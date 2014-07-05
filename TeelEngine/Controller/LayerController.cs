@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace TeelEngine
@@ -16,7 +17,7 @@ namespace TeelEngine
         public LayerController()
         {
             Items = new List<ILayer>();
-            Camera = new Camera();
+            Camera = new Camera(new Point(0, 0), 800, 600);
         }
 
         public void Render(SpriteBatch spriteBatch)
