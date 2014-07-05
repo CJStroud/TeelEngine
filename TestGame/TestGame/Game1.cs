@@ -16,9 +16,10 @@ namespace TestGame
     {
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
-        MenuController menuController = new MenuController();
+        MenuController _menuController = new MenuController();
         LayerController layerController = new LayerController();
         private Unit unit;
+        public Camera Camera;
 
 
         private Texture2D unitTexture;
@@ -32,7 +33,7 @@ namespace TestGame
 
         protected override void Initialize()
         {
-            
+            Camera = new Camera(new Point(0,0), Globals.TileSize, Globals.TileSize);
             
             base.Initialize();
         }
@@ -42,8 +43,8 @@ namespace TestGame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             unitTexture = Content.Load<Texture2D>("Unit");
             unit = new Unit(unitTexture);
-
-            EntityLayer entityLayer = new EntityLayer();
+            unit.Location = new Vector2(0.5F, 0.5F);
+            var entityLayer = new EntityLayer();
             entityLayer.AddEntity(unit);
 
             layerController.Add(entityLayer);
@@ -56,11 +57,8 @@ namespace TestGame
 
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -70,7 +68,7 @@ namespace TestGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            layerController.Render(_spriteBatch);
+            layerController.Render(_spriteBatch, Camera);
             _spriteBatch.End();
 
             base.Draw(gameTime);

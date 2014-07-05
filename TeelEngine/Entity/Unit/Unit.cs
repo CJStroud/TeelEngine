@@ -15,7 +15,7 @@ namespace TeelEngine
     {
         public Texture2D Texture { get; private set; }
         public Rectangle Bounds { get; private set; }
-        public Point Location { get; set; }
+        public Vector2 Location { get; set; }
 
         public Unit(Texture2D texture)
         {
@@ -30,6 +30,11 @@ namespace TeelEngine
         public void Render(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, new Rectangle(100, 100, Globals.TileSize, Globals.TileSize), Color.White);
+        }
+
+        public void Render(SpriteBatch spriteBatch, Rectangle drawRectangle)
+        {
+            spriteBatch.Draw(Texture, drawRectangle, Color.White);
         }
     }
 }

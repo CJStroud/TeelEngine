@@ -9,40 +9,40 @@ namespace TeelEngine
 {
     public class Camera
     {
-        public Rectangle ViewedRectangle { get; set; }
+        public Rectangle Lens { get; set; }
 
 
         public Camera(Point startPoint, int pixelWidth, int pixelHeight)
         {
-            ViewedRectangle = new Rectangle(startPoint.X, startPoint.Y, pixelWidth, pixelHeight);
+            Lens = new Rectangle(startPoint.X, startPoint.Y, pixelWidth, pixelHeight);
         }
 
-        public void Render(SpriteBatch spriteBatch, List<IEntity> entities)
+        public void Render(SpriteBatch spriteBatch, IEnumerable<ISprite> sprites)
         {
-            foreach (var entity in entities)
+            //spriteBatch.Draw(texture, new Rectangle(0,0,100,100), Color.Chocolate);
+            foreach (var entity in sprites)
             {
                 var entityRectangle = ConvertLocationFromGrid(entity.Location);
-
+                if (Lens.Intersects(entityRectangle))
+                {
+                    entityRectangle.X -= Lens.X;
+                    entityRectangle.Y -= Lens.Y;
+                    entity.Render(spriteBatch, entityRectangle);
+                }
             }
         }
-
-        private int GetTileWidth()
-        {
-            return PixelWidth/Globals.TileSize;
-        }
-
-        private int GetTileHeight()
-        {
-            return PixelHeight/Globals.TileSize;
-        }
-
-        private Rectangle ConvertLocationFromGrid(Point location)
+        private Rectangle ConvertLocationFromGrid(Vector2 location)
         {
             return new Rectangle(
-                location.X * Globals.TileSize, 
-                location.Y * Globals.TileSize, 
+                (int)(location.X * Globals.TileSize), 
+                (int)(location.Y * Globals.TileSize), 
                 Globals.TileSize, 
                 Globals.TileSize);
+        }
+
+        public void UpdatLensPosition(Point newStartPosition)
+        {
+            Lens = new Rectangle(newStartPosition.X, newStartPosition.Y, Lens.Width, Lens.Height);
         }
     }
 }

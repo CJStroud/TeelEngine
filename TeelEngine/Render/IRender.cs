@@ -6,5 +6,6 @@ namespace TeelEngine
     {
         int Priority { get; }
         void Render(SpriteBatch spriteBatch);
+        void Render(SpriteBatch spriteBatch, Camera camera);
     }
 }

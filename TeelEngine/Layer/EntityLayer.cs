@@ -27,12 +27,17 @@ namespace TeelEngine
             }
         }
 
+        public void Render(SpriteBatch spriteBatch, Camera camera)
+        {
+            camera.Render(spriteBatch, Entities);
+        }
+
         public void AddEntity(IEntity entity)
         {
             Entities.Add(entity);
         }
 
-        public void Move(int entityindex, Point Location)
+        public void Move(int entityindex, Vector2 Location)
         {
             Entities[entityindex].Location = Location;
         }

@@ -12,12 +12,9 @@ namespace TeelEngine
 
         public int Priority { get; private set; }
 
-        public Camera Camera;
-
         public LayerController()
         {
             Items = new List<ILayer>();
-            Camera = new Camera(new Point(0, 0), 800, 600);
         }
 
         public void Render(SpriteBatch spriteBatch)
@@ -25,6 +22,14 @@ namespace TeelEngine
             foreach (var layer in Items)
             {
                 layer.Render(spriteBatch);
+            }
+        }
+
+        public void Render(SpriteBatch spriteBatch, Camera camera)
+        {
+            foreach (var layer in Items)
+            {
+                layer.Render(spriteBatch, camera);
             }
         }
 

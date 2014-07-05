@@ -13,6 +13,10 @@ namespace TeelEngine
             Console.Write("Rendering Menu");
         }
 
+        public void Render(SpriteBatch spriteBatch, Camera camera)
+        {
+        }
+
         public List<IMenu> Items { get; private set; }
 
         public void Add(IMenu item)

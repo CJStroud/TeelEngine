@@ -10,13 +10,18 @@ namespace TeelEngine
     public class Item : IEntity
     {
         public Texture2D Texture { get; private set; }
-        public Point Location { get; set; }
+        public Vector2 Location { get; set; }
         public void Interact()
         {
             
         }
 
         public void Render(SpriteBatch spriteBatch)
+        {
+            
+        }
+
+        public void Render(SpriteBatch spriteBatch, Rectangle drawRectangle)
         {
             
         }
