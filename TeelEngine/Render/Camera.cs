@@ -7,19 +7,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TeelEngine
 {
-    public class Camera
+    public static class Camera
     {
-        public Rectangle Lens { get; set; }
-
-
-        public Camera(Point startPoint, int pixelWidth, int pixelHeight)
+        public static Rectangle Lens { get; set; }
+        public static void Render(SpriteBatch spriteBatch, IEnumerable<ISprite> sprites)
         {
-            Lens = new Rectangle(startPoint.X, startPoint.Y, pixelWidth, pixelHeight);
-        }
-
-        public void Render(SpriteBatch spriteBatch, IEnumerable<ISprite> sprites)
-        {
-            //spriteBatch.Draw(texture, new Rectangle(0,0,100,100), Color.Chocolate);
+            spriteBatch.Draw(Globals.texture, new Rectangle(0,0,Lens.Width,Lens.Height), Color.Chocolate);
             foreach (var entity in sprites)
             {
                 var entityRectangle = ConvertLocationFromGrid(entity.Location);
@@ -31,7 +24,7 @@ namespace TeelEngine
                 }
             }
         }
-        private Rectangle ConvertLocationFromGrid(Vector2 location)
+        private static Rectangle ConvertLocationFromGrid(Vector2 location)
         {
             return new Rectangle(
                 (int)(location.X * Globals.TileSize), 
@@ -40,9 +33,9 @@ namespace TeelEngine
                 Globals.TileSize);
         }
 
-        public void UpdatLensPosition(Point newStartPosition)
+        public static void UpdateLensPosition(Point newStartPosition)
         {
-            Lens = new Rectangle(newStartPosition.X, newStartPosition.Y, Lens.Width, Lens.Height);
+            Camera.Lens = new Rectangle(newStartPosition.X, newStartPosition.Y, Lens.Width, Lens.Height);
         }
     }
 }

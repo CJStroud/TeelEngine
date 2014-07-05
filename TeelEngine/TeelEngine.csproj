@@ -98,6 +98,9 @@
     <Compile Include="Entity\Unit\Path.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Layer\ILayer.cs" />
+    <Compile Include="Layer\TerrainLayer.cs" />
+    <Compile Include="Map\ITile.cs" />
+    <Compile Include="Map\MapLoader.cs" />
     <Compile Include="Menu\IMenu.cs" />
     <Compile Include="Render\Camera.cs" />
     <Compile Include="Render\IRender.cs" />

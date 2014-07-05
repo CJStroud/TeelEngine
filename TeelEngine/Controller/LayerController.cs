@@ -10,8 +10,6 @@ namespace TeelEngine
     {
         public List<ILayer> Items { get; private set; }
 
-        public int Priority { get; private set; }
-
         public LayerController()
         {
             Items = new List<ILayer>();
@@ -25,18 +23,20 @@ namespace TeelEngine
             }
         }
 
-        public void Render(SpriteBatch spriteBatch, Camera camera)
-        {
-            foreach (var layer in Items)
-            {
-                layer.Render(spriteBatch, camera);
-            }
-        }
-
         public void Add(ILayer item)
         {
             Items.Add(item);
             Items = Items.OrderBy(itm => itm.Priority).ToList();
+        }
+
+        public EntityLayer GetEntityLayer()
+        {
+            return Items.OfType<EntityLayer>().FirstOrDefault();
+        }
+
+        public IEnumerable<TerrainLayer> GetTerrainLayers()
+        {
+            return Items.OfType<TerrainLayer>();
         }
     }
 }

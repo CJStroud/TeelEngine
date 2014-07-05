@@ -6,15 +6,9 @@ namespace TeelEngine
 {
     public class MenuController : IController<IMenu>, IRender
     {
-        public int Priority { get; private set; }
-
         public void Render(SpriteBatch spriteBatch)
         {
             Console.Write("Rendering Menu");
-        }
-
-        public void Render(SpriteBatch spriteBatch, Camera camera)
-        {
         }
 
         public List<IMenu> Items { get; private set; }

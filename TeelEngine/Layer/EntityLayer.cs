@@ -12,7 +12,10 @@ namespace TeelEngine
     {
         public List<IEntity> Entities { get; set; }
 
+        public static List<IEntity> EntityList { get; set; } 
+
         public int Priority { get; private set; }
+        public Texture2D SpriteSheet { get; set; }
 
         public EntityLayer()
         {
@@ -21,15 +24,7 @@ namespace TeelEngine
 
         public void Render(SpriteBatch spriteBatch)
         {
-            foreach (var entity in Entities)
-            {
-                entity.Render(spriteBatch);
-            }
-        }
-
-        public void Render(SpriteBatch spriteBatch, Camera camera)
-        {
-            camera.Render(spriteBatch, Entities);
+            Camera.Render(spriteBatch, Entities);
         }
 
         public void AddEntity(IEntity entity)
