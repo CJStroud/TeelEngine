@@ -18,5 +18,10 @@ namespace TeelEngine
         {
             
         }
+
+        public void Add(ITile tile)
+        {
+            TileList.Add(tile);
+        }
     }
 }
