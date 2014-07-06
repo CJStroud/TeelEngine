@@ -4,7 +4,8 @@ namespace TeelEngine
 {
     public interface IController<T>
     {
-        List<T> Items { get; }
-        void Add(T item);
+        Dictionary<string, T> Items { get; set; }
+
+        void Add(string name, T item);
     }
 }

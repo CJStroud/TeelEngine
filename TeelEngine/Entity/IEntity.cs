@@ -6,7 +6,5 @@ namespace TeelEngine
     public interface IEntity : ISprite
     {
         void Interact();
-        
-
     }
 }

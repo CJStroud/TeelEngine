@@ -12,15 +12,16 @@ namespace TeelEngine
         public static Rectangle Lens { get; set; }
         public static void Render(SpriteBatch spriteBatch, IEnumerable<ISprite> sprites)
         {
-            spriteBatch.Draw(Globals.texture, new Rectangle(0,0,Lens.Width,Lens.Height), Color.Chocolate);
-            foreach (var entity in sprites)
+            foreach (var sprite in sprites)
             {
-                var entityRectangle = ConvertLocationFromGrid(entity.Location);
-                if (Lens.Intersects(entityRectangle))
+                var spriteRectangle = ConvertLocationFromGrid(sprite.Location);
+                if (Lens.Intersects(spriteRectangle))
                 {
-                    entityRectangle.X -= Lens.X;
-                    entityRectangle.Y -= Lens.Y;
-                    entity.Render(spriteBatch, entityRectangle);
+                    var spriteScreenLocation = sprite.ScreenPosition;
+                    spriteScreenLocation.X -= Lens.X;
+                    spriteScreenLocation.Y -= Lens.Y;
+
+                    sprite.Render(spriteBatch, spriteScreenLocation);
                 }
             }
         }

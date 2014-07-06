@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Reflection.Emit;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,9 +11,6 @@ namespace TeelEngine
 
         public static List<IEntity> EntityList { get; set; } 
 
-        public int Priority { get; private set; }
-        public Texture2D SpriteSheet { get; set; }
-
         public EntityLayer()
         {
             Entities = new List<IEntity>();
@@ -27,15 +21,25 @@ namespace TeelEngine
             Camera.Render(spriteBatch, Entities);
         }
 
-        public void AddEntity(IEntity entity)
+        public void Update(GameTime gameTime)
+        {
+            foreach (var entity in Entities)
+            {
+                entity.Update(gameTime);
+            }
+        }
+
+        public void Initialize()
+        {
+            foreach (var entity in Entities)
+            {
+                entity.Initialize();
+            }
+        }
+
+        public void Add(IEntity entity)
         {
             Entities.Add(entity);
         }
-
-        public void Move(int entityindex, Vector2 Location)
-        {
-            Entities[entityindex].Location = Location;
-        }
-
     }
 }

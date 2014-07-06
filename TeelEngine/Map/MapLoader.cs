@@ -50,11 +50,11 @@ namespace TeelEngine
                 {
                     case "Entity":
                         EntityLayer entityLayer = CreateEntityLayer(layerDescendant);
-                        layerController.Add(entityLayer);
+                        layerController.Add("EntityLayer", entityLayer);
                         break;
                     case "Terrain":
                         TerrainLayer terrainLayer = CreateTerrainLayer(layerDescendant);
-                        layerController.Add(terrainLayer);
+                        layerController.Add("TerrainLayer", terrainLayer);
                         break;
                 }
             }
@@ -89,6 +89,7 @@ namespace TeelEngine
                     Vector2 location = ExtractLocation(entityDescendant);
                     var entity = CreateEntity(id, location);
                     entityLayer.Add(entity);
+                    
                 }
             }
             return entityLayer;
