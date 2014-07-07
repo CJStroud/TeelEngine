@@ -34,7 +34,7 @@ namespace TestGame
         protected override void Initialize()
         {
             Camera.Lens = new Rectangle(0,0, 1000, 1000);
-            texture = new AnimatedTexture(new Vector2(0,3), 3, 4, 6);
+            texture = new AnimatedTexture(new Vector2(0,3), 3, 4, 6, true);
             spriteTexture = new SpriteTexture();
             
             base.Initialize();

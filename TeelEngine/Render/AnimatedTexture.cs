@@ -36,15 +36,30 @@ namespace TeelEngine
         public int RowCount { get; set; }
         public int FrameWidth { get; set; }
         public int FrameHeight { get; set; }
-        public bool Paused { get; set; }
+
+        private bool _paused;
+        public bool Paused
+        {
+            get { return _paused; }
+            set
+            {
+                _paused = value;
+                if (_paused)
+                {
+                    Column = 0;
+                }
+            }
+        }
+
         public float TotalElapsed { get; set; }
         public float TimePerFrame { get; set; }
 
-        public AnimatedTexture(Vector2 frame, int columnCount, int rowCount, int framePerSec)
+        public AnimatedTexture(Vector2 frame, int columnCount, int rowCount, int framePerSec, bool paused)
         {
             _frame = frame;
             ColumnCount = columnCount;
             RowCount = rowCount;
+            _paused = paused;
             Paused = false;
             TotalElapsed = 0;
             TimePerFrame = (float) 1/framePerSec;
