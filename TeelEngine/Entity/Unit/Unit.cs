@@ -60,7 +60,6 @@ namespace TeelEngine
             var animatedTexture = (AnimatedTexture)texture;
             if (animatedTexture != null)
             {
-                animatedTexture.Row = Index;
                 animatedTexture.Render(spriteBatch, ScreenPosition);
             }
         }
@@ -159,32 +158,50 @@ namespace TeelEngine
             {
                 Location = location;
                 IsMoving = true;
+                if (GetAnimatedTexture() != null)
+                {
+                    GetAnimatedTexture().Row = (int)Direction;
+                }
             }
         }
 
         public void MoveDown()
         {
-            Move(new Vector2(Location.X, Location.Y + 1));
             Direction = TeelEngine.Direction.South;
+            Move(new Vector2(Location.X, Location.Y + 1));
             Velocity.Y = Speed;
         }
         public void MoveUp()
         {
-            Move(new Vector2(Location.X, Location.Y - 1));
             Direction = TeelEngine.Direction.North;
+            Move(new Vector2(Location.X, Location.Y - 1));
             Velocity.Y = -Speed;
         }
         public void MoveLeft()
         {
-            Move(new Vector2(Location.X - 1, Location.Y));
             Direction = TeelEngine.Direction.West;
+            Move(new Vector2(Location.X - 1, Location.Y));
             Velocity.X = -Speed;
         }
         public void MoveRight()
         {
-            Move(new Vector2(Location.X + 1, Location.Y));
             Direction = TeelEngine.Direction.East;
+            Move(new Vector2(Location.X + 1, Location.Y));
             Velocity.X = Speed;
+        }
+
+        public AnimatedTexture GetAnimatedTexture()
+        {
+            ITexture texture = Globals.TextureController.Get(TextureName);
+            var animatedTexture = (AnimatedTexture)texture;
+            return animatedTexture;
+        }
+
+        public SpriteTexture GetSpriteTexture()
+        {
+            ITexture texture = Globals.TextureController.Get(TextureName);
+            var animatedTexture = (SpriteTexture)texture;
+            return animatedTexture;
         }
     }
 }
