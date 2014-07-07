@@ -13,23 +13,12 @@ namespace TeelEngine
 
         public static bool EntityCollididesWithTerrain(IEntity entity)
         {
-            if (Collisions.Any(location => PositionsAreSame(entity.Location, location)))
-            {
-                return true;
-            }
-            return false;
+            return Collisions.Any(location => PositionsAreSame(entity.Location, location));
         }
 
         public static bool EntityCollidesWithEntity(IEntity entity, List<IEntity> colliedableEntities)
         {
-            foreach (var colliedableEntity in colliedableEntities)
-            {
-                if (PositionsAreSame(entity.Location, colliedableEntity.Location))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return colliedableEntities.Any(colliedableEntity => PositionsAreSame(entity.Location, colliedableEntity.Location));
         }
 
         public static bool PositionsAreSame(Vector2 position1, Vector2 position2)
