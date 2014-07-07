@@ -9,7 +9,6 @@ namespace TeelEngine
     public class LayerController : IController<ILayer>, IRender
     {
         public Dictionary<string, ILayer> Items { get; set; }
-
         public LayerController()
         {
             Items = new Dictionary<string, ILayer>();

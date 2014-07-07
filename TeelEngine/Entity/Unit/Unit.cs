@@ -57,10 +57,19 @@ namespace TeelEngine
         public void Render(SpriteBatch spriteBatch, Vector2 screenLocation)
         {
             ITexture texture = Globals.TextureController.Get(TextureName);
-            var animatedTexture = (AnimatedTexture)texture;
+            if (texture == null) return;
+            var animatedTexture = texture as AnimatedTexture;
             if (animatedTexture != null)
             {
                 animatedTexture.Render(spriteBatch, screenLocation);
+            }
+            else
+            {
+                var sprite = texture as SpriteTexture;
+                if (sprite != null)
+                {
+                    sprite.Render(spriteBatch, Index, screenLocation);
+                }
             }
         }
 

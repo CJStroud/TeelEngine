@@ -94,11 +94,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collision\CollisionDetection.cs" />
     <Compile Include="Entity\IEntity.cs" />
     <Compile Include="Controller\IController.cs" />
     <Compile Include="Entity\Item\IUsable.cs" />
     <Compile Include="Entity\Unit\Path.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="Key\IKeybind.cs" />
     <Compile Include="Layer\ILayer.cs" />
     <Compile Include="Layer\TerrainLayer.cs" />
     <Compile Include="Map\ITile.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Render\SpriteTexture.cs" />
     <Compile Include="Render\TextureController.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

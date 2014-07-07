@@ -81,6 +81,16 @@ namespace TestGame
                int x = Camera.Lens.X - 1;
                Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
             }
+            if (keyboardState.IsKeyDown(Keys.Up))
+            {
+                int y = Camera.Lens.Y - 1;
+                Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
+            }
+            if (keyboardState.IsKeyDown(Keys.Down))
+            {
+                int y = Camera.Lens.Y + 1;
+                Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
+            }
             Globals.TextureController.Update(gameTime);
             layerController.Update(gameTime);
 
