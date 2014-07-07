@@ -22,6 +22,7 @@ namespace TestGame
         SpriteBatch _spriteBatch;
         MenuController _menuController = new MenuController();
         LayerController layerController = new LayerController();
+        KeyController keyController = new KeyController();
         private AnimatedTexture texture;
         private SpriteTexture spriteTexture;
 
@@ -50,6 +51,9 @@ namespace TestGame
 
             layerController = Content.Load<LayerController>("LayerController");
             layerController.Initialize();
+            EntityLayer entityLayer = layerController.GetEntityLayer();
+            var unit = (Unit)entityLayer.Entities[0];
+            keyController.Add("Move Down", Keys.S, unit.MoveDown);
 
             var settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -69,31 +73,31 @@ namespace TestGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             
-            KeyboardState keyboardState = Keyboard.GetState();
+            var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Right))
             {
-                int x = Camera.Lens.X + 1;
+                var x = Camera.Lens.X + 1;
                 Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
             }
             if (keyboardState.IsKeyDown(Keys.Left))
             {
-               int x = Camera.Lens.X - 1;
+               var x = Camera.Lens.X - 1;
                Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
             }
             if (keyboardState.IsKeyDown(Keys.Up))
             {
-                int y = Camera.Lens.Y - 1;
+                var y = Camera.Lens.Y - 1;
                 Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
             }
             if (keyboardState.IsKeyDown(Keys.Down))
             {
-                int y = Camera.Lens.Y + 1;
+                var y = Camera.Lens.Y + 1;
                 Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
             }
             Globals.TextureController.Update(gameTime);
             layerController.Update(gameTime);
-
+            keyController.CheckKeyPresses(keyboardState);
             base.Update(gameTime);
         }
 

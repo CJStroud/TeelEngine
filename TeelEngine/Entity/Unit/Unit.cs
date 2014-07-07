@@ -147,7 +147,7 @@ namespace TeelEngine
                 }
                 if (keyboardState.IsKeyDown(Keys.S))
                 {
-                    MoveDown();
+                    //MoveDown();
                 }
                 if (keyboardState.IsKeyDown(Keys.W))
                 {
