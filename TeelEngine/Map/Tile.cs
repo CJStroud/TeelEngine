@@ -28,7 +28,7 @@ namespace TeelEngine
             var spriteTexture = (SpriteTexture)texture;
             if (spriteTexture != null)
             {
-                spriteTexture.Render(spriteBatch, Index, ScreenPosition);
+                spriteTexture.Render(spriteBatch, Index, screenLocation);
             }
         }
 

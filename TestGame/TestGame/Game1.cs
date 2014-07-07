@@ -69,7 +69,18 @@ namespace TestGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
             
+            KeyboardState keyboardState = Keyboard.GetState();
 
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                int x = Camera.Lens.X + 1;
+                Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
+            }
+            if (keyboardState.IsKeyDown(Keys.Left))
+            {
+               int x = Camera.Lens.X - 1;
+               Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
+            }
             Globals.TextureController.Update(gameTime);
             layerController.Update(gameTime);
 

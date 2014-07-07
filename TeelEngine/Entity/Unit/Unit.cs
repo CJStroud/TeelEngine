@@ -60,7 +60,7 @@ namespace TeelEngine
             var animatedTexture = (AnimatedTexture)texture;
             if (animatedTexture != null)
             {
-                animatedTexture.Render(spriteBatch, ScreenPosition);
+                animatedTexture.Render(spriteBatch, screenLocation);
             }
         }
 
