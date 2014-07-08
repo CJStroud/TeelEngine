@@ -24,7 +24,7 @@ namespace TeelEngine
 
         public float Speed { get; set; }
 
-        [ContentSerializerIgnore] 
+        [ContentSerializerIgnore]
         public Vector2 Velocity;
 
         [ContentSerializerIgnore]
@@ -33,7 +33,7 @@ namespace TeelEngine
         public Unit()
         {
             TextureName = "";
-            Location = new Vector2(0,0);
+            Location = new Vector2(0, 0);
             Index = 0;
         }
 
@@ -46,7 +46,7 @@ namespace TeelEngine
 
         public void Interact()
         {
-            
+
         }
 
         public void Render(SpriteBatch spriteBatch)
@@ -77,61 +77,11 @@ namespace TeelEngine
         {
             ITexture texture = Globals.TextureController.Get(TextureName);
             var animatedTexture = (AnimatedTexture)texture;
-            
+
             if (IsMoving)
             {
                 animatedTexture.Paused = false;
-                if (Direction == Direction.East)
-                {
-                    if (ScreenPosition.X + Velocity.X >= Location.X*((float) Globals.TileSize))
-                    {
-                        ScreenPosition = new Vector2(Location.X*((float) Globals.TileSize), ScreenPosition.Y);
-                        IsMoving = false;
-                    }
-                    else
-                    {
-                        ScreenPosition = new Vector2(ScreenPosition.X + Velocity.X, ScreenPosition.Y);
-                    }
-                }
-
-                if (Direction == Direction.South)
-                {
-                    if (ScreenPosition.Y + Velocity.Y >= Location.Y*((float) Globals.TileSize))
-                    {
-                        ScreenPosition = new Vector2(ScreenPosition.X, Location.Y*((float) Globals.TileSize));
-                        IsMoving = false;
-                    }
-                    else
-                    {
-                        ScreenPosition = new Vector2(ScreenPosition.X, ScreenPosition.Y + Velocity.Y);
-                    }
-                }
-
-                if (Direction == Direction.West)
-                {
-                    if (ScreenPosition.X + Velocity.X <= Location.X * ((float)Globals.TileSize))
-                    {
-                        ScreenPosition = new Vector2(Location.X * ((float)Globals.TileSize), ScreenPosition.Y);
-                        IsMoving = false;
-                    }
-                    else
-                    {
-                        ScreenPosition = new Vector2(ScreenPosition.X + Velocity.X, ScreenPosition.Y);
-                    }
-                }
-
-                if (Direction == Direction.North)
-                {
-                    if (ScreenPosition.Y + Velocity.Y <= Location.Y * ((float)Globals.TileSize))
-                    {
-                        ScreenPosition = new Vector2(ScreenPosition.X, Location.Y * ((float)Globals.TileSize));
-                        IsMoving = false;
-                    }
-                    else
-                    {
-                        ScreenPosition = new Vector2(ScreenPosition.X, ScreenPosition.Y + Velocity.Y);
-                    }
-                }
+                UpdateScreenPosition();
             }
             else
             {
@@ -156,44 +106,68 @@ namespace TeelEngine
             }
         }
 
+        private void UpdateScreenPosition()
+        {
+            var nextMoveLocation = new Vector2((ScreenPosition.X + Velocity.X), (ScreenPosition.Y + Velocity.Y));
+            var targetEndLocation = new Vector2(Location.X * Globals.TileSize, Location.Y * Globals.TileSize);
+
+            IsMoving = CheckStillMoving(nextMoveLocation, targetEndLocation);
+
+            ScreenPosition = IsMoving ? nextMoveLocation : targetEndLocation;
+        }
+
+        private bool CheckStillMoving(Vector2 nextMoveLocation, Vector2 targetEndLocation)
+        {
+            if (Direction == Direction.North && nextMoveLocation.Y <= targetEndLocation.Y) return false;
+            if (Direction == Direction.South && nextMoveLocation.Y >= targetEndLocation.Y) return false;
+            if (Direction == Direction.East && nextMoveLocation.X >= targetEndLocation.X) return false;
+            if (Direction == Direction.West && nextMoveLocation.X <= targetEndLocation.X) return false;
+
+            return true;
+        }
+
+
         public void Initialize()
         {
-            ScreenPosition = new Vector2(Location.X*Globals.TileSize, Location.Y*Globals.TileSize);
+            ScreenPosition = new Vector2(Location.X * Globals.TileSize, Location.Y * Globals.TileSize);
         }
 
         public void Move(Vector2 location)
         {
-            if (!IsMoving)
+            Location = location;
+            IsMoving = true;
+            if (GetAnimatedTexture() != null)
             {
-                Location = location;
-                IsMoving = true;
-                if (GetAnimatedTexture() != null)
-                {
-                    GetAnimatedTexture().Row = (int)Direction;
-                }
+                GetAnimatedTexture().Row = (int)Direction;
             }
+            Velocity = Vector2.Zero;
+
         }
 
         public void MoveDown()
         {
+            if (IsMoving) return;
             Direction = TeelEngine.Direction.South;
             Move(new Vector2(Location.X, Location.Y + 1));
             Velocity.Y = Speed;
         }
         public void MoveUp()
         {
+            if (IsMoving) return;
             Direction = TeelEngine.Direction.North;
             Move(new Vector2(Location.X, Location.Y - 1));
             Velocity.Y = -Speed;
         }
         public void MoveLeft()
         {
+            if (IsMoving) return;
             Direction = TeelEngine.Direction.West;
             Move(new Vector2(Location.X - 1, Location.Y));
             Velocity.X = -Speed;
         }
         public void MoveRight()
         {
+            if (IsMoving) return;
             Direction = TeelEngine.Direction.East;
             Move(new Vector2(Location.X + 1, Location.Y));
             Velocity.X = Speed;
