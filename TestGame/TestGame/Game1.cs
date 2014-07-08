@@ -53,7 +53,11 @@ namespace TestGame
             layerController.Initialize();
             EntityLayer entityLayer = layerController.GetEntityLayer();
             var unit = (Unit)entityLayer.Entities[0];
+
             keyController.Add("Move Down", Keys.S, unit.MoveDown);
+            keyController.Add("Move Up", Keys.W, unit.MoveUp);
+            keyController.Add("Move Left", Keys.A, unit.MoveLeft);
+            keyController.Add("Move Right", Keys.D, unit.MoveRight);
 
             var settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -95,8 +99,10 @@ namespace TestGame
                 var y = Camera.Lens.Y + 1;
                 Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
             }
+
             Globals.TextureController.Update(gameTime);
             layerController.Update(gameTime);
+
             keyController.CheckKeyPresses(keyboardState);
             base.Update(gameTime);
         }

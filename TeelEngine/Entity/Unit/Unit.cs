@@ -86,23 +86,6 @@ namespace TeelEngine
             else
             {
                 animatedTexture.Paused = true;
-                KeyboardState keyboardState = Keyboard.GetState();
-                if (keyboardState.IsKeyDown(Keys.D))
-                {
-                    MoveRight();
-                }
-                if (keyboardState.IsKeyDown(Keys.A))
-                {
-                    MoveLeft();
-                }
-                if (keyboardState.IsKeyDown(Keys.S))
-                {
-                    //MoveDown();
-                }
-                if (keyboardState.IsKeyDown(Keys.W))
-                {
-                    MoveUp();
-                }
             }
         }
 
@@ -132,46 +115,64 @@ namespace TeelEngine
             ScreenPosition = new Vector2(Location.X * Globals.TileSize, Location.Y * Globals.TileSize);
         }
 
-        public void Move(Vector2 location)
+
+        public void Move(Direction direction)
         {
-            Location = location;
-            IsMoving = true;
+            if (IsMoving) return;
+            Direction = direction;
+            Location = GetNewLocation(direction);
+
+            Velocity = Vector2.Zero;
             if (GetAnimatedTexture() != null)
             {
                 GetAnimatedTexture().Row = (int)Direction;
+                Velocity = GetVelocityForDirection(direction);
+                IsMoving = true;
             }
-            Velocity = Vector2.Zero;
 
+        }
+
+        private Vector2 GetVelocityForDirection(Direction direction)
+        {
+            if (direction == Direction.North) return new Vector2(0, -Speed);
+            if (direction == Direction.South) return new Vector2(0, Speed);
+            if (direction == Direction.East) return new Vector2(Speed, 0);
+            if (direction == Direction.West) return new Vector2(-Speed, 0);
+
+            return Vector2.Zero;
+        }
+
+        private Vector2 GetNewLocation(Direction direction)
+        {
+            if (direction == Direction.North) return new Vector2(Location.X, Location.Y - 1);
+            if (direction == Direction.South) return new Vector2(Location.X, Location.Y + 1);
+            if (direction == Direction.East) return new Vector2(Location.X + 1, Location.Y);
+            if (direction == Direction.West) return new Vector2(Location.X - 1, Location.Y);
+
+            return Vector2.Zero;
+        }
+
+        public void MoveUp()
+        {
+            Move(Direction.North);
         }
 
         public void MoveDown()
         {
-            if (IsMoving) return;
-            Direction = TeelEngine.Direction.South;
-            Move(new Vector2(Location.X, Location.Y + 1));
-            Velocity.Y = Speed;
+            Move(Direction.South);
         }
-        public void MoveUp()
-        {
-            if (IsMoving) return;
-            Direction = TeelEngine.Direction.North;
-            Move(new Vector2(Location.X, Location.Y - 1));
-            Velocity.Y = -Speed;
-        }
-        public void MoveLeft()
-        {
-            if (IsMoving) return;
-            Direction = TeelEngine.Direction.West;
-            Move(new Vector2(Location.X - 1, Location.Y));
-            Velocity.X = -Speed;
-        }
+
         public void MoveRight()
         {
-            if (IsMoving) return;
-            Direction = TeelEngine.Direction.East;
-            Move(new Vector2(Location.X + 1, Location.Y));
-            Velocity.X = Speed;
+            Move(Direction.East);
         }
+
+        public void MoveLeft()
+        {
+            Move(Direction.West);
+        }
+
+
 
         public AnimatedTexture GetAnimatedTexture()
         {
