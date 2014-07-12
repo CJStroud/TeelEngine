@@ -7,9 +7,10 @@ namespace TeelEngine
 {
     public enum Direction
     {
-        North,
-        East,
-        South,
-        West
+        North = 0,
+        East = 1,
+        South =  ~North,
+        West = ~East,
+        None = 4
     }
 }

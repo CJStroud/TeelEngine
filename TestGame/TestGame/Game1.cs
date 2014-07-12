@@ -23,6 +23,8 @@ namespace TestGame
         MenuController _menuController = new MenuController();
         public static LayerController layerController = new LayerController();
         public static KeyController keyController = new KeyController();
+        private Path path;
+
         private AnimatedTexture texture;
         private SpriteTexture spriteTexture;
 
@@ -54,13 +56,14 @@ namespace TestGame
             EntityLayer entityLayer = layerController.GetEntityLayer();
             var unit = (Unit)entityLayer.Entities[0];
             keyController = Content.Load<KeyController>("Keycontroller");
-
+            
             keyController.AddAction("Move Down", Events.PlayerMoveDown);
             keyController.AddAction("Move Up", Events.PlayerMoveUp);
             keyController.AddAction("Move Left", Events.PlayerMoveLeft);
             keyController.AddAction("Move Right", Events.PlayerMoveRight);
-            
-            
+
+            path = Path.CreatePath(new Point(0, 0), new Point(5, 5));
+            unit.Move(path);
 
             var settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -80,7 +83,9 @@ namespace TestGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            
+
+
+
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Right))

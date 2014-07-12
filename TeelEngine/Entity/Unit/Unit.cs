@@ -30,6 +30,9 @@ namespace TeelEngine
         [ContentSerializerIgnore]
         public Direction Direction;
 
+        [ContentSerializerIgnore] 
+        private Path _path;
+
         public Unit()
         {
             TextureName = "";
@@ -86,6 +89,11 @@ namespace TeelEngine
             else
             {
                 animatedTexture.Paused = true;
+                if (_path != null && _path.PathNodes.Count > 0)
+                {
+                    Direction direction = _path.GetNextDirection();
+                    Move(direction);
+                }
             }
         }
 
@@ -95,7 +103,6 @@ namespace TeelEngine
             var targetEndLocation = new Vector2(Location.X * Globals.TileSize, Location.Y * Globals.TileSize);
 
             IsMoving = CheckStillMoving(nextMoveLocation, targetEndLocation);
-
             ScreenPosition = IsMoving ? nextMoveLocation : targetEndLocation;
         }
 
@@ -125,11 +132,16 @@ namespace TeelEngine
             Velocity = Vector2.Zero;
             if (GetAnimatedTexture() != null)
             {
-                GetAnimatedTexture().Row = (int)Direction;
+                //GetAnimatedTexture().Row = (int)Direction;
                 Velocity = GetVelocityForDirection(direction);
                 IsMoving = true;
             }
 
+        }
+
+        public void Move(Path path)
+        {
+            _path = path;
         }
 
         private Vector2 GetVelocityForDirection(Direction direction)
