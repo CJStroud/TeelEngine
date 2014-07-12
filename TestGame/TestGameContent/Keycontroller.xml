@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="TeelEngine.KeyController">
+    <Items>
+      <Item>
+        <Key>W</Key>
+        <Value>Move Up</Value>
+      </Item>
+      <Item>
+        <Key>S</Key>
+        <Value>Move Down</Value>
+      </Item>
+      <Item>
+        <Key>D</Key>
+        <Value>Move Right</Value>
+      </Item>
+      <Item>
+        <Key>A</Key>
+        <Value>Move Left</Value>
+      </Item>
+    </Items>
+  </Asset>
+</XnaContent>

@@ -21,8 +21,8 @@ namespace TestGame
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
         MenuController _menuController = new MenuController();
-        LayerController layerController = new LayerController();
-        KeyController keyController = new KeyController();
+        public static LayerController layerController = new LayerController();
+        public static KeyController keyController = new KeyController();
         private AnimatedTexture texture;
         private SpriteTexture spriteTexture;
 
@@ -48,24 +48,28 @@ namespace TestGame
             spriteTexture.LoadContent(Content, "Textures/chipset01", 16);
             Globals.TextureController.Add("Unit", texture);
             Globals.TextureController.Add("Background", spriteTexture);
-
+            CollisionDetection.Collisions = Content.Load<List<Vector2>>("Collisions");
             layerController = Content.Load<LayerController>("LayerController");
             layerController.Initialize();
             EntityLayer entityLayer = layerController.GetEntityLayer();
             var unit = (Unit)entityLayer.Entities[0];
+            keyController = Content.Load<KeyController>("Keycontroller");
 
-            keyController.Add("Move Down", Keys.S, unit.MoveDown);
-            keyController.Add("Move Up", Keys.W, unit.MoveUp);
-            keyController.Add("Move Left", Keys.A, unit.MoveLeft);
-            keyController.Add("Move Right", Keys.D, unit.MoveRight);
+            keyController.AddAction("Move Down", Events.PlayerMoveDown);
+            keyController.AddAction("Move Up", Events.PlayerMoveUp);
+            keyController.AddAction("Move Left", Events.PlayerMoveLeft);
+            keyController.AddAction("Move Right", Events.PlayerMoveRight);
+            
+            
 
             var settings = new XmlWriterSettings();
             settings.Indent = true;
-
-            using (var writer = XmlWriter.Create("LayerController.xml", settings))
+            
+            using (var writer = XmlWriter.Create("Keycontroller.xml", settings))
             {
-                IntermediateSerializer.Serialize(writer, layerController, null);
+                IntermediateSerializer.Serialize(writer, keyController, null);
             }
+            
         }
 
         protected override void UnloadContent()
@@ -102,7 +106,6 @@ namespace TestGame
 
             Globals.TextureController.Update(gameTime);
             layerController.Update(gameTime);
-
             keyController.CheckKeyPresses(keyboardState);
             base.Update(gameTime);
         }

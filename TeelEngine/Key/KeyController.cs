@@ -2,52 +2,57 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 
 namespace TeelEngine
 {
-    public class KeyController : IController<Keybind>
+    public class KeyController
     {
-        public Dictionary<string, Keybind> Items { get; set; }
+        public Dictionary<Keys, string> Items { get; set; }
+        [ContentSerializerIgnore]
+        public Dictionary<string, Action> Actions { get; set; }  
 
         public KeyController()
         {
-            Items = new Dictionary<string, Keybind>();
+            Items = new Dictionary<Keys, string>();
+            Actions = new Dictionary<string, Action>();
         }
 
-        public void Add(string name, Keybind item)
+        public bool AddKeybinding(Keys key, string action)
         {
-            if (!Items.ContainsKey(name))
-            {
-                Items.Add(name, item);
-            }
+            if (Items.ContainsKey(key) || !Actions.ContainsKey(action)) return false;
+            Items.Add(key, action);
+            return true;
         }
 
-        public void Add(string name, Keys key, Action action)
+        public bool AddAction(string name, Action action)
         {
-            Add(name, new Keybind(key, action));
+            if (Actions.ContainsKey(name)) return false;
+            Actions.Add(name, action);
+            return true;
         }
 
         public void InvokeAction(string name)
         {
-            Keybind keybind;
-            Items.TryGetValue(name, out keybind);
-            if (keybind != null) keybind.Action.Invoke();
+            Action action;
+            Actions.TryGetValue(name, out action);
+            if (action != null) action.Invoke();
         }
 
         public void InvokeAction(Keys key)
         {
-            foreach (var keybind in Items.Values.Where(keybind => keybind.Key == key))
+            foreach (string actionName in Items.Keys.Where(k => k == key).Select(k => Items[k]).Where(actionName => Actions.ContainsKey(actionName)))
             {
-                keybind.Action.Invoke();
+                Actions[actionName]();
             }
         }
 
         public void CheckKeyPresses(KeyboardState state)
         {
-            foreach (var keybind in Items.Values.Where(keybind => state.IsKeyDown(keybind.Key)))
+            foreach (string actionName in Items.Keys.Where(state.IsKeyDown).Select(key => Items[key]).Where(actionName => Actions.ContainsKey(actionName)))
             {
-                keybind.Action.Invoke();
+                Actions[actionName]();
             }
         }
     }

@@ -71,6 +71,26 @@
               <TextureName>Background</TextureName>
               <Index>32</Index>
             </Item>
+            <Item Type="TeelEngine.Tile">
+              <Location>3 3</Location>
+              <TextureName>Background</TextureName>
+              <Index>9</Index>
+            </Item>
+            <Item Type="TeelEngine.Tile">
+              <Location>3 4</Location>
+              <TextureName>Background</TextureName>
+              <Index>9</Index>
+            </Item>
+            <Item Type="TeelEngine.Tile">
+              <Location>3 5</Location>
+              <TextureName>Background</TextureName>
+              <Index>9</Index>
+            </Item>
+            <Item Type="TeelEngine.Tile">
+              <Location>3 6</Location>
+              <TextureName>Background</TextureName>
+              <Index>9</Index>
+            </Item>
           </Tiles>
         </Value>
       </Item>
@@ -82,7 +102,7 @@
               <TextureName>Unit</TextureName>
               <Index>3</Index>
               <Location>0 0</Location>
-              <Speed>1</Speed>
+              <Speed>2</Speed>
             </Item>
           </Entities>
         </Value>

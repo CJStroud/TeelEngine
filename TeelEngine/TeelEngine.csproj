@@ -100,7 +100,6 @@
     <Compile Include="Entity\Item\IUsable.cs" />
     <Compile Include="Entity\Unit\Path.cs" />
     <Compile Include="Globals.cs" />
-    <Compile Include="Key\Keybind.cs" />
     <Compile Include="Key\KeyController.cs" />
     <Compile Include="Layer\ILayer.cs" />
     <Compile Include="Layer\TerrainLayer.cs" />
