@@ -10,13 +10,14 @@ namespace TeelEngine
     {
         public List<Move> AvailableMoves { get; set; }
         public Direction ChosenDirection { get; set; }
+        public Direction PreviousNodeDirection { get; set; }
 
         public Point Location { get; private set; }
 
         public PathNode(Direction previousDirection, Point location, Point endPoint)
         {
+            PreviousNodeDirection = ~previousDirection;
             Location = location;
-
             AvailableMoves = new List<Move>
                 {
                     new Move(new Point(Location.X, Location.Y - 1), endPoint, Direction.North),
@@ -33,8 +34,8 @@ namespace TeelEngine
         {
             if (Location == endPoint)
             {
-                ChosenDirection = Direction.None;
-                List<PathNode> thePath = new List<PathNode> { this };
+                PathNode pathNode = new PathNode(~ChosenDirection, Location, endPoint);
+                List<PathNode> thePath = new List<PathNode> { pathNode };
                 Console.WriteLine("This is where it should stop...");
                 return thePath;
             }

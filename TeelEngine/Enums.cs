@@ -9,8 +9,8 @@ namespace TeelEngine
     {
         North = 0,
         East = 1,
-        South =  ~North,
-        West = ~East,
+        South =  2,
+        West = 3,
         None = 4
     }
 }

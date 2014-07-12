@@ -24,6 +24,7 @@ namespace TestGame
         public static LayerController layerController = new LayerController();
         public static KeyController keyController = new KeyController();
         private Path path;
+        private Unit unit;
 
         private AnimatedTexture texture;
         private SpriteTexture spriteTexture;
@@ -45,6 +46,8 @@ namespace TestGame
 
         protected override void LoadContent()
         {
+            this.IsMouseVisible = true;
+
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             texture.LoadContent(Content, "Textures/spritesheet");
             spriteTexture.LoadContent(Content, "Textures/chipset01", 16);
@@ -54,7 +57,7 @@ namespace TestGame
             layerController = Content.Load<LayerController>("LayerController");
             layerController.Initialize();
             EntityLayer entityLayer = layerController.GetEntityLayer();
-            var unit = (Unit)entityLayer.Entities[0];
+            unit = (Unit)entityLayer.Entities[0];
             keyController = Content.Load<KeyController>("Keycontroller");
             
             keyController.AddAction("Move Down", Events.PlayerMoveDown);
@@ -62,8 +65,8 @@ namespace TestGame
             keyController.AddAction("Move Left", Events.PlayerMoveLeft);
             keyController.AddAction("Move Right", Events.PlayerMoveRight);
 
-            path = Path.CreatePath(new Point(0, 0), new Point(5, 5));
-            unit.Move(path);
+            //path = Path.CreatePath(new Point(0, 0), new Point(2, 2));
+            //unit.Move(path);
 
             var settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -87,6 +90,23 @@ namespace TestGame
 
 
             var keyboardState = Keyboard.GetState();
+            var mouseState = Mouse.GetState();
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                var mousePosition = new Point(mouseState.X, mouseState.Y);
+                if (mousePosition.X < GraphicsDevice.PresentationParameters.BackBufferWidth &&
+                    mousePosition.Y < GraphicsDevice.PresentationParameters.BackBufferHeight)
+                {
+
+                    Console.WriteLine(mousePosition);
+
+                    var start = new Point((int) unit.Location.X, (int) unit.Location.Y);
+                    var end = new Point(mousePosition.X/Globals.TileSize, mousePosition.Y/Globals.TileSize);
+                    path = Path.CreatePath(start, end);
+                    unit.Move(path);
+                }
+            }
 
             if (keyboardState.IsKeyDown(Keys.Right))
             {
@@ -130,3 +150,4 @@ namespace TestGame
         }
     }
 }
+

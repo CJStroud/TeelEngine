@@ -10,10 +10,10 @@ namespace TeelEngine
 
         public static Path CreatePath(Point startPoint, Point endPoint)
         {
-            PathNode initialNode = new PathNode(Direction.None, startPoint, endPoint);
-            Path path = new Path();
+            var initialNode = new PathNode(Direction.None, startPoint, endPoint);
+            var path = new Path();
             path.SetPath(initialNode.GetNextNode(endPoint, int.MaxValue));
-            if(path.PathNodes.Count > 1)path.PathNodes.RemoveAt(0);
+            if(path.PathNodes.Count >= 1) path.PathNodes.RemoveAt(0);
             return path;
         }
 
@@ -25,7 +25,7 @@ namespace TeelEngine
 
         public Direction GetNextDirection()
         {
-            Direction direction = PathNodes.Last().ChosenDirection;
+            Direction direction = PathNodes.Last().PreviousNodeDirection;
             PathNodes.Remove(PathNodes.Last());
             return direction;
         }

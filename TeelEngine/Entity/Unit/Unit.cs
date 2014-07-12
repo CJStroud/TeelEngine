@@ -92,7 +92,7 @@ namespace TeelEngine
                 if (_path != null && _path.PathNodes.Count > 0)
                 {
                     Direction direction = _path.GetNextDirection();
-                    Move(direction);
+                    if (direction != Direction.None) Move(direction);
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace TeelEngine
             Velocity = Vector2.Zero;
             if (GetAnimatedTexture() != null)
             {
-                //GetAnimatedTexture().Row = (int)Direction;
+                GetAnimatedTexture().Row = (int)Direction;
                 Velocity = GetVelocityForDirection(direction);
                 IsMoving = true;
             }
