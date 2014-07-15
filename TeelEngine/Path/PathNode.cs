@@ -16,7 +16,8 @@ namespace TeelEngine
 
         public PathNode(Direction previousDirection, Point location, Point endPoint)
         {
-            PreviousNodeDirection = ~previousDirection;
+            PreviousNodeDirection = (Direction)((uint)previousDirection ^ 3);
+            Console.WriteLine("Prev Direction: " + PreviousNodeDirection);
             Location = location;
             AvailableMoves = new List<Move>
                 {
@@ -26,7 +27,25 @@ namespace TeelEngine
                     new Move(new Point(Location.X - 1, Location.Y), endPoint, Direction.West),
                 };
 
-            if (previousDirection != Direction.None) AvailableMoves.RemoveAll(m => m.Direction == previousDirection);
+            if ((uint)previousDirection != (uint)Direction.None)
+            {
+                int index = -1;
+                for (int i = 0; i < AvailableMoves.Count; i++)
+                {
+                    if (AvailableMoves[i].Direction == previousDirection)
+                    {
+                        index = i;
+                    }
+                }
+                if (index != -1)
+                {
+                    Console.WriteLine("Removed: " + AvailableMoves[index].Direction);
+                    AvailableMoves.RemoveAt(index);
+                    
+                }
+                
+                //AvailableMoves.RemoveAll(m => m.Direction == previousDirection);
+            }
             AvailableMoves = new List<Move>(AvailableMoves.OrderBy(m => m.StepsFromGoal));
         }
 
@@ -34,7 +53,7 @@ namespace TeelEngine
         {
             if (Location == endPoint)
             {
-                PathNode pathNode = new PathNode(~ChosenDirection, Location, endPoint);
+                PathNode pathNode = new PathNode((Direction)((uint)ChosenDirection ^ 3), Location, endPoint);
                 List<PathNode> thePath = new List<PathNode> { pathNode };
                 Console.WriteLine("This is where it should stop...");
                 return thePath;
@@ -45,6 +64,7 @@ namespace TeelEngine
             {
                 if (CollisionDetection.EntityCollididesWithTerrain(new Vector2(AvailableMoves[i].Location.X, AvailableMoves[i].Location.Y)))
                 {
+                    Console.WriteLine("Collided at Direction: " + AvailableMoves[i].Direction);
                     AvailableMoves.RemoveAt(i);
                     loops--;
                     i--;
@@ -52,22 +72,30 @@ namespace TeelEngine
             }
 
 
-            if (AvailableMoves.Count < 1 || AvailableMoves[0].StepsFromGoal > previousStepCount) return null;
+            if (AvailableMoves.Count < 1)
+            {
+                Console.WriteLine("Going up a level : Step count / no moves");
+                return null;
+            }
 
 
             Console.WriteLine("D: " + AvailableMoves[0].Direction + ", C: " + AvailableMoves[0].Location + ", S: " + AvailableMoves[0].StepsFromGoal);
             ChosenDirection = AvailableMoves[0].Direction;
-            PathNode node = new PathNode(~ChosenDirection, AvailableMoves[0].Location, endPoint);
+            PathNode node = new PathNode((Direction)((uint)ChosenDirection ^ 3), AvailableMoves[0].Location, endPoint);
 
             List<PathNode> nodes = new List<PathNode>();
 
             while ((nodes = node.GetNextNode(endPoint, AvailableMoves[0].StepsFromGoal)) == null)
             {
-                if (AvailableMoves.Count <= 1) return null;
+                if (AvailableMoves.Count <= 1)
+                {
+                    Console.WriteLine("Going up a level : No moves");
+                    return null;
+                }
                 AvailableMoves.RemoveAt(0);
                 Console.WriteLine(AvailableMoves[0].Direction);
                 ChosenDirection = AvailableMoves[0].Direction;
-                node = new PathNode(~ChosenDirection, AvailableMoves[0].Location, endPoint);
+                node = new PathNode((Direction)((uint)ChosenDirection ^ 3), AvailableMoves[0].Location, endPoint);
 
             }
 

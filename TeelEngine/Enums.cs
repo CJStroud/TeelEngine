@@ -5,12 +5,12 @@ using System.Text;
 
 namespace TeelEngine
 {
-    public enum Direction
+    public enum Direction : uint
     {
         North = 0,
         East = 1,
-        South =  2,
-        West = 3,
+        West =  2,
+        South = 3,
         None = 4
     }
 }

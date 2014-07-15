@@ -98,7 +98,6 @@ namespace TestGame
                 if (mousePosition.X < GraphicsDevice.PresentationParameters.BackBufferWidth &&
                     mousePosition.Y < GraphicsDevice.PresentationParameters.BackBufferHeight)
                 {
-
                     Console.WriteLine(mousePosition);
 
                     var start = new Point((int) unit.Location.X, (int) unit.Location.Y);

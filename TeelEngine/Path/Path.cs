@@ -13,7 +13,7 @@ namespace TeelEngine
             var initialNode = new PathNode(Direction.None, startPoint, endPoint);
             var path = new Path();
             path.SetPath(initialNode.GetNextNode(endPoint, int.MaxValue));
-            if(path.PathNodes.Count >= 1) path.PathNodes.RemoveAt(0);
+            if(path.PathNodes != null && path.PathNodes.Count >= 1) path.PathNodes.RemoveAt(0);
             return path;
         }
 
