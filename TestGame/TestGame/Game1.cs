@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Xml;
+using aStarPathfinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -102,7 +103,10 @@ namespace TestGame
 
                     var start = new Point((int) unit.Location.X, (int) unit.Location.Y);
                     var end = new Point(mousePosition.X/Globals.TileSize, mousePosition.Y/Globals.TileSize);
-                    path = Path.CreatePath(start, end);
+                    PathFinder pathFinder = new PathFinder(20, 20, CollisionDetection.Collisions, start, end);
+                    pathFinder.Create();
+
+                    path = pathFinder.Path;
                     unit.Move(path);
                 }
             }

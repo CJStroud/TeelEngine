@@ -106,9 +106,9 @@
     <Compile Include="Map\MapLoader.cs" />
     <Compile Include="Map\Tile.cs" />
     <Compile Include="Menu\IMenu.cs" />
-    <Compile Include="Path\PathNode.cs" />
-    <Compile Include="Path\Move.cs" />
     <Compile Include="Path\Path.cs" />
+    <Compile Include="Path\PathFinder.cs" />
+    <Compile Include="Path\PathNode.cs" />
     <Compile Include="Render\AnimatedTexture.cs" />
     <Compile Include="Render\Camera.cs" />
     <Compile Include="Render\IRender.cs" />

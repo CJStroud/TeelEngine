@@ -10,6 +10,12 @@ namespace TeelEngine
     {
         public static List<Vector2> Collisions = new List<Vector2>();
 
+        public static bool CollisionAtPoint(Point point)
+        {
+            Vector2 vector = new Vector2(point.X, point.Y);
+            return Collisions.Contains(vector);
+        }
+
 
         public static bool EntityCollididesWithTerrain(Vector2 entityLocation)
         {

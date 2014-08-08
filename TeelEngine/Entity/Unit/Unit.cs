@@ -89,7 +89,7 @@ namespace TeelEngine
             else
             {
                 animatedTexture.Paused = true;
-                if (_path != null && _path.PathNodes != null && _path.PathNodes.Count > 0)
+                if (_path != null && _path.Nodes != null && _path.Nodes.Count > 0)
                 {
                     Direction direction = _path.GetNextDirection();
                     if (direction != Direction.None) Move(direction);
