@@ -30,6 +30,7 @@ namespace TestGame
         private AnimatedTexture texture;
         private SpriteTexture spriteTexture;
 
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -65,6 +66,7 @@ namespace TestGame
             keyController.AddAction("Move Up", Events.PlayerMoveUp);
             keyController.AddAction("Move Left", Events.PlayerMoveLeft);
             keyController.AddAction("Move Right", Events.PlayerMoveRight);
+
 
             //path = Path.CreatePath(new Point(0, 0), new Point(2, 2));
             //unit.Move(path);
@@ -103,11 +105,14 @@ namespace TestGame
 
                     var start = new Point((int) unit.Location.X, (int) unit.Location.Y);
                     var end = new Point(mousePosition.X/Globals.TileSize, mousePosition.Y/Globals.TileSize);
-                    PathFinder pathFinder = new PathFinder(20, 20, CollisionDetection.Collisions, start, end);
-                    pathFinder.Create();
+                    
+                    PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
+                    pathFinder.Create(start, end);
 
                     path = pathFinder.Path;
+                    
                     unit.Move(path);
+
                 }
             }
 

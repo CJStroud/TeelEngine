@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Mail;
 using Microsoft.Xna.Framework;
@@ -18,6 +19,7 @@ namespace aStarPathfinding
 
         public PathNode CheckingNode = null;
 
+        public PathNode[,] TempMap { get; set; }
         public PathNode[,] Map { get; set; }
 
         public Path Path { get; set; }
@@ -26,15 +28,23 @@ namespace aStarPathfinding
 
         public const int BaseMovementCost = 10;
 
-        public PathFinder(int mapWidth, int mapHeight, List<Vector2> collisions, Point start, Point end)
+        private int width;
+        private int height;
+        private List<Vector2> collisions; 
+
+        public PathFinder(int mapWidth, int mapHeight, List<Vector2> collisions)
         {
-            Map = GenerateNodes(mapWidth, mapHeight, collisions);
-            StartNode = Map[start.X, start.Y];
-            TargetNode = Map[end.X, end.Y];
+            width = mapWidth;
+            height = mapHeight;
+            this.collisions = collisions;
+
+            //Map = GenerateNodes(mapWidth, mapHeight, collisions);
         }
 
         private PathNode[,] GenerateNodes(int width, int height, List<Vector2> collisions)
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             var map = new PathNode[width, height];
 
             for (int x = 0; x < width; x++)
@@ -42,7 +52,7 @@ namespace aStarPathfinding
                 for (int y = 0; y < height; y++)
                 {
                     var node = new PathNode(new Point(x, y));
-
+                    node.ParentNode = null;
                     if (collisions.Contains(new Vector2(x, y)))
                         node.IsSolid = true;
 
@@ -51,16 +61,32 @@ namespace aStarPathfinding
                 }
 
             }
-
+            watch.Stop();
+            Console.WriteLine("Generating Nodes - " + watch.ElapsedMilliseconds);
             return map;
         }
 
-        public void Create()
+        public void Create(Point start, Point end)
         {
-            SetAdjacentNodes();
+            Path = null;
+            targetFound = false;
+            OpenList = new List<PathNode>();
+            ClosedList = new List<PathNode>();
+            Map = null;
+            Map = GenerateNodes(width, height, collisions);
+
+            StartNode = null;
+            TargetNode = null;
+
+            StartNode = Map[start.X, start.Y];
+            StartNode.ParentNode = null;
+            StartNode.Start = true;
+            TargetNode = Map[end.X, end.Y];
 
             CalculateEstimateValues();
+            CheckingNode = null;
             CheckingNode = StartNode;
+            CheckingNode = SetAdjacentNodes(CheckingNode);
 
             while (Path == null)
             {
@@ -84,36 +110,26 @@ namespace aStarPathfinding
         {
             if (targetFound == false)
             {
-                if (CheckingNode.NorthNode != null)
+                if (CheckingNode.NorthNode != null && !targetFound)
                     CalculateNodeValue(CheckingNode, CheckingNode.NorthNode);
 
-                if (CheckingNode.EastNode != null)
+                if (CheckingNode.EastNode != null && !targetFound)
                     CalculateNodeValue(CheckingNode, CheckingNode.EastNode);
-            
-                if (CheckingNode.SouthNode != null)
+
+                if (CheckingNode.SouthNode != null && !targetFound)
                     CalculateNodeValue(CheckingNode, CheckingNode.SouthNode);
 
-                if (CheckingNode.WestNode != null)
+                if (CheckingNode.WestNode != null && !targetFound)
                     CalculateNodeValue(CheckingNode, CheckingNode.WestNode);
 
                 if (targetFound == false)
                 {
                     AddToClosedList(CheckingNode);
                     RemoveFromOpenList(CheckingNode);
-
+                    CheckingNode = null;
                     CheckingNode = GetSmallestValueNode();
+                    CheckingNode = SetAdjacentNodes(CheckingNode);
                 }
-            }
-        }
-
-        public void SetAdjacentNodes()
-        {
-            foreach (var pathNode in Map)
-            {
-                pathNode.NorthNode = GetPathNodeAt(new Point(pathNode.Location.X, pathNode.Location.Y - 1));
-                pathNode.EastNode = GetPathNodeAt(new Point(pathNode.Location.X + 1, pathNode.Location.Y));
-                pathNode.SouthNode = GetPathNodeAt(new Point(pathNode.Location.X, pathNode.Location.Y + 1));
-                pathNode.WestNode = GetPathNodeAt(new Point(pathNode.Location.X - 1, pathNode.Location.Y));
             }
         }
 
@@ -132,6 +148,16 @@ namespace aStarPathfinding
             return node;
         }
 
+        public PathNode SetAdjacentNodes(PathNode pathNode)
+        {
+            pathNode.NorthNode = GetPathNodeAt(new Point(pathNode.Location.X, pathNode.Location.Y - 1));
+            pathNode.EastNode = GetPathNodeAt(new Point(pathNode.Location.X + 1, pathNode.Location.Y));
+            pathNode.SouthNode = GetPathNodeAt(new Point(pathNode.Location.X, pathNode.Location.Y + 1));
+            pathNode.WestNode = GetPathNodeAt(new Point(pathNode.Location.X - 1, pathNode.Location.Y));
+
+            return pathNode;
+        }
+
         public void CalculateEstimateValues()
         {
             foreach (PathNode pathNode in Map)
@@ -143,7 +169,7 @@ namespace aStarPathfinding
 
         public void CalculateNodeValue(PathNode currentNode, PathNode nodeToCheck)
         {
-            if (currentNode == nodeToCheck)
+            if (currentNode.Location == nodeToCheck.Location)
                 throw new ArgumentException("The current node and the target node cannot be the same!");
 
             if (nodeToCheck.Location == TargetNode.Location)
@@ -228,6 +254,11 @@ namespace aStarPathfinding
                 {
                     node.Direction = CalculateDirection(node, node.ParentNode);
                     Path.Nodes.Insert(0, node);
+
+                    if (node.ParentNode.ParentNode != null && node.Location == node.ParentNode.ParentNode.Location)
+                    {
+                        Console.WriteLine("IT'S FUCKED");
+                    }
                 }
                 node = node.ParentNode;
             } while (node != null);

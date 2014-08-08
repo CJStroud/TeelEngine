@@ -1,11 +1,24 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace TeelEngine
 {
     public class PathNode
     {
-        public PathNode ParentNode = null; // The node that is before in the path
-
+        public PathNode ParentNode
+        {
+            get { return parentNode; }
+            set {
+                if (!Start)
+                {
+                    parentNode = value;
+                }
+                else
+                {
+                    Console.WriteLine("Something is my parent :O!");
+                } }
+        } // The node that is before in the path
+        private PathNode parentNode = null;
         // The nodes around this node 
         // These will be null if there is no node, or a node that cannot be passed through
         public PathNode NorthNode { get; set; }
@@ -20,6 +33,7 @@ namespace TeelEngine
         public bool IsSolid { get; set; }
         public Point Location { get; private set; }
         public Direction Direction { get; set; }
+        public bool Start = false;
 
         public PathNode(Point location)
         {
