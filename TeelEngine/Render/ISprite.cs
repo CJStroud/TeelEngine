@@ -10,13 +10,6 @@ namespace TeelEngine
 {
     public interface ISprite
     {
-        Vector2 Location { get; set; }
         string TextureName { get; set; }
-        int Index { get; set; }
-        Vector2 ScreenPosition { get; set; }
-        void Render(SpriteBatch spriteBatch);
-        void Render(SpriteBatch spriteBatch, Vector2 screenLocation);
-        void Update(GameTime gameTime);
-        void Initialize();
     }
 }
