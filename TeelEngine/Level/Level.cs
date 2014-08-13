@@ -1,4 +1,6 @@
+using System.Configuration;
 using System.Drawing;
+using Point = Microsoft.Xna.Framework.Point;
 
 namespace TeelEngine.Level
 {
@@ -15,5 +17,13 @@ namespace TeelEngine.Level
         }
 
         public GameTile[,] GameTiles { get; private set; }
+
+        public void AddTile(ITile tile, Point location)
+        {
+           // GameTile gTile = GameTiles[location.X, location.Y];
+            if (GameTiles[location.X, location.Y] == null) GameTiles[location.X, location.Y] = new GameTile {Location = location};
+
+            GameTiles[location.X, location.Y].SubTiles.Add(tile);
+        }
     }
 }

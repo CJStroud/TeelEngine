@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using NUnit.Framework;
 using TeelEngine.Level;
 
 namespace TeelEngine
@@ -39,15 +38,14 @@ namespace TeelEngine
                             Texture2D spriteSheet = SpriteSheets[tile.AssetName];
 
                             int spriteSheetTileWidth = spriteSheet.Width / TileSize;
-                            int spriteSheetTileHeight = spriteSheet.Height / TileSize;
 
-                            int yPixelPos = (id/spriteSheetTileWidth)*TileSize;
-                            int xPixelPos = (id - (yPixelPos*spriteSheetTileHeight))*TileSize;
+                            int xPixelPos = (id % spriteSheetTileWidth) * TileSize;
+                            int yPixelPos = (id / spriteSheetTileWidth) * TileSize;
 
-                            
+
                             var sourceRectangle = new Rectangle(xPixelPos, yPixelPos, TileSize, TileSize);
-                            var destRectangle = new Rectangle(gameTile.Location.X*TileSize, gameTile.Location.Y*TileSize,
-                                TileSize, TileSize);
+                            var destRectangle = new Rectangle(gameTile.Location.X*TileSize*4, gameTile.Location.Y*TileSize*4,
+                                TileSize*4, TileSize*4);
 
                             spriteBatch.Draw(spriteSheet, destRectangle, sourceRectangle, Color.White);
 

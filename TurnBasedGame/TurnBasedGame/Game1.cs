@@ -26,7 +26,6 @@ namespace TurnBasedGame
             Content.RootDirectory = "Content";
 
             level = new Level(30, 30);
-            gameRenderer = new GameRenderer(null, 0);
 
         }
         protected override void Initialize()
@@ -36,7 +35,22 @@ namespace TurnBasedGame
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            List<Texture2D> spriteSheets = new List<Texture2D>();
+            Texture2D bg = Content.Load<Texture2D>("Spritesheets/background");
+            bg.Name = "background";
+            spriteSheets.Add(bg);
 
+            Texture2D fg = Content.Load<Texture2D>("Spritesheets/foreground");
+            fg.Name = "foreground";
+            spriteSheets.Add(fg);
+
+            gameRenderer = new GameRenderer(spriteSheets, 16);
+
+
+            TerrainTile tTile = new TerrainTile {AssetName = fg.Name, TextureId = 25};
+            level.AddTile(tTile, new Point(1, 1));
+
+            Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
         }
         protected override void UnloadContent()
@@ -53,7 +67,7 @@ namespace TurnBasedGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             gameRenderer.Render(level, spriteBatch);
             spriteBatch.End();
 
