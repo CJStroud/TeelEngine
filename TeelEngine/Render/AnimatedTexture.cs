@@ -65,41 +65,41 @@ namespace TeelEngine
             TimePerFrame = (float) 1/framePerSec;
         }
 
-        public void Render(SpriteBatch spriteBatch, Vector2 screenPos)
-        {
-            Render(spriteBatch, screenPos, _frame);
-        }
-        public void Render(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 frame)
-        {
-            if (!ReadyToRender) return;
-            Rectangle souceRectangle = new Rectangle((int) (FrameWidth*frame.X), (int) (FrameHeight*frame.Y), FrameWidth, FrameHeight);
+        //public void Render(SpriteBatch spriteBatch, Vector2 screenPos)
+        //{
+        //    Render(spriteBatch, screenPos, _frame);
+        //}
+        //public void Render(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 frame)
+        //{
+        //    if (!ReadyToRender) return;
+        //    Rectangle souceRectangle = new Rectangle((int) (FrameWidth*frame.X), (int) (FrameHeight*frame.Y), FrameWidth, FrameHeight);
 
-            float width = Globals.TileSize;
-            float height = Globals.TileSize;
-            int offsetX = 0;
-            int offsetY = 0;
+        //    float width = Globals.TileSize;
+        //    float height = Globals.TileSize;
+        //    int offsetX = 0;
+        //    int offsetY = 0;
 
-            if (FrameWidth > FrameHeight)
-            {
-                width = Globals.TileSize;
-                height = ((float)Globals.TileSize)/((float)FrameWidth/(float)FrameHeight);
+        //    if (FrameWidth > FrameHeight)
+        //    {
+        //        width = Globals.TileSize;
+        //        height = ((float)Globals.TileSize)/((float)FrameWidth/(float)FrameHeight);
 
-                offsetY = (int) ((Globals.TileSize - height)/2);
-            }
-            else if(FrameHeight > FrameWidth)
-            {
-                width = Globals.TileSize/((float) FrameHeight/(float) FrameWidth);
-                height = Globals.TileSize;
+        //        offsetY = (int) ((Globals.TileSize - height)/2);
+        //    }
+        //    else if(FrameHeight > FrameWidth)
+        //    {
+        //        width = Globals.TileSize/((float) FrameHeight/(float) FrameWidth);
+        //        height = Globals.TileSize;
 
-                offsetX = (int) ((Globals.TileSize - width)/2);
-            }
-
-
+        //        offsetX = (int) ((Globals.TileSize - width)/2);
+        //    }
 
 
-            Rectangle destinationRectangle = new Rectangle((int) screenPos.X + offsetX, (int) screenPos.Y + offsetY, (int)width, (int)height);
-            spriteBatch.Draw(Texture, destinationRectangle, souceRectangle, Color.White);
-        }
+
+
+        //    Rectangle destinationRectangle = new Rectangle((int) screenPos.X + offsetX, (int) screenPos.Y + offsetY, (int)width, (int)height);
+        //    spriteBatch.Draw(Texture, destinationRectangle, souceRectangle, Color.White);
+        //}
 
         public void NextFrame(float elapsed)
         {

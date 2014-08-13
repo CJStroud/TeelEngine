@@ -11,17 +11,17 @@ namespace TeelEngine
         public static List<Vector2> Collisions = new List<Vector2>();
 
 
-        public static bool EntityCollididesWithTerrain(Vector2 entityLocation)
-        {
-            IEnumerable<Vector2> viewableCollisions = Camera.GetViewableLocations(Collisions, Camera.Lens);
-            return viewableCollisions.Any(location => PositionsAreSame(entityLocation, location));
-        }
+        //public static bool EntityCollididesWithTerrain(Vector2 entityLocation)
+        //{
+        //    IEnumerable<Vector2> viewableCollisions = Camera.GetViewableLocations(Collisions, Camera.Lens);
+        //    return viewableCollisions.Any(location => PositionsAreSame(entityLocation, location));
+        //}
 
-        public static bool EntityCollidesWithEntity(Vector2 entityLocation, IEnumerable<IEntity> colliedableEntities)
-        {
-            IEnumerable<ISprite> viewableSprites = Camera.GetViewableSprites(colliedableEntities, Camera.Lens);
-            return viewableSprites.Any(colliedableEntity => PositionsAreSame(entityLocation, colliedableEntity.Location));
-        }
+        //public static bool EntityCollidesWithEntity(Vector2 entityLocation, IEnumerable<IEntity> colliedableEntities)
+        //{
+        //    IEnumerable<ISprite> viewableSprites = Camera.GetViewableSprites(colliedableEntities, Camera.Lens);
+        //    return viewableSprites.Any(colliedableEntity => PositionsAreSame(entityLocation, colliedableEntity.Location));
+        //}
 
         public static bool PositionsAreSame(Vector2 position1, Vector2 position2)
         {

@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeGame", "RealTimeGame\RealTimeGame\RealTimeGame.csproj", "{5E424205-253D-4642-92A7-7524644503E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeGameContent", "RealTimeGame\RealTimeGameContent\RealTimeGameContent.contentproj", "{F235A026-3689-43E8-955B-D46DC3B635CF}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeelEngine", "TeelEngine\TeelEngine.csproj", "{C9761324-0CE1-481A-B9D3-BF42FEFD6D40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGame", "TestGame\TestGame\TestGame.csproj", "{84B130E7-603A-47B5-9031-51FFC6DB070A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnBasedGame", "TurnBasedGame\TurnBasedGame\TurnBasedGame.csproj", "{EE889B16-50D1-4875-8429-EAF9D917B9E2}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "TestGameContent", "TestGame\TestGameContent\TestGameContent.contentproj", "{E6187DA8-5B56-4FD5-91E1-D2618D11D2A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurnBasedGameContent", "TurnBasedGame\TurnBasedGameContent\TurnBasedGameContent.contentproj", "{C2D64C1E-12AE-4188-9C32-7D3405F0FFA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +17,22 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E424205-253D-4642-92A7-7524644503E7}.Debug|x86.ActiveCfg = Debug|x86
+		{5E424205-253D-4642-92A7-7524644503E7}.Debug|x86.Build.0 = Debug|x86
+		{5E424205-253D-4642-92A7-7524644503E7}.Release|x86.ActiveCfg = Release|x86
+		{5E424205-253D-4642-92A7-7524644503E7}.Release|x86.Build.0 = Release|x86
+		{F235A026-3689-43E8-955B-D46DC3B635CF}.Debug|x86.ActiveCfg = Debug|x86
+		{F235A026-3689-43E8-955B-D46DC3B635CF}.Release|x86.ActiveCfg = Release|x86
 		{C9761324-0CE1-481A-B9D3-BF42FEFD6D40}.Debug|x86.ActiveCfg = Debug|x86
 		{C9761324-0CE1-481A-B9D3-BF42FEFD6D40}.Debug|x86.Build.0 = Debug|x86
 		{C9761324-0CE1-481A-B9D3-BF42FEFD6D40}.Release|x86.ActiveCfg = Release|x86
 		{C9761324-0CE1-481A-B9D3-BF42FEFD6D40}.Release|x86.Build.0 = Release|x86
-		{84B130E7-603A-47B5-9031-51FFC6DB070A}.Debug|x86.ActiveCfg = Debug|x86
-		{84B130E7-603A-47B5-9031-51FFC6DB070A}.Debug|x86.Build.0 = Debug|x86
-		{84B130E7-603A-47B5-9031-51FFC6DB070A}.Release|x86.ActiveCfg = Release|x86
-		{84B130E7-603A-47B5-9031-51FFC6DB070A}.Release|x86.Build.0 = Release|x86
-		{E6187DA8-5B56-4FD5-91E1-D2618D11D2A1}.Debug|x86.ActiveCfg = Debug|x86
-		{E6187DA8-5B56-4FD5-91E1-D2618D11D2A1}.Release|x86.ActiveCfg = Release|x86
+		{EE889B16-50D1-4875-8429-EAF9D917B9E2}.Debug|x86.ActiveCfg = Debug|x86
+		{EE889B16-50D1-4875-8429-EAF9D917B9E2}.Debug|x86.Build.0 = Debug|x86
+		{EE889B16-50D1-4875-8429-EAF9D917B9E2}.Release|x86.ActiveCfg = Release|x86
+		{EE889B16-50D1-4875-8429-EAF9D917B9E2}.Release|x86.Build.0 = Release|x86
+		{C2D64C1E-12AE-4188-9C32-7D3405F0FFA2}.Debug|x86.ActiveCfg = Debug|x86
+		{C2D64C1E-12AE-4188-9C32-7D3405F0FFA2}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

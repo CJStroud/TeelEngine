@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using TeelEngine;
+using TeelEngine.Level;
 
 namespace TurnBasedGame
 {
@@ -15,11 +17,17 @@ namespace TurnBasedGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Level level;
+        GameRenderer gameRenderer; 
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            level = new Level(30, 30);
+            gameRenderer = new GameRenderer();
+
         }
         protected override void Initialize()
         {
@@ -28,6 +36,8 @@ namespace TurnBasedGame
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+
         }
         protected override void UnloadContent()
         {
@@ -43,7 +53,12 @@ namespace TurnBasedGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
+            gameRenderer.Render(level, spriteBatch);
+            spriteBatch.End();
+
             base.Draw(gameTime);
+
         }
     }
 }

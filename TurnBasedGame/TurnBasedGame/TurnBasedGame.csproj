@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>6571a0a5-a467-43ae-828c-a2aaf7580c6b</ProjectGuid>
+    <ProjectGuid>{EE889B16-50D1-4875-8429-EAF9D917B9E2}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -68,6 +68,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TeelEngine\TeelEngine.csproj">
+      <Project>{C9761324-0CE1-481A-B9D3-BF42FEFD6D40}</Project>
+      <Name>TeelEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TurnBasedGameContent\TurnBasedGameContent.contentproj">
       <Name>TurnBasedGameContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

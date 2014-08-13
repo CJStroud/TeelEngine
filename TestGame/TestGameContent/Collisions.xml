@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:Generic="System.Collections.Generic" xmlns:Framework="Microsoft.Xna.Framework">
-  <Asset Type="Generic:List[Framework:Vector2]">3 6 3 5 3 4 3 3</Asset>
-</XnaContent>

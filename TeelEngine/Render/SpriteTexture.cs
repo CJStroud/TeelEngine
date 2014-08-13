@@ -29,10 +29,10 @@ namespace TeelEngine
             int x = index%_width;
             int y = index/_width;
             
-            Rectangle sourceRectangle = new Rectangle(x * SpriteSize, y * SpriteSize, SpriteSize, SpriteSize);
-            Rectangle destinationRectangle = new Rectangle((int) screenPos.X, (int) screenPos.Y, Globals.TileSize,
-                Globals.TileSize);
-            spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
+            //Rectangle sourceRectangle = new Rectangle(x * SpriteSize, y * SpriteSize, SpriteSize, SpriteSize);
+            //Rectangle destinationRectangle = new Rectangle((int) screenPos.X, (int) screenPos.Y, Globals.TileSize,
+            //    Globals.TileSize);
+            //spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
 
 
         }
