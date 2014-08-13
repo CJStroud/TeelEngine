@@ -15,10 +15,9 @@ namespace TeelEngine
 
         public GameRenderer(List<Texture2D> spriteSheets, int tileSize)
         {
-            SpriteSheets = spriteSheets;
+            SpriteSheets = spriteSheets.ToDictionary(d => d.Name);
             TileSize = tileSize;
         }
-
 
         public void Render(Level.Level level, SpriteBatch spriteBatch)
         {
