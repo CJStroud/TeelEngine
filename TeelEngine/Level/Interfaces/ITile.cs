@@ -5,6 +5,7 @@ namespace TeelEngine.Level
 {
     public interface ITile
     {
-        Point Location { get; }
+        
+
     }
 }

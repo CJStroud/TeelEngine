@@ -26,7 +26,7 @@ namespace TurnBasedGame
             Content.RootDirectory = "Content";
 
             level = new Level(30, 30);
-            gameRenderer = new GameRenderer();
+            gameRenderer = new GameRenderer(null, 0);
 
         }
         protected override void Initialize()

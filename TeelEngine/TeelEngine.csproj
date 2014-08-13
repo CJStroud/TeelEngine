@@ -72,9 +72,6 @@
     <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\..\..\Downloads\Moq.4.0.10827.Final (1)\Moq.4.0.10827\NET40\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
@@ -101,7 +98,6 @@
   <ItemGroup>
     <Compile Include="Collision\CollisionDetection.cs" />
     <Compile Include="Key\KeyController.cs" />
-    <Compile Include="Level\Tests.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Objects\EntityTile.cs" />
     <Compile Include="GameRenderer.cs" />
