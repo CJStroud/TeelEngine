@@ -99,7 +99,8 @@
     <Compile Include="Key\KeyController.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Objects\EntityTile.cs" />
-    <Compile Include="GameRenderer.cs" />
+    <Compile Include="Render\IAnimatable.cs" />
+    <Compile Include="TileRenderer.cs" />
     <Compile Include="Level\Objects\GameTile.cs" />
     <Compile Include="Level\Interfaces\IRenderable.cs" />
     <Compile Include="Level\Interfaces\ITile.cs" />

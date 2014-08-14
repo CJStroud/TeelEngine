@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TeelEngine
 {
-    public class AnimatedTexture : ITexture
+    public class AnimatedTexture 
     {
         public string AssetName { get; set; }
         public Texture2D Texture { get; set; }
@@ -65,41 +65,42 @@ namespace TeelEngine
             TimePerFrame = (float) 1/framePerSec;
         }
 
-        //public void Render(SpriteBatch spriteBatch, Vector2 screenPos)
-        //{
-        //    Render(spriteBatch, screenPos, _frame);
-        //}
-        //public void Render(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 frame)
-        //{
-        //    if (!ReadyToRender) return;
-        //    Rectangle souceRectangle = new Rectangle((int) (FrameWidth*frame.X), (int) (FrameHeight*frame.Y), FrameWidth, FrameHeight);
+        public void Render(SpriteBatch spriteBatch, Vector2 screenPos, int tileSize)
+        {
+            Render(spriteBatch, screenPos, _frame, tileSize);
+        }
+        public void Render(SpriteBatch spriteBatch, Vector2 screenPos, Vector2 frame, int tileSize)
+        {
+            FrameWidth = Texture.Width / ColumnCount;
+            FrameHeight = Texture.Height / RowCount;
+            Rectangle souceRectangle = new Rectangle((int)(FrameWidth * frame.X), (int)(FrameHeight * frame.Y), FrameWidth, FrameHeight);
 
-        //    float width = Globals.TileSize;
-        //    float height = Globals.TileSize;
-        //    int offsetX = 0;
-        //    int offsetY = 0;
+            float width = tileSize;
+            float height = tileSize;
+            int offsetX = 0;
+            int offsetY = 0;
 
-        //    if (FrameWidth > FrameHeight)
-        //    {
-        //        width = Globals.TileSize;
-        //        height = ((float)Globals.TileSize)/((float)FrameWidth/(float)FrameHeight);
+            if (FrameWidth > FrameHeight)
+            {
+                width = tileSize;
+                height = ((float)tileSize) / ((float)FrameWidth / (float)FrameHeight);
 
-        //        offsetY = (int) ((Globals.TileSize - height)/2);
-        //    }
-        //    else if(FrameHeight > FrameWidth)
-        //    {
-        //        width = Globals.TileSize/((float) FrameHeight/(float) FrameWidth);
-        //        height = Globals.TileSize;
+                offsetY = (int)((tileSize - height) / 2);
+            }
+            else if (FrameHeight > FrameWidth)
+            {
+                width = tileSize / ((float)FrameHeight / (float)FrameWidth);
+                height = tileSize;
 
-        //        offsetX = (int) ((Globals.TileSize - width)/2);
-        //    }
-
-
+                offsetX = (int)((tileSize - width) / 2);
+            }
 
 
-        //    Rectangle destinationRectangle = new Rectangle((int) screenPos.X + offsetX, (int) screenPos.Y + offsetY, (int)width, (int)height);
-        //    spriteBatch.Draw(Texture, destinationRectangle, souceRectangle, Color.White);
-        //}
+
+
+            Rectangle destinationRectangle = new Rectangle((int)screenPos.X + offsetX, (int)screenPos.Y + offsetY, (int)width, (int)height);
+            spriteBatch.Draw(Texture, destinationRectangle, souceRectangle, Color.White);
+        }
 
         public void NextFrame(float elapsed)
         {
@@ -116,25 +117,13 @@ namespace TeelEngine
             }
         }
 
-        public void LoadContent(ContentManager contentManager)
+        public void LoadContent()
         {
-            if (AssetName != null)
-            {
-                Texture = contentManager.Load<Texture2D>(AssetName);
-                ReadyToRender = true;
-                FrameWidth = Texture.Width/ColumnCount;
-                FrameHeight = Texture.Height/RowCount;
-            }
+
+               
+
         }
 
-        public void LoadContent(ContentManager contentManager, string assetName)
-        {
-            if (assetName != null)
-            {
-                AssetName = assetName;
-                LoadContent(contentManager);
-            }
-        }
 
         public void UnloadContent()
         {
