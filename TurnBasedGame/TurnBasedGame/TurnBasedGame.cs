@@ -25,7 +25,7 @@ namespace TurnBasedGame
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            level = new Level(30, 30);
+            level = new Level(50, 50);
 
         }
         protected override void Initialize()
@@ -46,8 +46,17 @@ namespace TurnBasedGame
 
             gameRenderer = new GameRenderer(spriteSheets, 16);
 
-
+            TerrainTile bTile = new TerrainTile {AssetName = bg.Name, TextureId = 10};
             TerrainTile tTile = new TerrainTile {AssetName = fg.Name, TextureId = 6};
+
+            for (int x = 0; x < 50; x++)
+            {
+                for (int y = 0; y < 50; y ++)
+                {
+                    level.AddTile(bTile, new Point(x, y));
+                }
+            }
+
             level.AddTile(tTile, new Point(1, 1));
 
             Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -60,6 +69,30 @@ namespace TurnBasedGame
 
         protected override void Update(GameTime gameTime)
         {
+            var keyboardState = Keyboard.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+                var x = Camera.Lens.X + 1;
+                Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
+            }
+            if (keyboardState.IsKeyDown(Keys.Left))
+            {
+                var x = Camera.Lens.X - 1;
+                Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
+            }
+            if (keyboardState.IsKeyDown(Keys.Up))
+            {
+                var y = Camera.Lens.Y - 1;
+                Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
+            }
+            if (keyboardState.IsKeyDown(Keys.Down))
+            {
+                var y = Camera.Lens.Y + 1;
+                Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
+            }
+
+
             base.Update(gameTime);
         }
 

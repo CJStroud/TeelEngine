@@ -20,6 +20,8 @@ namespace TeelEngine
 
         public void Render(Level.Level level, SpriteBatch spriteBatch)
         {
+            int gameTileSize = TileSize*2;
+
             foreach (var gameTile in level.GameTiles)
             {
                 if (gameTile == null)
@@ -29,7 +31,7 @@ namespace TeelEngine
 
                 foreach (var subTile in gameTile.SubTiles)
                 {
-                    if (Camera.IsWithinLens(TileSize, gameTile.Location))
+                    if (Camera.IsWithinLens(gameTileSize, gameTile.Location))
                     {
                         if (subTile is IRenderable)
                         {
@@ -44,8 +46,8 @@ namespace TeelEngine
 
 
                             var sourceRectangle = new Rectangle(xPixelPos, yPixelPos, TileSize, TileSize);
-                            var destRectangle = new Rectangle(gameTile.Location.X*TileSize*4, gameTile.Location.Y*TileSize*4,
-                                TileSize*4, TileSize*4);
+                            var destRectangle = new Rectangle((gameTile.Location.X*gameTileSize) - Camera.Lens.X, (gameTile.Location.Y*gameTileSize) - Camera.Lens.Y,
+                                gameTileSize, gameTileSize);
 
                             spriteBatch.Draw(spriteSheet, destRectangle, sourceRectangle, Color.White);
 
