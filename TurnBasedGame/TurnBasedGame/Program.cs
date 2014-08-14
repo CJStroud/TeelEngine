@@ -10,7 +10,7 @@ namespace TurnBasedGame
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (TurnBasedGame game = new TurnBasedGame())
             {
                 game.Run();
             }

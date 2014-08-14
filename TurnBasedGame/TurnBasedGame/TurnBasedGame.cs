@@ -13,14 +13,14 @@ using TeelEngine.Level;
 
 namespace TurnBasedGame
 {
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class TurnBasedGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Level level;
         GameRenderer gameRenderer; 
 
-        public Game1()
+        public TurnBasedGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -47,7 +47,7 @@ namespace TurnBasedGame
             gameRenderer = new GameRenderer(spriteSheets, 16);
 
 
-            TerrainTile tTile = new TerrainTile {AssetName = fg.Name, TextureId = 25};
+            TerrainTile tTile = new TerrainTile {AssetName = fg.Name, TextureId = 6};
             level.AddTile(tTile, new Point(1, 1));
 
             Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);

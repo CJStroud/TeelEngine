@@ -10,7 +10,7 @@ namespace RealTimeGame
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (RealTimeGame game = new RealTimeGame())
             {
                 game.Run();
             }
