@@ -5,61 +5,29 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using TeelEngine.Render;
 
 namespace TeelEngine 
 {
     public class SpriteTexture : ITexture
     {
         public string AssetName { get; set; }
-        public Texture2D Texture { get; set; }
-        public bool ReadyToRender { get; set; }
+        public int TextureId { get; set; }
 
-        private int _width;
-
-        public int SpriteSize { get; set; }
-
-        public SpriteTexture()
+        public SpriteTexture(string assetName, int textureId)
         {
-            
+            AssetName = assetName;
+            TextureId = textureId;
         }
 
-        public void Render(SpriteBatch spriteBatch, int index, Vector2 screenPos)
+        public void Render(SpriteBatch spriteBatch, Point screenPos, SpriteSheet spriteSheet, int gameTileSize)
         {
-            if (!ReadyToRender && index >= 0) return;
-            int x = index%_width;
-            int y = index/_width;
-            
-            //Rectangle sourceRectangle = new Rectangle(x * SpriteSize, y * SpriteSize, SpriteSize, SpriteSize);
-            //Rectangle destinationRectangle = new Rectangle((int) screenPos.X, (int) screenPos.Y, Globals.TileSize,
-            //    Globals.TileSize);
-            //spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
+            var sourceRectangle = spriteSheet.GetTileRectangle(TextureId);
 
+            var destinationRectangle = new Rectangle(screenPos.X, screenPos.Y, gameTileSize,
+                gameTileSize);
 
-        }
-
-        public void LoadContent(ContentManager contentManager)
-        {
-            if (AssetName != null && SpriteSize != 0)
-            {
-                Texture = contentManager.Load<Texture2D>(AssetName);
-                _width = Texture.Width/SpriteSize;
-                ReadyToRender = true;
-            }
-        }
-
-        public void LoadContent(ContentManager contentManager, string assetName, int spriteSize)
-        {
-            if (assetName != null)
-            {
-                AssetName = assetName;
-                SpriteSize = spriteSize;
-                LoadContent(contentManager);
-            }
-        }
-
-        public void UnloadContent()
-        {
-            
+            spriteBatch.Draw(spriteSheet.Texture, destinationRectangle, sourceRectangle, Color.White);
         }
     }
 }

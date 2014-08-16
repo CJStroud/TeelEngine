@@ -38,23 +38,26 @@ namespace TurnBasedGame
         {
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            List<Texture2D> spriteSheets = new List<Texture2D>();
-            Texture2D bg = Content.Load<Texture2D>("Spritesheets/background");
-            bg.Name = "background";
-            spriteSheets.Add(bg);
+            var spriteSheets = new List<SpriteSheet>();
+            var bg = Content.Load<Texture2D>("Spritesheets/background");
+            var spriteSheetBg = new SpriteSheet("background", 16, bg);
+            spriteSheets.Add(spriteSheetBg);
 
-            Texture2D fg = Content.Load<Texture2D>("Spritesheets/foreground");
-            fg.Name = "foreground";
-            spriteSheets.Add(fg);
+            var fg = Content.Load<Texture2D>("Spritesheets/foreground");
+            var spriteSheetFg = new SpriteSheet("foreground", 16, fg);
+            spriteSheets.Add(spriteSheetFg);
 
-            Texture2D woman = Content.Load<Texture2D>("Spritesheets/spritesheet");
-            woman.Name = "woman";
-            spriteSheets.Add(woman);
+            var woman = Content.Load<Texture2D>("Spritesheets/woman");
+            var spriteSheetWo = new SpriteSheet("woman", 32, woman);
+            spriteSheets.Add(spriteSheetWo);
 
             _tileRenderer = new TileRenderer(spriteSheets, 16);
 
-            var bTile = new TerrainTile {AssetName = bg.Name, TextureId = 10};
-            var tTile = new TerrainTile {AssetName = fg.Name, TextureId = 6};
+            var spriteTextureGrass = new SpriteTexture(spriteSheetBg.Name, 29);
+            var spriteTextureBed = new SpriteTexture(spriteSheetFg.Name, 6);
+
+            var bTile = new TerrainTile {Texture = spriteTextureGrass};
+            var tTile = new TerrainTile {Texture = spriteTextureBed};
 
             var animations = new Dictionary<string, int>();
 
@@ -63,9 +66,11 @@ namespace TurnBasedGame
             animations.Add("MOVE_DOWN", 2);
             animations.Add("MOVE_LEFT", 3);
 
-            var eTile = new EntityTile {AssetName = woman.Name, Animations = animations};
+            var animatedTexture = new AnimatedTexture(spriteSheetWo.Name, new Point(0, 0), 3, true,  spriteSheetWo.ColumnCount);
 
-            for (int x = 0; x < 50; x++)
+            var eTile = new EntityTile { Animations = animations, Texture = animatedTexture};
+
+            for (int x = 0; x < 60; x++)
             {
                 for (int y = 0; y < 50; y ++)
                 {
@@ -75,6 +80,13 @@ namespace TurnBasedGame
 
             level.AddTile(tTile, new Point(1, 1));
             level.AddTile(tTile, new Point(40, 40));
+
+
+            var entity = new MoveableEntity() {Location = new Point(5,5), Speed = 0.2F};
+            level.Entities.Add(entity);
+
+            eTile.EntityId = 0;
+
             level.AddTile(eTile, new Point(5, 5));
 
             Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -114,8 +126,13 @@ namespace TurnBasedGame
                 var eTile = level.GameTiles[5, 5].SubTiles.Last() as EntityTile;
                 if (eTile != null)
                 {
-                    eTile.CurrentAnimation = "MOVE_UP";
+                    eTile.Move(0, -1);
                 }
+            }
+
+            foreach (var gameTile in level.GameTiles)
+            {
+                if(gameTile != null)gameTile.Update(level, gameTime);
             }
 
             base.Update(gameTime);

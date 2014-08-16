@@ -5,7 +5,6 @@ namespace TeelEngine.Level
 {
     public interface ITile
     {
-        
-
+        void Update(Level level, GameTime gameTime);
     }
 }

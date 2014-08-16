@@ -96,10 +96,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collision\CollisionDetection.cs" />
+    <Compile Include="EntityRenderer.cs" />
+    <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\MoveableEntity.cs" />
     <Compile Include="Key\KeyController.cs" />
+    <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Objects\EntityTile.cs" />
-    <Compile Include="Render\IAnimatable.cs" />
+    <Compile Include="Level\Interfaces\IAnimatable.cs" />
+    <Compile Include="Render\SpriteSheet.cs" />
     <Compile Include="TileRenderer.cs" />
     <Compile Include="Level\Objects\GameTile.cs" />
     <Compile Include="Level\Interfaces\IRenderable.cs" />
@@ -110,7 +115,6 @@
     <Compile Include="Render\Camera.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Render\ISprite.cs" />
     <Compile Include="Render\ITexture.cs" />
     <Compile Include="Render\SpriteTexture.cs" />
   </ItemGroup>

@@ -10,12 +10,6 @@ namespace TeelEngine
     public interface ITexture
     {
         string AssetName { get; set; }
-
-        Texture2D Texture { get; set; }
-
-        bool ReadyToRender { get; set; }
-
-        void LoadContent(ContentManager contentManager);
-        void UnloadContent();
+        int TextureId { get; set; }
     }
 }

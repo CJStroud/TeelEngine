@@ -18,5 +18,12 @@ namespace TeelEngine.Level
             SubTiles.Add(tile);
         }
 
+        public void Update(Level level, GameTime gameTime)
+        {
+            foreach (var subTile in SubTiles)
+            {
+                subTile.Update(level, gameTime);
+            }
+        }
     }
 }
