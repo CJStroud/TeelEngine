@@ -37,6 +37,7 @@ namespace TeelEngine
 
                     if (animatedEntity.CurrentAnimation != null)
                     {
+                        
                         animatedTexture.Row = animatedEntity.Animations[animatedEntity.CurrentAnimation];
                         animatedTexture.Paused = false;
                     }

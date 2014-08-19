@@ -25,6 +25,7 @@ namespace TeelEngine
 
         public override void Move(Direction direction)
         {
+            if (IsMoving) return;
             if (direction == Direction.North) CurrentAnimation = "MOVE_UP";
             if (direction == Direction.East) CurrentAnimation = "MOVE_RIGHT";
             if (direction == Direction.South) CurrentAnimation = "MOVE_DOWN";

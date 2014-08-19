@@ -157,13 +157,13 @@ namespace TurnBasedGame
 
             if (keyboardState.IsKeyDown(Keys.X))
             {
-                _entityRenderer.GameTileSize += 2;
-                _tileRenderer.GameTileSize += 2;
+                _entityRenderer.GameTileSize += 1;
+                _tileRenderer.GameTileSize += 1;
             }
             if (keyboardState.IsKeyDown(Keys.Z))
             {
-                _entityRenderer.GameTileSize -= 2;
-                _tileRenderer.GameTileSize -= 2;
+                _entityRenderer.GameTileSize -= 1;
+                _tileRenderer.GameTileSize -= 1;
             }
 
             base.Update(gameTime);
