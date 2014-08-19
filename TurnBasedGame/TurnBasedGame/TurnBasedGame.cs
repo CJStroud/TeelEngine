@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using aStarPathfinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -36,12 +37,15 @@ namespace TurnBasedGame
 
         protected override void Initialize()
         {
+            IsMouseVisible = true;
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            
+
+
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var spriteSheetsTerrain = new List<SpriteSheet>();
             var spriteSheetsEntities = new List<SpriteSheet>();
@@ -145,6 +149,31 @@ namespace TurnBasedGame
             {
                 moveableEntity.Move(Direction.West);
             }
+
+
+
+            var mouseState = Mouse.GetState();
+
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                var mousePosition = new Point(mouseState.X, mouseState.Y);
+                if (mousePosition.X < GraphicsDevice.PresentationParameters.BackBufferWidth &&
+                    mousePosition.Y < GraphicsDevice.PresentationParameters.BackBufferHeight)
+                {
+                    Console.WriteLine(mousePosition);
+
+                    var start = new Point((int)moveableEntity.Location.X, (int)moveableEntity.Location.Y);
+                    var end = new Point(mousePosition.X / _tileRenderer.GameTileSize, mousePosition.Y / _tileRenderer.GameTileSize);
+
+                    PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
+                    pathFinder.Create(start, end);
+
+                    Path path = pathFinder.Path;
+
+                    moveableEntity.Path = path;
+                }
+            }
+
 
             foreach (var gameTile in level.GameTiles)
             {

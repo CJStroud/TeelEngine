@@ -104,6 +104,9 @@
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Interfaces\IAnimatable.cs" />
+    <Compile Include="Path\Path.cs" />
+    <Compile Include="Path\PathFinder.cs" />
+    <Compile Include="Path\PathNode.cs" />
     <Compile Include="Render\SpriteSheet.cs" />
     <Compile Include="TileRenderer.cs" />
     <Compile Include="Level\Objects\GameTile.cs" />

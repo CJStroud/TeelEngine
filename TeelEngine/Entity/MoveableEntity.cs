@@ -14,6 +14,8 @@ namespace TeelEngine
         public Direction MoveDirection { get; set; }
         public bool IsMoving { get; set; }
 
+        public Path Path { get; set; }
+
         public virtual void Move(Direction direction)
         {
             if(direction == Direction.North) Move(new Vector2(Location.X, Location.Y - 1));
@@ -48,6 +50,14 @@ namespace TeelEngine
                     Location = NewLocation;
                     Offset = new Vector2(0, 0);
                     IsMoving = false;
+                }
+            }
+            else
+            {
+                if (Path != null)
+                {
+                    Move(Path.GetNextDirection());
+                    if (Path.Nodes.Count == 0) Path = null;
                 }
             }
 
