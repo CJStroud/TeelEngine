@@ -63,13 +63,18 @@ namespace TeelEngine
 
         public void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet)
         {
+            Render(spriteBatch, screenPos, gameTileSize, spriteSheet, 0F);
+        }
+
+        public void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet, float rotation)
+        {
             if (ColumnCount == 0) ColumnCount = spriteSheet.ColumnCount;
 
             var souceRectangle = spriteSheet.GetTileRectangle(_frame);
 
             var destinationRectangle = new Rectangle(screenPos.X, screenPos.Y, gameTileSize, gameTileSize);
 
-            spriteBatch.Draw(spriteSheet.Texture, destinationRectangle, souceRectangle, Color.White);
+            spriteBatch.Draw(spriteSheet.Texture, destinationRectangle, souceRectangle, Color.White, rotation, new Vector2(spriteSheet.TileSize / 2F, spriteSheet.TileSize / 2F), SpriteEffects.None, 0);
         }
 
         public void NextFrame(float elapsed)

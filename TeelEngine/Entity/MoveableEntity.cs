@@ -10,38 +10,47 @@ namespace TeelEngine
     public class MoveableEntity : Entity, IMoveable
     {
         public float Speed { get; set; }
-        public Vector2 Offset { get; set; }
-        public Point NewLocation { get; set; }
+        public Vector2 NewLocation { get; set; }
         public Direction MoveDirection { get; set; }
+        public bool IsMoving { get; set; }
 
-        public void Move(Direction direction)
+        public virtual void Move(Direction direction)
         {
-            
+            if(direction == Direction.North) Move(new Vector2(Location.X, Location.Y - 1));
+            if(direction == Direction.East) Move(new Vector2(Location.X + 1, Location.Y));
+            if(direction == Direction.South) Move(new Vector2(Location.X,  Location.Y + 1));
+            if(direction == Direction.West) Move(new Vector2(Location.X - 1, Location.Y));
+        }
+
+        public virtual void Move(Vector2 location)
+        {
+            if (!IsMoving)
+            {
+                NewLocation = location;
+                IsMoving = true;
+            }
         }
 
         public override void Update(Level.Level level, GameTime gameTime)
         {
-            if (Location != NewLocation)
+            if (IsMoving)
             {
-                int diffX = NewLocation.X - entity.Location.X;
-                int diffY = NewLocation.Y - entity.Location.Y;
+                float diffX = NewLocation.X - Location.X;
+                float diffY = NewLocation.Y - Location.Y;
 
                 int signX = Math.Sign(diffX);
                 int signY = Math.Sign(diffY);
 
+                Offset = new Vector2(Offset.X + ((signX * Speed) * Math.Abs(diffX)), Offset.Y + ((signY * Speed) * Math.Abs(diffY)));
 
-                Offset = new Vector2(Offset.X + (signX * entity.Speed), Offset.Y + (signY * entity.Speed));
-
-                if (Offset.X >= 1 || Offset.Y >= 1 || Offset.X <= -1 || Offset.Y <= -1)
+                if (Math.Abs((Location.X + Offset.X) - NewLocation.X) < Speed && Math.Abs((Location.Y + Offset.Y) - NewLocation.Y) < Speed)
                 {
                     Location = NewLocation;
                     Offset = new Vector2(0, 0);
+                    IsMoving = false;
                 }
             }
 
-            var texture = Texture as AnimatedTexture;
-            var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            texture.NextFrame(elapsed);
             base.Update(level, gameTime);
         }
     }

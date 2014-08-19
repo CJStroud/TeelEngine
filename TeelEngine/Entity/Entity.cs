@@ -8,22 +8,23 @@ using TeelEngine.Render;
 
 namespace TeelEngine
 {
-    public class Entity : IAnimatable
+    public class Entity : IRenderable
     {
-        public Point Location { get; set; }
-
-        public Dictionary<string, int> Animations { get; set; }
-
-        public string CurrentAnimation { get; set; }
+        public Vector2 Location { get; set; }
 
         public ITexture Texture { get; set; }
 
+        public float Rotation { get; set; }
+
         public int EntityId { get; set; }
 
+        public Vector2 Offset { get; set; }
 
-        public override void Update(Level.Level level, GameTime gameTime)
+        public string Group { get; set; }
+
+        public virtual void Update(Level.Level level, GameTime gameTime)
         {
-            
+
         }
 
     }

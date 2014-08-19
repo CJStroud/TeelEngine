@@ -9,7 +9,7 @@ namespace TeelEngine.Level.Interfaces
     interface IMoveable
     {
         Vector2 Offset { get; set; }
-        Point NewLocation { get; set; }
+        Vector2 NewLocation { get; set; }
         Direction MoveDirection { get; set; }
         float Speed { get; set; }
 

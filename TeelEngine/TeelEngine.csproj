@@ -98,11 +98,11 @@
     <Compile Include="Collision\CollisionDetection.cs" />
     <Compile Include="EntityRenderer.cs" />
     <Compile Include="Entity\Entity.cs" />
+    <Compile Include="Entity\MoveableAnimatableEntity.cs" />
     <Compile Include="Entity\MoveableEntity.cs" />
     <Compile Include="Key\KeyController.cs" />
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
-    <Compile Include="Level\Objects\EntityTile.cs" />
     <Compile Include="Level\Interfaces\IAnimatable.cs" />
     <Compile Include="Render\SpriteSheet.cs" />
     <Compile Include="TileRenderer.cs" />

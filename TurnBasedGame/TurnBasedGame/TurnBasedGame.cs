@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 using TeelEngine;
 using TeelEngine.Level;
 
@@ -18,14 +19,18 @@ namespace TurnBasedGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Level level;
-        TileRenderer _tileRenderer; 
+        TileRenderer _tileRenderer;
+        private EntityRenderer _entityRenderer;
 
         public TurnBasedGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            
             level = new Level(50, 50);
+
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
 
         }
 
@@ -38,25 +43,28 @@ namespace TurnBasedGame
         {
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            var spriteSheets = new List<SpriteSheet>();
+            var spriteSheetsTerrain = new List<SpriteSheet>();
+            var spriteSheetsEntities = new List<SpriteSheet>();
+
             var bg = Content.Load<Texture2D>("Spritesheets/background");
             var spriteSheetBg = new SpriteSheet("background", 16, bg);
-            spriteSheets.Add(spriteSheetBg);
+            spriteSheetsTerrain.Add(spriteSheetBg);
 
             var fg = Content.Load<Texture2D>("Spritesheets/foreground");
             var spriteSheetFg = new SpriteSheet("foreground", 16, fg);
-            spriteSheets.Add(spriteSheetFg);
+            spriteSheetsTerrain.Add(spriteSheetFg);
 
             var woman = Content.Load<Texture2D>("Spritesheets/woman");
             var spriteSheetWo = new SpriteSheet("woman", 32, woman);
-            spriteSheets.Add(spriteSheetWo);
+            spriteSheetsEntities.Add(spriteSheetWo);
 
-            _tileRenderer = new TileRenderer(spriteSheets, 16);
+            _tileRenderer = new TileRenderer(spriteSheetsTerrain, 32);
+            _entityRenderer = new EntityRenderer(spriteSheetsEntities, 32);
 
-            var spriteTextureGrass = new SpriteTexture(spriteSheetBg.Name, 29);
+            var spriteTextureGrass = new SpriteTexture(spriteSheetBg.Name, 145);
             var spriteTextureBed = new SpriteTexture(spriteSheetFg.Name, 6);
 
-            var bTile = new TerrainTile {Texture = spriteTextureGrass};
+            var bTile = new TerrainTile {Texture = spriteTextureGrass, Rotation = 0F};
             var tTile = new TerrainTile {Texture = spriteTextureBed};
 
             var animations = new Dictionary<string, int>();
@@ -66,9 +74,7 @@ namespace TurnBasedGame
             animations.Add("MOVE_DOWN", 2);
             animations.Add("MOVE_LEFT", 3);
 
-            var animatedTexture = new AnimatedTexture(spriteSheetWo.Name, new Point(0, 0), 3, true,  spriteSheetWo.ColumnCount);
-
-            var eTile = new EntityTile { Animations = animations, Texture = animatedTexture};
+            var animatedTexture = new AnimatedTexture(spriteSheetWo.Name, new Point(0, 0), 8, true,  spriteSheetWo.ColumnCount);
 
             for (int x = 0; x < 60; x++)
             {
@@ -82,12 +88,8 @@ namespace TurnBasedGame
             level.AddTile(tTile, new Point(40, 40));
 
 
-            var entity = new MoveableEntity() {Location = new Point(5,5), Speed = 0.2F};
-            level.Entities.Add(entity);
-
-            eTile.EntityId = 0;
-
-            level.AddTile(eTile, new Point(5, 5));
+            var entity = new MoveableAnimatableEntity {Location = new Vector2(5,5), Speed = 0.08F, Animations = animations, Texture = animatedTexture, NewLocation = new Vector2(4F, 4F)};
+            level.AddEntity(entity);
 
             Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
@@ -121,18 +123,47 @@ namespace TurnBasedGame
                 var y = Camera.Lens.Y + 10;
                 Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
             }
+
+            var moveableEntity = (MoveableEntity)level.Entities[0];
+
             if (keyboardState.IsKeyDown(Keys.W))
             {
-                var eTile = level.GameTiles[5, 5].SubTiles.Last() as EntityTile;
-                if (eTile != null)
-                {
-                    eTile.Move(0, -1);
-                }
+                moveableEntity.Move(Direction.North);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.D))
+            {
+                moveableEntity.Move(Direction.East);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.S))
+            {
+                moveableEntity.Move(Direction.South);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.A))
+            {
+                moveableEntity.Move(Direction.West);
             }
 
             foreach (var gameTile in level.GameTiles)
             {
                 if(gameTile != null)gameTile.Update(level, gameTime);
+            }
+            foreach (var entity in level.Entities)
+            {
+                entity.Update(level, gameTime);
+            }
+
+            if (keyboardState.IsKeyDown(Keys.X))
+            {
+                _entityRenderer.GameTileSize += 2;
+                _tileRenderer.GameTileSize += 2;
+            }
+            if (keyboardState.IsKeyDown(Keys.Z))
+            {
+                _entityRenderer.GameTileSize -= 2;
+                _tileRenderer.GameTileSize -= 2;
             }
 
             base.Update(gameTime);
@@ -140,10 +171,11 @@ namespace TurnBasedGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             _tileRenderer.Render(level, spriteBatch);
+            _entityRenderer.Render(level, spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

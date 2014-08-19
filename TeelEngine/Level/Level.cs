@@ -1,5 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Point = Microsoft.Xna.Framework.Point;
 
 namespace TeelEngine.Level
@@ -19,7 +24,9 @@ namespace TeelEngine.Level
         }
 
         public GameTile[,] GameTiles { get; private set; }
-        public List<Entity> Entities { get; set; }
+        public List<Entity> Entities { get; private set; }
+
+        private int _nextAvaliableId;
 
         public void AddTile(ITile tile, Point location)
         {
@@ -30,6 +37,22 @@ namespace TeelEngine.Level
 
                 GameTiles[location.X, location.Y].SubTiles.Add(tile);
             }
+        }
+
+        public int GetNextAvailableEntityId()
+        {
+            return (_nextAvaliableId += 1);
+        }
+
+        public void AddEntity(Entity entity)
+        {
+            entity.EntityId = GetNextAvailableEntityId();
+            Entities.Add(entity);
+        }
+
+        public IEnumerable<Entity> GetEntitesByGroup(string group)
+        {
+            return Entities.Where(ent => ent.Group == group);
         }
     }
 }
