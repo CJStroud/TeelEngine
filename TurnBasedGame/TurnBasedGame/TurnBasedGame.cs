@@ -163,7 +163,7 @@ namespace TurnBasedGame
                     Console.WriteLine(mousePosition);
 
                     var start = new Point((int)moveableEntity.Location.X, (int)moveableEntity.Location.Y);
-                    var end = new Point(mousePosition.X / _tileRenderer.GameTileSize, mousePosition.Y / _tileRenderer.GameTileSize);
+                    var end = Camera.GetGridCoordsWherePixelLocationIs(_tileRenderer.GameTileSize, mousePosition);
 
                     PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
                     pathFinder.Create(start, end);

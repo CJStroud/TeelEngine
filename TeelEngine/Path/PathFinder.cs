@@ -68,6 +68,8 @@ namespace aStarPathfinding
 
         public void Create(Point start, Point end)
         {
+            if (start == end) return;
+
             Path = null;
             targetFound = false;
             OpenList = new List<PathNode>();
