@@ -16,21 +16,21 @@ namespace TeelEngine
 
         public Path Path { get; set; }
 
+        public virtual void Move(Vector2 destination)
+        {
+            if (!IsMoving && destination != Location)
+            {
+                NewLocation = destination;
+                IsMoving = true;
+            }
+        }
+
         public virtual void Move(Direction direction)
         {
             if(direction == Direction.North) Move(new Vector2(Location.X, Location.Y - 1));
             if(direction == Direction.East) Move(new Vector2(Location.X + 1, Location.Y));
             if(direction == Direction.South) Move(new Vector2(Location.X,  Location.Y + 1));
             if(direction == Direction.West) Move(new Vector2(Location.X - 1, Location.Y));
-        }
-
-        public virtual void Move(Vector2 location)
-        {
-            if (!IsMoving)
-            {
-                NewLocation = location;
-                IsMoving = true;
-            }
         }
 
         public override void Update(Level.Level level, GameTime gameTime)
@@ -56,8 +56,8 @@ namespace TeelEngine
             {
                 if (Path != null)
                 {
-                    Move(Path.GetNextDirection());
-                    if (Path.Nodes.Count == 0) Path = null;
+                    Move(Path.GetNextLocation());
+                    if (Path.ReachedEnd) Path = null;
                 }
             }
 
