@@ -100,6 +100,7 @@
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\MoveableAnimatableEntity.cs" />
     <Compile Include="Entity\MoveableEntity.cs" />
+    <Compile Include="GameStates\IGameState.cs" />
     <Compile Include="Key\KeyController.cs" />
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />

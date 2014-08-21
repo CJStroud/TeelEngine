@@ -33,6 +33,13 @@ namespace TeelEngine
             return true;
         }
 
+        public bool Add(string name, Keys key, Action action)
+        {
+            bool addAction = AddAction(name, action);
+
+            return addAction && AddKeybinding(key, name);
+        }
+
         public void InvokeAction(string name)
         {
             Action action;
