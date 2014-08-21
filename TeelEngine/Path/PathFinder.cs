@@ -11,9 +11,9 @@ namespace aStarPathfinding
 {
     public class PathFinder
     {
-        private List<PathNode> OpenList = new List<PathNode>(); // The open list is for nodes to be checked
-        private List<PathNode> ClosedList = new List<PathNode>(); // The closed list for nodes that have been checked
-
+        private Queue<PathNode> _openList;// = new List<PathNode>(); // The open list is for nodes to be checked
+        private ISet<PathNode> _closedList;// = new HashSet<PathNode>(); // The closed list for nodes that have been checked
+ 
 
         private bool targetFound = false;
 
@@ -30,12 +30,24 @@ namespace aStarPathfinding
 
         private int width;
         private int height;
-        private List<Vector2> collisions; 
+        private List<Vector2> collisions;
+
+
+        private int XMaxValue;
+        private int XMinValue;
+        private int YMaxValue;
+        private int YMinValue;
+
 
         public PathFinder(int mapWidth, int mapHeight, List<Vector2> collisions)
         {
             width = mapWidth;
             height = mapHeight;
+            XMaxValue = mapWidth - 1;
+            YMaxValue = mapHeight - 1;
+            XMinValue = 0;
+            YMinValue = 0;
+
             this.collisions = collisions;
 
             //Map = GenerateNodes(mapWidth, mapHeight, collisions);
@@ -70,10 +82,11 @@ namespace aStarPathfinding
         {
             if (start == end) return;
 
+
             Path = null;
             targetFound = false;
-            OpenList = new List<PathNode>();
-            ClosedList = new List<PathNode>();
+            _openList = new Queue<PathNode>();
+            _closedList = new HashSet<PathNode>();
             Map = null;
             Map = GenerateNodes(width, height, collisions);
 
@@ -127,7 +140,7 @@ namespace aStarPathfinding
                 if (targetFound == false)
                 {
                     AddToClosedList(CheckingNode);
-                    RemoveFromOpenList(CheckingNode);
+                    RemoveFromOpenList();
                     CheckingNode = null;
                     CheckingNode = GetSmallestValueNode();
                     CheckingNode = SetAdjacentNodes(CheckingNode);
@@ -137,17 +150,10 @@ namespace aStarPathfinding
 
         private PathNode GetPathNodeAt(Point location)
         {
-            PathNode node;
-            try
-            {
-                node = Map[location.X, location.Y];
-            }
-            catch (IndexOutOfRangeException)
-            {
-                node = null;
-            }
-
-            return node;
+            bool outOfBounds = location.X > XMaxValue || location.X < XMinValue 
+                                || location.Y > YMaxValue || location.Y < YMinValue;
+               
+            return outOfBounds ? null : Map[location.X, location.Y];
         }
 
         public PathNode SetAdjacentNodes(PathNode pathNode)
@@ -164,7 +170,7 @@ namespace aStarPathfinding
         {
             foreach (PathNode pathNode in Map)
             {
-                pathNode.EstimatedCost = 10*(Math.Abs(pathNode.Location.X - TargetNode.Location.X)
+                pathNode.EstimatedCost = BaseMovementCost * (Math.Abs(pathNode.Location.X - TargetNode.Location.X)
                                              + Math.Abs(pathNode.Location.Y - TargetNode.Location.Y));
             }
         }
@@ -187,10 +193,10 @@ namespace aStarPathfinding
                 return;
 
             // Don't check if it is on the closed list
-            if (ClosedList.Contains(nodeToCheck))
+            if (_closedList.Contains(nodeToCheck))
                 return;
 
-            if (OpenList.Contains(nodeToCheck))
+            if (_openList.Contains(nodeToCheck))
             {
                 int newGCost = currentNode.EstimatedCost + BaseMovementCost;
 
@@ -214,25 +220,26 @@ namespace aStarPathfinding
 
         private void AddToOpenList(PathNode pathNode)
         {
-            OpenList.Add(pathNode);
+            _openList.Enqueue(pathNode);
         }
 
-        private void RemoveFromOpenList(PathNode pathNode)
+        private void RemoveFromOpenList()
         {
-            if (OpenList.Contains(pathNode))
-                OpenList.Remove(pathNode);
+
+            _openList.Dequeue();
+            
         }
 
         private void AddToClosedList(PathNode pathNode)
         {
-            ClosedList.Add(pathNode);
+            _closedList.Add(pathNode);
         }
 
         private PathNode GetSmallestValueNode()
         {
             PathNode smallestValue = null;
 
-            foreach (PathNode node in OpenList)
+            foreach (PathNode node in _openList)
             {
                 if (smallestValue == null)
                     smallestValue = node;

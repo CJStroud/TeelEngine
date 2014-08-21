@@ -11,7 +11,7 @@ namespace TeelEngine
         public static bool IsWithinLens(int tileSize, Point location)
         {
             var spriteRectangle = new Rectangle(location.X*tileSize, location.Y*tileSize, tileSize, tileSize);
-            return Camera.Lens.Intersects(spriteRectangle);
+            return Lens.Intersects(spriteRectangle);
         }
 
         public static void UpdateLensPosition(Point newStartPosition)
@@ -23,7 +23,6 @@ namespace TeelEngine
         {
             int x = (pixelLocation.X + Lens.X)/tileSize;
             int y = (pixelLocation.Y + Lens.Y)/tileSize;
-
             return new Point(x, y);
         }
     }

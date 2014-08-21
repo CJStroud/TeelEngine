@@ -15,7 +15,6 @@ namespace TeelEngine
         public override void Update(Level.Level level, GameTime gameTime)
         {
             if (!IsMoving) CurrentAnimation = null;
-
             var texture = Texture as AnimatedTexture;
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             texture.NextFrame(elapsed);
