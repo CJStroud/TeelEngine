@@ -7,26 +7,34 @@ using Microsoft.Xna.Framework;
 namespace TeelEngine
 {
     public class Path
-    { 
-        public List<PathNode> Nodes { get; set; }
-        public bool ReachedEnd { get; private set; }
-        private int _index;
+    {
+        #region properties
 
-/*
-        public Direction GetNextDirection()
-        {
-            Direction direction = Nodes[_index].Direction;
-            _index++;
-            return direction;
+        /// <summary>
+        /// Stack of PathNodes that make up the path
+        /// </summary>
+        public Stack<PathNode> Nodes { get; set; }
+        public bool ReachedEnd {
+            get { return Nodes.Count == 0; }
         }
-*/
 
+        #endregion
+
+        #region public methods
+
+        /// <summary>
+        /// Returns the next nodes location as a vector and removes that node from the path
+        /// </summary>
+        /// <returns>Location of the next node</returns>
         public Vector2 GetNextLocation()
         {
-            var location = new Vector2(Nodes[_index].Location.X, Nodes[_index].Location.Y);
-            if (Nodes[_index].Location == Nodes.Last().Location) ReachedEnd = true;
-            _index++;
-            return location;
+            if (Nodes.Count == 0) return Vector2.Zero;
+
+            PathNode node = Nodes.Pop();
+            return new Vector2(node.Location.X, node.Location.Y);
         }
+
+        #endregion
+
     }
 }

@@ -44,8 +44,6 @@ namespace TurnBasedGame
         protected override void LoadContent()
         {
 
-
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var spriteSheetsTerrain = new List<SpriteSheet>();
             var spriteSheetsEntities = new List<SpriteSheet>();
@@ -92,7 +90,7 @@ namespace TurnBasedGame
             level.AddTile(tTile, new Point(40, 40));
 
 
-            var entity = new MoveableAnimatableEntity {Location = new Vector2(5,5), Speed = 0.08F, Animations = animations, Texture = animatedTexture, NewLocation = new Vector2(4F, 4F)};
+            var entity = new MoveableAnimatableEntity {Location = new Vector2(1,1), Speed = 0.08F, Animations = animations, Texture = animatedTexture, NewLocation = new Vector2(4F, 4F)};
             level.AddEntity(entity);
 
             Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
@@ -166,9 +164,7 @@ namespace TurnBasedGame
                     var end = Camera.GetGridCoordsWherePixelLocationIs(_tileRenderer.GameTileSize, mousePosition);
 
                     PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
-                    pathFinder.Create(start, end);
-
-                    Path path = pathFinder.Path;
+                    Path path = pathFinder.FindPath(start, end);
 
                     moveableEntity.Path = path;
                 }

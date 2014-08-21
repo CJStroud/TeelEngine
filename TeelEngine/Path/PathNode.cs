@@ -3,49 +3,70 @@ using Microsoft.Xna.Framework;
 
 namespace TeelEngine
 {
+    /// <summary>
+    /// Holds the information about each stage on the path
+    /// </summary>
     public class PathNode
     {
+
+        #region properties
+
+        /// <summary>
+        /// This node that comes before this one is the path, if this is the starting node it will be null
+        /// </summary>
         public PathNode ParentNode
         {
-            get { return parentNode; }
-            set {
-                if (!Start)
-                {
-                    parentNode = value;
-                }
-                else
-                {
-                    Console.WriteLine("Something is my parent :O!");
-                } }
-        } // The node that is before in the path
-        private PathNode parentNode = null;
-        // The nodes around this node 
-        // These will be null if there is no node, or a node that cannot be passed through
+            get { return _parentNode; }
+            set
+            {
+                _parentNode = value;
+            }
+        }
+
+        /// <summary>
+        /// The grid reference location of this node
+        /// </summary>
+        public Point Location { get; private set; }
+
         public PathNode NorthNode { get; set; }
         public PathNode EastNode { get; set; }
         public PathNode SouthNode { get; set; }
         public PathNode WestNode { get; set; }
 
-        public int EstimatedCost { get; set; }      // g
-        public int MovementCost { get; set; }       // h
-        public int TotalCost { get; set; }          // f (g + h)
+        public int EstimatedCost { get; set; }
+        public int MovementCost { get; set; }
+        public int TotalCost { get; set; }
 
         public bool IsSolid { get; set; }
-        public Point Location { get; private set; }
-        public Direction Direction { get; set; }
-        public bool Start = false;
+
+        #endregion
+
+        #region private methods
+
+        private PathNode _parentNode;
+
+        #endregion
+
+        #region constructors
 
         public PathNode(Point location)
         {
             Location = location;
         }
 
+        #endregion
+
+        #region public methods
+
         /// <summary>
-        /// Calculates the total cost of moving through the node
+        /// Calculates the total cost of moving through the node, using the estimated cost and movement cost
         /// </summary>
         public void CalculateTotalCost()
         {
             TotalCost = EstimatedCost + MovementCost;
         }
+
+        #endregion
+
     }
 }
