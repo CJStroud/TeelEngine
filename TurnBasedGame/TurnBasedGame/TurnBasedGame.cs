@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using TeelEngine.GameStates;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using TeelEngine;
 using TeelEngine.Level;
@@ -19,7 +20,7 @@ namespace TurnBasedGame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private List<IGameState> gameStates; 
+        private GameStateManager gameStateManager;
 
         public TurnBasedGame()
         {
@@ -33,14 +34,13 @@ namespace TurnBasedGame
 
         protected override void Initialize()
         {
-            GameStateDefault gameStateDefault = new GameStateDefault(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            gameStates = new List<IGameState>();
-            gameStates.Add(gameStateDefault);
+            gameStateManager = new GameStateManager();
 
-            foreach (var gameState in gameStates)
-            {
-                gameState.Initialize();
-            }
+            GameStateDefault gameStateDefault = new GameStateDefault("Default", graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+
+            gameStateManager.Add(gameStateDefault);
+
+            gameStateManager.Initialize();
 
             IsMouseVisible = true;
             base.Initialize();
@@ -52,10 +52,7 @@ namespace TurnBasedGame
             spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
             Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
-            foreach (var gameState in gameStates)
-            {
-                gameState.LoadContent(Content);
-            }
+            gameStateManager.LoadContent(Content);
 
         }
         protected override void UnloadContent()
@@ -65,10 +62,7 @@ namespace TurnBasedGame
 
         protected override void Update(GameTime gameTime)
         {
-            foreach (var gameState in gameStates)
-            {
-                gameState.Update(gameTime);
-            }
+            gameStateManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -77,10 +71,7 @@ namespace TurnBasedGame
         {
             GraphicsDevice.Clear(Color.Black);
 
-            foreach (var gameState in gameStates)
-            {
-                gameState.Draw(gameTime, spriteBatch);
-            }
+            gameStateManager.Draw(gameTime, spriteBatch);
 
             base.Draw(gameTime);
 

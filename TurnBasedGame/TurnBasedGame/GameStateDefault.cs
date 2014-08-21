@@ -12,10 +12,8 @@ using TeelEngine.Level;
 
 namespace TurnBasedGame
 {
-    public class GameStateDefault : IGameState
+    public class GameStateDefault : GameState
     {
-        public string Name { get; set; }
-
         private Level level;
         private TileRenderer _tileRenderer;
         private EntityRenderer _entityRenderer;
@@ -23,18 +21,16 @@ namespace TurnBasedGame
         private int ScreenWidth;
         private int ScreenHeight;
 
-        public GameStateDefault(int screenWidth, int screenHeight)
+        public GameStateDefault(string name, int screenWidth, int screenHeight) : base(name)
         {
             ScreenWidth = screenWidth;
             ScreenHeight = screenHeight;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             level = new Level(50, 50);
             _keyController = new KeyController();
-
-            
 
             _keyController.Add("MoveCameraUp", Keys.Up, () =>
             {
@@ -73,7 +69,7 @@ namespace TurnBasedGame
             });
         }
 
-        public void LoadContent(ContentManager contentManager)
+        public override void LoadContent(ContentManager contentManager)
         {
             var spriteSheetsTerrain = new List<SpriteSheet>();
             var spriteSheetsEntities = new List<SpriteSheet>();
@@ -124,7 +120,7 @@ namespace TurnBasedGame
             level.AddEntity(entity);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             _keyController.CheckKeyPresses(Keyboard.GetState());
 
@@ -163,7 +159,7 @@ namespace TurnBasedGame
 
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             _tileRenderer.Render(level, spriteBatch);
