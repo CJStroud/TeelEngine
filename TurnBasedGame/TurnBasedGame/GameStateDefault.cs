@@ -118,6 +118,12 @@ namespace TurnBasedGame
 
             var entity = new MoveableAnimatableEntity { Location = new Vector2(5, 5), Speed = 0.08F, Animations = animations, Texture = animatedTexture, NewLocation = new Vector2(4F, 4F) };
             level.AddEntity(entity);
+
+            _keyController.Add("PlayerMoveUp", Keys.W, () => entity.Move(Direction.North));
+            _keyController.Add("PlayerMoveRight", Keys.D, () => entity.Move(Direction.East));
+            _keyController.Add("PlayerMoveDown", Keys.S, () => entity.Move(Direction.South));
+            _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
+
         }
 
         public override void Update(GameTime gameTime)
