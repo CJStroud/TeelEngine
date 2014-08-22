@@ -18,29 +18,29 @@ namespace TurnBasedGame
 {
     public class TurnBasedGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        private GameStateManager gameStateManager;
+        readonly GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
+        private GameStateManager _gameStateManager;
 
         public TurnBasedGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth = 1280;
 
         }
 
         protected override void Initialize()
         {
-            gameStateManager = new GameStateManager();
+            _gameStateManager = new GameStateManager();
 
-            GameStateDefault gameStateDefault = new GameStateDefault("Default", graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            var gameStateDefault = new GameStateDefault("Default", _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-            gameStateManager.Add(gameStateDefault);
+            _gameStateManager.Add(gameStateDefault);
 
-            gameStateManager.Initialize();
+            _gameStateManager.Initialize();
 
             IsMouseVisible = true;
             base.Initialize();
@@ -49,10 +49,10 @@ namespace TurnBasedGame
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
-            Camera.Lens = new Rectangle(0,0,graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            _spriteBatch = new SpriteBatch(_graphics.GraphicsDevice);
+            Camera.Lens = new Rectangle(0,0,_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
-            gameStateManager.LoadContent(Content);
+            _gameStateManager.LoadContent(Content);
 
         }
         protected override void UnloadContent()
@@ -62,7 +62,7 @@ namespace TurnBasedGame
 
         protected override void Update(GameTime gameTime)
         {
-            gameStateManager.Update(gameTime);
+            _gameStateManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -71,7 +71,7 @@ namespace TurnBasedGame
         {
             GraphicsDevice.Clear(Color.Black);
 
-            gameStateManager.Draw(gameTime, spriteBatch);
+            _gameStateManager.Draw(gameTime, _spriteBatch);
 
             base.Draw(gameTime);
 

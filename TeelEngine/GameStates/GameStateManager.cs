@@ -10,25 +10,25 @@ namespace TeelEngine.GameStates
 {
     public class GameStateManager
     {
-        Dictionary<string, GameState> gameStates = new Dictionary<string, GameState>();
+        readonly Dictionary<string, GameState> _gameStates = new Dictionary<string, GameState>();
         public GameState CurrentGameState;
 
         public bool Add(GameState gameState)
         {
-            if (gameStates.ContainsKey(gameState.Name)) return false;
+            if (_gameStates.ContainsKey(gameState.Name)) return false;
 
-            gameStates.Add(gameState.Name, gameState);
+            _gameStates.Add(gameState.Name, gameState);
 
-            if (gameStates.Values.Count == 1) CurrentGameState = gameStates[gameState.Name];            
+            if (_gameStates.Values.Count == 1) CurrentGameState = _gameStates[gameState.Name];            
 
             return true;
         }
 
         public bool SwapState(string state)
         {
-            if (!gameStates.ContainsKey(state)) return false;
+            if (!_gameStates.ContainsKey(state) || CurrentGameState.Name == state) return false;
 
-            CurrentGameState = gameStates[state];
+            CurrentGameState = _gameStates[state];
             return true;
         }
 
@@ -50,7 +50,7 @@ namespace TeelEngine.GameStates
 
         public void Initialize()
         {
-            foreach (var gameState in gameStates.Values)
+            foreach (var gameState in _gameStates.Values)
             {
                 gameState.Initialize();
             }
@@ -58,7 +58,7 @@ namespace TeelEngine.GameStates
 
         public void LoadContent(ContentManager contentManager)
         {
-            foreach (var gameState in gameStates.Values)
+            foreach (var gameState in _gameStates.Values)
             {
                 gameState.LoadContent(contentManager);
             }
