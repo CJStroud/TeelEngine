@@ -96,7 +96,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collision\CollisionDetection.cs" />
-    <Compile Include="EntityRenderer.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\MoveableAnimatableEntity.cs" />
     <Compile Include="Entity\MoveableEntity.cs" />
@@ -109,19 +108,20 @@
     <Compile Include="Path\Path.cs" />
     <Compile Include="Path\PathFinder.cs" />
     <Compile Include="Path\PathNode.cs" />
-    <Compile Include="Render\SpriteSheet.cs" />
-    <Compile Include="TileRenderer.cs" />
+    <Compile Include="Render\Renderer\EntityRenderer.cs" />
+    <Compile Include="Render\Texture\SpriteSheet.cs" />
+    <Compile Include="Render\Renderer\TileRenderer.cs" />
     <Compile Include="Level\Objects\GameTile.cs" />
     <Compile Include="Level\Interfaces\IRenderable.cs" />
     <Compile Include="Level\Interfaces\ITile.cs" />
     <Compile Include="Level\Level.cs" />
     <Compile Include="Level\Objects\TerrainTile.cs" />
-    <Compile Include="Render\AnimatedTexture.cs" />
+    <Compile Include="Render\Texture\AnimatedTexture.cs" />
     <Compile Include="Render\Camera.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Render\ITexture.cs" />
-    <Compile Include="Render\SpriteTexture.cs" />
+    <Compile Include="Render\Texture\ITexture.cs" />
+    <Compile Include="Render\Texture\SpriteTexture.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
