@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using aStarPathfinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -13,6 +12,7 @@ using TeelEngine.GameStates;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using TeelEngine;
 using TeelEngine.Level;
+using TeelEngine.Pathing;
 
 namespace TurnBasedGame
 {

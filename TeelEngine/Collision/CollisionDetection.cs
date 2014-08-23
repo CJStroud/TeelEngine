@@ -8,7 +8,7 @@ namespace TeelEngine
 {
     public class CollisionDetection
     {
-        public static List<Vector2> Collisions = new List<Vector2>();
+        public static List<Point> Collisions = new List<Point>();
 
 
         //public static bool EntityCollididesWithTerrain(Vector2 entityLocation)

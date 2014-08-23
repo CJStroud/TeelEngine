@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using aStarPathfinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TeelEngine;
 using TeelEngine.Level;
+using TeelEngine.Pathing;
 
 namespace TurnBasedGame
 {
@@ -71,6 +71,13 @@ namespace TurnBasedGame
 
         public override void LoadContent(ContentManager contentManager)
         {
+            CollisionDetection.Collisions = new List<Point>();
+
+            for (int t = 0; t < 25; t++)
+            {
+                CollisionDetection.Collisions.Add(new Point(t, 10));
+            }
+
             var spriteSheetsTerrain = new List<SpriteSheet>();
             var spriteSheetsEntities = new List<SpriteSheet>();
 
@@ -152,12 +159,10 @@ namespace TurnBasedGame
                     Console.WriteLine(mousePosition);
 
                     var start = new Point((int)moveableEntity.Location.X, (int)moveableEntity.Location.Y);
-                    var end = new Point(mousePosition.X / _tileRenderer.GameTileSize, mousePosition.Y / _tileRenderer.GameTileSize);
+                    var end = Camera.GetGridCoordsWherePixelLocationIs(_tileRenderer.GameTileSize, mousePosition);
 
                     PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
-                    pathFinder.Create(start, end);
-
-                    Path path = pathFinder.Path;
+                    Path path = pathFinder.FindPath(start, end);
 
                     moveableEntity.Path = path;
                 }
