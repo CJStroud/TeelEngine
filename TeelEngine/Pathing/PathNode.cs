@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace TeelEngine
+namespace TeelEngine.Pathing
 {
     /// <summary>
     /// Holds the information about each stage on the path

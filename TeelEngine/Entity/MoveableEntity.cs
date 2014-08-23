@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using TeelEngine.Level.Interfaces;
+using TeelEngine.Pathing;
 
 namespace TeelEngine
 {

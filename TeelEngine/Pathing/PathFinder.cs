@@ -1,13 +1,8 @@
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Mail;
-using Microsoft.Xna.Framework;
-using TeelEngine;
-using Path = TeelEngine.Path;
 
-namespace aStarPathfinding
+namespace TeelEngine.Pathing
 {
     public class PathFinder
     {
@@ -29,15 +24,16 @@ namespace aStarPathfinding
 
         private PathNode _startNode;
         private PathNode _targetNode;
-        private PathNode _nodeToCheck;
+        private PathNode _nodeInFocus;
         private Path _path;
 
         private PathNode[,] _nodeMap;
 
         private Queue<PathNode> _openList;
         private ISet<PathNode> _closedList;
-        private readonly List<Vector2> _permCollisionLocations; // collision points that wont change, hardcoded into the map
-        private List<Vector2> _allCollisionLocations; 
+        private List<Point> _hardCollisionLocations; // collision points that wont change, hardcoded into the map
+        private List<Point> _softCollisionLocations; // collision points that are liable to change during runtime
+        private List<Point> _allCollisionLocations; 
 
         private bool _pathComplete;
 
@@ -45,56 +41,88 @@ namespace aStarPathfinding
 
         #region constructors
 
-        public PathFinder(int mapMapWidth, int mapMapHeight, List<Vector2> permCollisionLocations)
+        /// <summary>
+        /// The pathfinder constructor, this should be instialised at the same time as the map or level
+        /// </summary>
+        /// <param name="mapMapWidth">The map width in tiles</param>
+        /// <param name="mapMapHeight">The map height in tiles</param>
+        /// <param name="hardCollisionLocations">The collison locations on the map that will never change during the maps lifetime</param>
+        public PathFinder(int mapMapWidth, int mapMapHeight, List<Point> hardCollisionLocations)
         {
+            // ensures hardCollisionLocations will not be set as null
+            _hardCollisionLocations = hardCollisionLocations ?? new List<Point>();
+            _allCollisionLocations = _hardCollisionLocations;
+
             _mapWidth = mapMapWidth;
             _mapHeight = mapMapHeight;
             _xMaxValue = mapMapWidth - 1;
             _yMaxValue = mapMapHeight - 1;
             _xMinValue = 0;
             _yMinValue = 0;
-
-            _permCollisionLocations = permCollisionLocations;
         }
 
         #endregion
 
         #region public methods
 
+        /// <summary>
+        /// Finds the shortest possible path between the start and on point
+        /// </summary>
+        /// <param name="start">The paths starting point as a grid location</param>
+        /// <param name="end">The paths ending point as a grid location</param>
+        /// <returns>A path object representing the shortest route. This will be null if there is no path</returns>
         public Path FindPath(Point start, Point end)
         {
             if (start == end) return null;
             if (!IsWithinMapBounds(start)) return null;
             if (!IsWithinMapBounds(end)) return null;
 
+            // variable setup
             NullOldVariables();
+            if (_softCollisionLocations!=null) _allCollisionLocations.AddRange(_softCollisionLocations);
 
-            // todo: pass through the variable collisions and merge with perm collision
-            // note variable collisions are things such as moving entities
-            _allCollisionLocations = _permCollisionLocations;
-
+            // node / node map setup
             GenerateNodeMap();
             _startNode = _nodeMap[start.X, start.Y];
             _targetNode = _nodeMap[end.X, end.Y];
 
             CalculateEstimateValues();
+            _nodeInFocus = _startNode;
+            _nodeInFocus = SetAdjacentNodes(_nodeInFocus);
 
-            _nodeToCheck = _startNode;
-            _nodeToCheck = SetAdjacentNodes(_nodeToCheck);
-
+            // main pathfinding loop
             while (_path == null)
             {
                 Update();
             }
 
+            // reset collision locations
+            _softCollisionLocations = null;
+            _allCollisionLocations = _hardCollisionLocations;
             return _path;
 
+        }
+
+        /// <summary>
+        /// Finds the shortest possible path between the start and on point
+        /// </summary>
+        /// <param name="start">The paths starting point as a grid location</param>
+        /// <param name="end">The paths ending point as a grid location</param>
+        /// <param name="softCollisionLocations">These are the collision points that may have changed each time a path is created</param>
+        /// <returns>A path object representing the shortest route. This will be null if there is no path</returns>
+        public Path FindPath(Point start, Point end, List<Point> softCollisionLocations)
+        {
+            _softCollisionLocations = softCollisionLocations ?? new List<Point>();
+            return FindPath(start, end);
         }
 
         #endregion
 
         #region main private methods
 
+        /// <summary>
+        /// Creates nodes to represent the map
+        /// </summary>
         private void GenerateNodeMap()
         {
             var map = new PathNode[_mapWidth, _mapHeight];
@@ -105,7 +133,7 @@ namespace aStarPathfinding
                 {
                     var node = new PathNode(new Point(x, y));
                     node.ParentNode = null;
-                    if (_allCollisionLocations.Contains(new Vector2(x, y)))
+                    if (_allCollisionLocations.Contains(new Point(x, y)))
                         node.IsSolid = true;
                     map[x, y] = node;
                 }
@@ -115,6 +143,9 @@ namespace aStarPathfinding
             _nodeMap = map;
         }
 
+        /// <summary>
+        /// Checks to see whether the path has been completed or whether we need to keep trying
+        /// </summary>
         private void Update()
         {
             if (_pathComplete)
@@ -123,20 +154,20 @@ namespace aStarPathfinding
             }
             else
             {
-                if (_pathComplete) return;
 
-                if (_nodeToCheck.NorthNode != null) CalculateNodeValue(_nodeToCheck, _nodeToCheck.NorthNode);
-                if (_nodeToCheck.EastNode != null) CalculateNodeValue(_nodeToCheck, _nodeToCheck.EastNode);
-                if (_nodeToCheck.SouthNode != null) CalculateNodeValue(_nodeToCheck, _nodeToCheck.SouthNode);
-                if (_nodeToCheck.WestNode != null) CalculateNodeValue(_nodeToCheck, _nodeToCheck.WestNode);
+                // Calculate the movement values for the adjacent nodes to the one we have in focus
+                if (_nodeInFocus.NorthNode != null) CalculateNodeValue(_nodeInFocus, _nodeInFocus.NorthNode);
+                if (_nodeInFocus.EastNode != null) CalculateNodeValue(_nodeInFocus, _nodeInFocus.EastNode);
+                if (_nodeInFocus.SouthNode != null) CalculateNodeValue(_nodeInFocus, _nodeInFocus.SouthNode);
+                if (_nodeInFocus.WestNode != null) CalculateNodeValue(_nodeInFocus, _nodeInFocus.WestNode);
 
-                if (_pathComplete) return;
-
-                AddToClosedList(_nodeToCheck);
-                RemoveFromOpenList();
-                _nodeToCheck = null;
-                _nodeToCheck = GetBestNodeFromOpenList();
-                _nodeToCheck = SetAdjacentNodes(_nodeToCheck);
+                // Mark node as checked by adding it to the closed list / removing from open list
+                // When the node is on the closed list it wont be checked again
+                AddToClosedList(_nodeInFocus);
+                RemoveNodeFromOpenList();
+                _nodeInFocus = null;
+                _nodeInFocus = GetBestNodeFromOpenList();
+                _nodeInFocus = SetAdjacentNodes(_nodeInFocus);
             }
         }
 
@@ -150,15 +181,21 @@ namespace aStarPathfinding
             return pathNode;
         }
 
-        private void CalculateNodeValue(PathNode currentNode, PathNode nodeToCheck)
+        /// <summary>
+        /// This calculates the value of the movement between two nodes
+        /// </summary>
+        /// <param name="nodeInFocus">This is the node that the pathfinder is currently looking at</param>
+        /// <param name="nodeToCheck">This is one of the nodes that is adjacent to the current node and is will be evaluated to see if it creates a shorter / faster path</param>
+        private void CalculateNodeValue(PathNode nodeInFocus, PathNode nodeToCheck)
         {
-            if (currentNode.Location == nodeToCheck.Location)
+            if (nodeInFocus.Location == nodeToCheck.Location)
                 throw new ArgumentException("The current node and the target node cannot be the same!");
 
+            // We have found the target node, there is no need to continue
             if (nodeToCheck.Location == _targetNode.Location)
             {
                 _pathComplete = true;
-                _targetNode.ParentNode = currentNode;
+                _targetNode.ParentNode = nodeInFocus;
                 return;
             }
 
@@ -167,22 +204,23 @@ namespace aStarPathfinding
 
             if (_openList.Contains(nodeToCheck))
             {
+                // if moving to the node we are checking is cheaper than the node we are currently on then 
+                // set the node we are looking ats parent to the node we are on
+                int costToMove = nodeInFocus.EstimatedCost + BaseMovementCost;
 
-                int newGCost = currentNode.EstimatedCost + BaseMovementCost;
-
-                // if the move cost if lower to the node we are checking then we want to change the nodes parent to this so it have the lowest move cost
-                if (newGCost < nodeToCheck.EstimatedCost)
+                if (costToMove < nodeToCheck.EstimatedCost)
                 {
-                    nodeToCheck.ParentNode = currentNode;
-                    nodeToCheck.EstimatedCost = newGCost;
+                    nodeToCheck.ParentNode = nodeInFocus;
+                    nodeToCheck.EstimatedCost = costToMove;
                     nodeToCheck.CalculateTotalCost();
                 }
 
             }
-            else // if the node we are checking is not on the openlist or closed list, then add to openlist for checking
+            else // if we have found a node that is not on either the open or closed list
             {
-                nodeToCheck.ParentNode = currentNode;
-                nodeToCheck.EstimatedCost = currentNode.EstimatedCost + BaseMovementCost;
+                // set its parent to the node we are looking at & add it to the open list to be checked
+                nodeToCheck.ParentNode = nodeInFocus;
+                nodeToCheck.EstimatedCost = nodeInFocus.EstimatedCost + BaseMovementCost;
                 nodeToCheck.CalculateTotalCost();
                 AddToOpenList(nodeToCheck);
             }
@@ -205,6 +243,8 @@ namespace aStarPathfinding
         /// </summary>
         private void TraceBackPath()
         {
+
+            // look at each nodes parent to create the best path
             _path = new Path();
             _path.Nodes = new Stack<PathNode>();
             PathNode node = _targetNode;
@@ -222,6 +262,9 @@ namespace aStarPathfinding
 
         #region helper private methods
 
+        /// <summary>
+        /// Clears out any old global variables
+        /// </summary>
         private void NullOldVariables()
         {
             _path = null;
@@ -244,6 +287,11 @@ namespace aStarPathfinding
                    && location.Y <= _yMaxValue && location.Y >= _yMinValue;
         }
 
+        /// <summary>
+        /// Returns the node that is at the location specified
+        /// </summary>
+        /// <param name="location">The x,y location of the node, represented as a point</param>
+        /// <returns>The pathnode object to located at the x,y coords on the pathfinder map</returns>
         private PathNode GetPathNodeAt(Point location)
         {
             return IsWithinMapBounds(location) ? _nodeMap[location.X, location.Y] : null;
@@ -269,19 +317,29 @@ namespace aStarPathfinding
             return smallestValue;
         }
 
+        /// <summary>
+        /// Adds a node to the open list
+        /// </summary>
+        /// <param name="pathNode">The pathnode to add</param>
         private void AddToOpenList(PathNode pathNode)
         {
             _openList.Enqueue(pathNode);
         }
 
+        /// <summary>
+        /// Add a node to the closed list
+        /// </summary>
+        /// <param name="pathNode">The pathnode to add</param>
         private void AddToClosedList(PathNode pathNode)
         {
             _closedList.Add(pathNode);
         }
 
-        private void RemoveFromOpenList()
+        /// <summary>
+        /// Removes the first node that was added to the openlist
+        /// </summary>
+        private void RemoveNodeFromOpenList()
         {
-
             _openList.Dequeue();
 
         }

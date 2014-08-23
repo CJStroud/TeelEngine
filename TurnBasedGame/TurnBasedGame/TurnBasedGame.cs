@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using aStarPathfinding;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -12,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using TeelEngine;
 using TeelEngine.Level;
+using TeelEngine.Pathing;
 
 namespace TurnBasedGame
 {
@@ -43,6 +43,13 @@ namespace TurnBasedGame
 
         protected override void LoadContent()
         {
+
+            CollisionDetection.Collisions = new List<Point>();
+
+            for (int t = 0; t < 25; t++)
+            {
+                CollisionDetection.Collisions.Add(new Point(t, 10));
+            }
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var spriteSheetsTerrain = new List<SpriteSheet>();
