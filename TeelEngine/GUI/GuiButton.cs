@@ -9,7 +9,18 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TeelEngine
 {
-    public delegate void OnMouseDelegate(MouseButton button);
+    public class OnPressEventArgs : EventArgs
+    {
+        public InputType Type { get; set; }
+        public int Keypressed { get; set; }
+    }
+
+    public enum InputType
+    {
+        Gamepad = 0,
+        Mouse,
+        Keyboard
+    }
 
     public enum MouseButton
     {
@@ -21,67 +32,43 @@ namespace TeelEngine
 
     public class GuiButton : Gui
     {
-        private OnMouseDelegate _onMouseDown;
+        private EventHandler<OnPressEventArgs> _onButtonDown;
 
-        private OnMouseDelegate _onMouseUp;
+        private EventHandler<OnPressEventArgs> _onButtonUp;
 
-        private MouseState _mouseState;
+        private EventHandler _onHover;
 
-        private MouseButton _previousPressedButton;
+        private int _previousPressedButton;
 
-        public GuiButton(Texture2D texture, Point location, OnMouseDelegate onMouseDown, OnMouseDelegate onMouseUp)
-            : this(texture, location, texture.Width, texture.Height, onMouseDown, onMouseUp)
+        public GuiButton(Texture2D texture, Point location, OnPressDelegate onButtonDown, OnPressDelegate onButtonUp, OnHoverDelegate onHover)
+            : this(texture, location, texture.Width, texture.Height, onButtonDown, onButtonUp, onHover)
         {
         }
 
-        public GuiButton(Texture2D texture, Point location, int width, int height, OnMouseDelegate onMouseDown, OnMouseDelegate onMouseUp): base(texture, location, width, height)
+        public GuiButton(Texture2D texture, Point location, int width, int height, EventHandler<OnPressEventArgs> onButtonDown, EventHandler<OnPressEventArgs> onButtonUp, EventHandler onHover)
+            : base(texture, location, width, height)
         {
-            _onMouseDown = onMouseDown;
-            _onMouseUp = onMouseUp;
-            _mouseState = Mouse.GetState();
+            _onButtonDown += onButtonDown;
+            _onButtonUp += onButtonUp;
+            _onHover += onHover;
         }
 
         public override void Update()
         {
-            var mouseRectangle = new Rectangle(_mouseState.X, _mouseState.Y, 1, 1);
 
-            if (mouseRectangle.Intersects(this.BoundingRectangle))
-            {
-                MouseButton button = IsPressed();
 
-                if(button != MouseButton.None)
-                {
-                    OnMouseDown(button);
-                }
-
-                if (button != _previousPressedButton)
-                {
-                    OnMouseUp(_previousPressedButton);
-                }
-
-                _previousPressedButton = button;
-
-            }
             base.Update();
         }
 
-        public void OnMouseDown(MouseButton button)
+        public virtual void OnButtonDown(object sender, OnPressEventArgs eventArgs)
         {
-            _onMouseDown(button);
+            _onButtonDown(sender, eventArgs);
         }
 
-        public void OnMouseUp(MouseButton button)
+        public virtual void OnButtonUp(object sender, OnPressEventArgs eventArgs)
         {
-            _onMouseUp(button);
+            _onButtonUp(sender, eventArgs);
         }
 
-        private MouseButton IsPressed()
-        {
-            if (_mouseState.LeftButton == ButtonState.Pressed) return MouseButton.Left;
-            if (_mouseState.RightButton == ButtonState.Pressed) return MouseButton.Right;
-            if (_mouseState.MiddleButton == ButtonState.Pressed) return MouseButton.Middle;
-
-            return MouseButton.None;
-        }
     }
 }
