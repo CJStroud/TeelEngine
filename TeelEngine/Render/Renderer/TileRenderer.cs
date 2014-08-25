@@ -82,7 +82,7 @@ namespace TeelEngine
             textureCollision.SetData<Color>(new Color[] { new Color(255, 0, 0, 125) });
             foreach (var collision in CollisionDetection.Collisions)
             {
-                spriteBatch.Draw(textureCollision, new Rectangle(collision.X * GameTileSize, collision.Y * GameTileSize, GameTileSize, GameTileSize), Color.White);
+                spriteBatch.Draw(textureCollision, new Rectangle(collision.X * GameTileSize -  Camera.Lens.X, collision.Y * GameTileSize - Camera.Lens.Y, GameTileSize, GameTileSize), Color.White);
             }
         }
     }
