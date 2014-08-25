@@ -89,6 +89,7 @@ namespace TeelEngine.Pathing
             CalculateEstimateValues();
             _nodeInFocus = _startNode;
             _nodeInFocus = SetAdjacentNodes(_nodeInFocus);
+            AddToOpenList(_nodeInFocus);
 
             // main pathfinding loop
             while (_path == null)
