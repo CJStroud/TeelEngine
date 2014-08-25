@@ -86,6 +86,8 @@ namespace TeelEngine.Pathing
             _startNode = _nodeMap[start.X, start.Y];
             _targetNode = _nodeMap[end.X, end.Y];
 
+            if (IsACollisionPoint(_targetNode.Location)) return null;
+
             CalculateEstimateValues();
             _nodeInFocus = _startNode;
             _nodeInFocus = SetAdjacentNodes(_nodeInFocus);
@@ -102,6 +104,11 @@ namespace TeelEngine.Pathing
             _allCollisionLocations = _hardCollisionLocations;
             return _path;
 
+        }
+
+        private bool IsACollisionPoint(Point location)
+        {
+            return _allCollisionLocations.Contains(location);
         }
 
         /// <summary>
@@ -134,7 +141,7 @@ namespace TeelEngine.Pathing
                 {
                     var node = new PathNode(new Point(x, y));
                     node.ParentNode = null;
-                    if (_allCollisionLocations.Contains(new Point(x, y)))
+                    if (IsACollisionPoint(new Point(x, y)))
                         node.IsSolid = true;
                     map[x, y] = node;
                 }
