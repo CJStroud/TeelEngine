@@ -78,6 +78,12 @@ namespace TeelEngine
                     }
                 }
             }
+            Texture2D textureCollision = new Texture2D(spriteBatch.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            textureCollision.SetData<Color>(new Color[] { new Color(255, 0, 0, 125) });
+            foreach (var collision in CollisionDetection.Collisions)
+            {
+                spriteBatch.Draw(textureCollision, new Rectangle(collision.X * GameTileSize, collision.Y * GameTileSize, GameTileSize, GameTileSize), Color.White);
+            }
         }
     }
 }
