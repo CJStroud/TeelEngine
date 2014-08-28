@@ -108,6 +108,7 @@ namespace TurnBasedGame
 
             var bTile = new TerrainTile { Texture = spriteTextureGrass, Rotation = 0F, Layer = 0};
             var tTile = new TerrainTile { Texture = spriteTextureBed, Layer = 999};
+            var sTile = new TerrainTile { Texture = spriteTextureBed, Layer = 0 };  
 
             var animations = new Dictionary<string, int>();
 
@@ -126,7 +127,22 @@ namespace TurnBasedGame
                 }
             }
 
-            level.AddTile(tTile, new Point(1, 1));
+            //foreground test
+            level.AddTile(tTile, new Point(3, 3));
+            level.AddTile(tTile, new Point(4, 3));
+            level.AddTile(tTile, new Point(5, 3));
+            level.AddTile(tTile, new Point(6, 3));
+            level.AddTile(tTile, new Point(7, 3));
+            level.AddTile(tTile, new Point(8, 3));
+
+            //background test
+            level.AddTile(sTile, new Point(3, 6));
+            level.AddTile(sTile, new Point(4, 6));
+            level.AddTile(sTile, new Point(5, 6));
+            level.AddTile(sTile, new Point(6, 6));
+            level.AddTile(sTile, new Point(7, 6));
+            level.AddTile(sTile, new Point(8, 6));
+
             level.AddTile(tTile, new Point(40, 40));
 
 

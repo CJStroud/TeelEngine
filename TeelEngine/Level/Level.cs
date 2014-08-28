@@ -65,41 +65,35 @@ namespace TeelEngine.Level
         {
             var allToRender = new List<IRenderable>();
 
-            Vector2 location = new Vector2();
-            IRenderable renderable;
-            for (int x = 0; x < Width; x++)
+            foreach (var gameTile in GameTiles)
             {
-                for (int y = 0; y < Height; y++)
+                if (gameTile != null)
                 {
-                    GameTile gameTile = GameTiles[x, y];
-                    if (gameTile != null)
+                    foreach (var tile in gameTile.SubTiles)
                     {
-                        foreach (var tile in gameTile.SubTiles)
+                        var terrainTile = tile as TerrainTile;
+                        if (terrainTile != null)
                         {
-                            renderable = new TerrainTile();
-                            renderable = tile as TerrainTile;
-                            if (renderable != null)
+                            terrainTile = new TerrainTile
                             {
-                                allToRender.Add(
-                                    new TerrainTile
-                                    {
-                                        Location = new Vector2(GameTiles[x, y].Location.X, GameTiles[x, y].Location.Y)
-                                        ,
-                                        Texture = renderable.Texture
-                                        ,
-                                        Layer = renderable.Layer
-                                    });
-                            }
-                        
-
+                                Location = new Vector2(gameTile.Location.X, gameTile.Location.Y),
+                                Texture = terrainTile.Texture,
+                                Layer = terrainTile.Layer,
+                                Offset = terrainTile.Offset,
+                                Rotation = terrainTile.Rotation
+                            };
+                            allToRender.Add(terrainTile);
                         }
                     }
-                 }
+                }   
             }
+
+                 
+            
 
             foreach (var entity in Entities)
             {
-                allToRender.Add(entity);
+                if (entity != null) allToRender.Add(entity);
             }
 
             allToRender = allToRender.OrderBy(render => render.Layer).ToList();
