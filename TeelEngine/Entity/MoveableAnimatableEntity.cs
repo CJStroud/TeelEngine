@@ -19,6 +19,16 @@ namespace TeelEngine
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             texture.NextFrame(elapsed);
 
+            if (CurrentAnimation != null)
+            {
+                texture.Row = Animations[CurrentAnimation];
+                texture.Paused = false;
+            }
+            else
+            {
+                texture.Paused = true;
+            }
+
             base.Update(level, gameTime);
         }
 

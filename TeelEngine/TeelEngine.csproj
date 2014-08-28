@@ -106,6 +106,7 @@
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Interfaces\IAnimatable.cs" />
     <Compile Include="Render\Renderer\EntityRenderer.cs" />
+    <Compile Include="Render\Renderer.cs" />
     <Compile Include="Render\Texture\SpriteSheet.cs" />
     <Compile Include="Render\Renderer\TileRenderer.cs" />
     <Compile Include="Pathing\Path.cs" />

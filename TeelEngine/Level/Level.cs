@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 using Point = Microsoft.Xna.Framework.Point;
 
 namespace TeelEngine.Level
@@ -19,12 +20,17 @@ namespace TeelEngine.Level
 
         public Level(int width, int height)
         {
+            Width = width;
+            Height = height;
             GameTiles = new GameTile[width, height];
             Entities = new List<Entity>();
         }
 
         public GameTile[,] GameTiles { get; private set; }
         public List<Entity> Entities { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+
 
         private int _nextAvaliableId;
 
@@ -53,6 +59,52 @@ namespace TeelEngine.Level
         public IEnumerable<Entity> GetEntitesByGroup(string group)
         {
             return Entities.Where(ent => ent.Group == group);
+        }
+
+        public List<IRenderable> GetAllRenderables()
+        {
+            var allToRender = new List<IRenderable>();
+
+            Vector2 location = new Vector2();
+            IRenderable renderable;
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    GameTile gameTile = GameTiles[x, y];
+                    if (gameTile != null)
+                    {
+                        foreach (var tile in gameTile.SubTiles)
+                        {
+                            renderable = new TerrainTile();
+                            renderable = tile as TerrainTile;
+                            if (renderable != null)
+                            {
+                                allToRender.Add(
+                                    new TerrainTile
+                                    {
+                                        Location = new Vector2(GameTiles[x, y].Location.X, GameTiles[x, y].Location.Y)
+                                        ,
+                                        Texture = renderable.Texture
+                                        ,
+                                        Layer = renderable.Layer
+                                    });
+                            }
+                        
+
+                        }
+                    }
+                 }
+            }
+
+            foreach (var entity in Entities)
+            {
+                allToRender.Add(entity);
+            }
+
+            allToRender = allToRender.OrderBy(render => render.Layer).ToList();
+
+            return allToRender;
         }
     }
 }

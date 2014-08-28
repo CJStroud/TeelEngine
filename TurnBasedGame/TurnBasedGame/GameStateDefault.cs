@@ -9,12 +9,14 @@ using Microsoft.Xna.Framework.Input;
 using TeelEngine;
 using TeelEngine.Level;
 using TeelEngine.Pathing;
+using TeelEngine.Render;
 
 namespace TurnBasedGame
 {
     public class GameStateDefault : GameState
     {
         private Level level;
+        private Renderer _renderer;
         private TileRenderer _tileRenderer;
         private EntityRenderer _entityRenderer;
         private KeyController _keyController;
@@ -80,27 +82,32 @@ namespace TurnBasedGame
 
             var spriteSheetsTerrain = new List<SpriteSheet>();
             var spriteSheetsEntities = new List<SpriteSheet>();
+            var spriteSheets = new List<SpriteSheet>();
 
             var bg = contentManager.Load<Texture2D>("Spritesheets/background");
             var spriteSheetBg = new SpriteSheet("background", 16, bg);
             spriteSheetsTerrain.Add(spriteSheetBg);
+            spriteSheets.Add(spriteSheetBg);
 
             var fg = contentManager.Load<Texture2D>("Spritesheets/foreground");
             var spriteSheetFg = new SpriteSheet("foreground", 16, fg);
             spriteSheetsTerrain.Add(spriteSheetFg);
+            spriteSheets.Add(spriteSheetFg);
 
             var woman = contentManager.Load<Texture2D>("Spritesheets/woman");
             var spriteSheetWo = new SpriteSheet("woman", 32, woman);
             spriteSheetsEntities.Add(spriteSheetWo);
+            spriteSheets.Add(spriteSheetWo);
 
             _tileRenderer = new TileRenderer(spriteSheetsTerrain, 32);
             _entityRenderer = new EntityRenderer(spriteSheetsEntities, 32);
+            _renderer = new Renderer(spriteSheets, 32);
 
             var spriteTextureGrass = new SpriteTexture(spriteSheetBg.Name, 0);
             var spriteTextureBed = new SpriteTexture(spriteSheetFg.Name, 6);
 
-            var bTile = new TerrainTile { Texture = spriteTextureGrass, Rotation = 0F };
-            var tTile = new TerrainTile { Texture = spriteTextureBed };
+            var bTile = new TerrainTile { Texture = spriteTextureGrass, Rotation = 0F, Layer = 0};
+            var tTile = new TerrainTile { Texture = spriteTextureBed, Layer = 999};
 
             var animations = new Dictionary<string, int>();
 
@@ -115,7 +122,7 @@ namespace TurnBasedGame
             {
                 for (int y = 0; y < 50; y++)
                 {
-                    level.AddTile(bTile, new Point(x, y));
+                    level.AddTile(bTile, new Point(x, y) );
                 }
             }
 
@@ -123,7 +130,15 @@ namespace TurnBasedGame
             level.AddTile(tTile, new Point(40, 40));
 
 
-            var entity = new MoveableAnimatableEntity { Location = new Vector2(5, 5), Speed = 0.08F, Animations = animations, Texture = animatedTexture, NewLocation = new Vector2(4F, 4F) };
+            var entity = new MoveableAnimatableEntity
+            {
+                Location = new Vector2(5, 5),
+                Speed = 0.08F,
+                Animations = animations,
+                Texture = animatedTexture,
+                NewLocation = new Vector2(4F, 4F),
+                Layer = 1
+            };
             level.AddEntity(entity);
 
             _keyController.Add("PlayerMoveUp", Keys.W, () => entity.Move(Direction.North));
@@ -173,8 +188,13 @@ namespace TurnBasedGame
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
+/*
             _tileRenderer.Render(level, spriteBatch);
             _entityRenderer.Render(level, spriteBatch);
+*/
+
+            _renderer.Render(level, spriteBatch);
+            
             spriteBatch.End();
         }
     }

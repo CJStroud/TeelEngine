@@ -22,6 +22,8 @@ namespace TeelEngine
 
         public string Group { get; set; }
 
+        public int Layer { get; set; }
+
         public virtual void Update(Level.Level level, GameTime gameTime)
         {
 
