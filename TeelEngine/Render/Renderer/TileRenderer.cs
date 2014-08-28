@@ -68,8 +68,8 @@ namespace TeelEngine
                                 if(moveable != null)offset = moveable.Offset;
 
                                 var screenPosition = new Point(
-                                    (gameTile.Location.X*GameTileSize) - Camera.Lens.X + (int)(offset.X * GameTileSize) + (GameTileSize / 2),
-                                    (gameTile.Location.Y*GameTileSize) - Camera.Lens.Y + (int)(offset.Y * GameTileSize) + (GameTileSize / 2));
+                                    (int)((gameTile.Location.X*GameTileSize) - Camera.Lens.X + (offset.X * GameTileSize) + (GameTileSize / 2)),
+                                    (int)((gameTile.Location.Y*GameTileSize) - Camera.Lens.Y + (offset.Y * GameTileSize) + (GameTileSize / 2)));
 
                                 texture.Render(spriteBatch, screenPosition, GameTileSize, spriteSheet, tile.Rotation);
                             }

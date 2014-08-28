@@ -10,7 +10,7 @@ namespace TeelEngine
 
         public static bool IsWithinLens(int tileSize, Point location)
         {
-            var spriteRectangle = new Rectangle(location.X*tileSize, location.Y*tileSize, tileSize, tileSize);
+            var spriteRectangle = new Rectangle((int)location.X*tileSize, (int)location.Y*tileSize, tileSize, tileSize);
             return Lens.Intersects(spriteRectangle);
         }
 

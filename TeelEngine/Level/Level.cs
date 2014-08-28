@@ -36,11 +36,12 @@ namespace TeelEngine.Level
 
         public void AddTile(ITile tile, Point location)
         {
-            if (location.X < GameTiles.GetUpperBound(0) && location.Y < GameTiles.GetUpperBound(1))
+            if (location.X <= GameTiles.GetUpperBound(0) && location.Y <= GameTiles.GetUpperBound(1))
             {
                 if (GameTiles[location.X, location.Y] == null)
                     GameTiles[location.X, location.Y] = new GameTile {Location = location};
 
+                tile.Location = new Vector2(location.X, location.Y);
                 GameTiles[location.X, location.Y].SubTiles.Add(tile);
             }
         }
@@ -69,27 +70,12 @@ namespace TeelEngine.Level
             {
                 if (gameTile != null)
                 {
-                    foreach (var tile in gameTile.SubTiles)
+                    foreach (IRenderable tile in gameTile.SubTiles)
                     {
-                        var terrainTile = tile as TerrainTile;
-                        if (terrainTile != null)
-                        {
-                            terrainTile = new TerrainTile
-                            {
-                                Location = new Vector2(gameTile.Location.X, gameTile.Location.Y),
-                                Texture = terrainTile.Texture,
-                                Layer = terrainTile.Layer,
-                                Offset = terrainTile.Offset,
-                                Rotation = terrainTile.Rotation
-                            };
-                            allToRender.Add(terrainTile);
-                        }
+                            allToRender.Add(tile);
                     }
-                }   
+                }
             }
-
-                 
-            
 
             foreach (var entity in Entities)
             {

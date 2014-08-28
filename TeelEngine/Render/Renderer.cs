@@ -19,11 +19,10 @@ namespace TeelEngine.Render
             GameTileSize = tileSize;
         }
 
-        public void Render(Level.Level level, SpriteBatch spriteBatch)
+        public void Render(List<IRenderable> renderables , SpriteBatch spriteBatch)
         {
-            List<IRenderable> toRender = level.GetAllRenderables();
 
-            foreach (var renderable in toRender)
+            foreach (var renderable in renderables)
             {
                 ITexture texture = renderable.Texture;
 

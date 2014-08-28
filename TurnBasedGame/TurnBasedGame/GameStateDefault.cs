@@ -105,11 +105,6 @@ namespace TurnBasedGame
 
             var spriteTextureGrass = new SpriteTexture(spriteSheetBg.Name, 0);
             var spriteTextureBed = new SpriteTexture(spriteSheetFg.Name, 6);
-
-            var bTile = new TerrainTile { Texture = spriteTextureGrass, Rotation = 0F, Layer = 0};
-            var tTile = new TerrainTile { Texture = spriteTextureBed, Layer = 999};
-            var sTile = new TerrainTile { Texture = spriteTextureBed, Layer = 0 };  
-
             var animations = new Dictionary<string, int>();
 
             animations.Add("MOVE_UP", 0);
@@ -123,28 +118,26 @@ namespace TurnBasedGame
             {
                 for (int y = 0; y < 50; y++)
                 {
+                    var bTile = new TerrainTile { Texture = spriteTextureGrass, Rotation = 0F, Layer = 0 };
                     level.AddTile(bTile, new Point(x, y) );
                 }
             }
 
             //foreground test
-            level.AddTile(tTile, new Point(3, 3));
-            level.AddTile(tTile, new Point(4, 3));
-            level.AddTile(tTile, new Point(5, 3));
-            level.AddTile(tTile, new Point(6, 3));
-            level.AddTile(tTile, new Point(7, 3));
-            level.AddTile(tTile, new Point(8, 3));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 999 }, new Point(3, 3));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 999 }, new Point(4, 3));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 999 }, new Point(5, 3));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 999 }, new Point(6, 3));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 999 }, new Point(7, 3));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 999 }, new Point(8, 3));
 
             //background test
-            level.AddTile(sTile, new Point(3, 6));
-            level.AddTile(sTile, new Point(4, 6));
-            level.AddTile(sTile, new Point(5, 6));
-            level.AddTile(sTile, new Point(6, 6));
-            level.AddTile(sTile, new Point(7, 6));
-            level.AddTile(sTile, new Point(8, 6));
-
-            level.AddTile(tTile, new Point(40, 40));
-
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 0 }, new Point(3, 6));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 0 }, new Point(4, 6));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 0 }, new Point(5, 6));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 0 }, new Point(6, 6));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 0 }, new Point(7, 6));
+            level.AddTile(new TerrainTile { Texture = spriteTextureBed, Layer = 0 }, new Point(8, 6));
 
             var entity = new MoveableAnimatableEntity
             {
@@ -204,12 +197,8 @@ namespace TurnBasedGame
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-/*
-            _tileRenderer.Render(level, spriteBatch);
-            _entityRenderer.Render(level, spriteBatch);
-*/
 
-            _renderer.Render(level, spriteBatch);
+            _renderer.Render(level.GetAllRenderables(), spriteBatch);
             
             spriteBatch.End();
         }
