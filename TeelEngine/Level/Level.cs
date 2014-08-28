@@ -64,27 +64,28 @@ namespace TeelEngine.Level
 
         public List<IRenderable> GetAllRenderables()
         {
-            var allToRender = new List<IRenderable>();
+            var renderables = new List<IRenderable>();
 
             foreach (var gameTile in GameTiles)
             {
                 if (gameTile != null)
                 {
-                    foreach (IRenderable tile in gameTile.SubTiles)
+                    foreach (var tile in gameTile.SubTiles)
                     {
-                            allToRender.Add(tile);
+                        IRenderable renderable = tile as IRenderable;
+                        if (renderable != null) renderables.Add(renderable);
                     }
                 }
             }
 
             foreach (var entity in Entities)
             {
-                if (entity != null) allToRender.Add(entity);
+                if (entity != null) renderables.Add(entity);
             }
 
-            allToRender = allToRender.OrderBy(render => render.Layer).ToList();
+            renderables = renderables.OrderBy(render => render.Layer).ToList();
 
-            return allToRender;
+            return renderables;
         }
     }
 }
