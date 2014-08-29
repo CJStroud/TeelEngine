@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Point = Microsoft.Xna.Framework.Point;
 
@@ -30,7 +31,6 @@ namespace TeelEngine.Level
         public List<Entity> Entities { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
-
 
         private int _nextAvaliableId;
 
@@ -86,6 +86,14 @@ namespace TeelEngine.Level
             renderables = renderables.OrderBy(render => render.Layer).ToList();
 
             return renderables;
+        }
+
+        public void Save(XmlWriter writer)
+        {
+            foreach (var gameTile in GameTiles)
+            {
+                gameTile.Save(writer);
+            }
         }
     }
 }

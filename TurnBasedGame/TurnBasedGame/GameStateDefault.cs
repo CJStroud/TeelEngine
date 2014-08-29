@@ -10,6 +10,7 @@ using TeelEngine;
 using TeelEngine.Level;
 using TeelEngine.Pathing;
 using TeelEngine.Render;
+using TeelEngine.Loading;
 
 namespace TurnBasedGame
 {
@@ -144,6 +145,12 @@ namespace TurnBasedGame
             _keyController.Add("PlayerMoveDown", Keys.S, () => entity.Move(Direction.South));
             _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
 
+
+            Saver saver = new Saver();
+            saver.Save(_level);
+
+            Loader loader = new Loader();
+            loader.Load();
         }
 
         public override void Update(GameTime gameTime)
