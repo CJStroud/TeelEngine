@@ -101,9 +101,11 @@
     <Compile Include="Entity\MoveableEntity.cs" />
     <Compile Include="GameStates\GameStateManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
+    <Compile Include="GUI\Anchor.cs" />
     <Compile Include="GUI\Gui.cs" />
     <Compile Include="GUI\GuiButton.cs" />
-    <Compile Include="Key\KeyController.cs" />
+    <Compile Include="GUI\GuiContainer.cs" />
+    <Compile Include="Input\InputManager.cs" />
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Interfaces\IAnimatable.cs" />

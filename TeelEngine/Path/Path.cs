@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TeelEngine
+namespace TeelEngine.Path
 {
     public class Path
     { 

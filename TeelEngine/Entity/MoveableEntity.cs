@@ -14,7 +14,7 @@ namespace TeelEngine
         public Direction MoveDirection { get; set; }
         public bool IsMoving { get; set; }
 
-        public Path Path { get; set; }
+        public TeelEngine.Path.Path Path { get; set; }
 
         public virtual void Move(Direction direction)
         {

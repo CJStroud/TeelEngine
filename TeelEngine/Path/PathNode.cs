@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace TeelEngine
+namespace TeelEngine.Path
 {
     public class PathNode
     {

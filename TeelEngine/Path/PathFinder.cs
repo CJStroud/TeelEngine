@@ -5,9 +5,8 @@ using System.IO;
 using System.Net.Mail;
 using Microsoft.Xna.Framework;
 using TeelEngine;
-using Path = TeelEngine.Path;
 
-namespace aStarPathfinding
+namespace TeelEngine.Path
 {
     public class PathFinder
     {
