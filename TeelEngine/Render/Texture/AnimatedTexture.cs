@@ -58,6 +58,11 @@ namespace TeelEngine
             TimePerFrame = (float) 1/framePerSec;
         }
 
+        public AnimatedTexture()
+        {
+            
+        }
+
         public override void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet)
         {
             Render(spriteBatch, screenPos, gameTileSize, spriteSheet, 0F);

@@ -147,19 +147,9 @@ namespace TurnBasedGame
             _keyController.Add("PlayerMoveDown", Keys.S, () => entity.Move(Direction.South));
             _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
 
+            _level = null;
 
-            var settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.Encoding = Encoding.UTF8;
-
-            using (var writer = XmlWriter.Create("level.xml", settings))
-            {
-                //IntermediateSerializer.Serialize(writer, _level.Entities, null);
-                IntermediateSerializer.Serialize(writer, _level.GameTiles[0,0], null);
-            }
-
-            /*Loader loader = new Loader();
-            loader.Load();*/
+            _level = Loader.Load("");
         }
 
         public override void Update(GameTime gameTime)

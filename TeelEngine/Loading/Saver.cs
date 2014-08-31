@@ -5,30 +5,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 
 namespace TeelEngine.Loading
 {
-    public class Saver
+    public static class Saver
     {
-        public void Save(Level.Level level)
+        public static void Save(Level.Level level)
         {
             var settings = new XmlWriterSettings();
             settings.Indent = true;
+            settings.Encoding = Encoding.UTF8;
 
-            TextWriter textWriter = new StreamWriter(@"C:\Testing\test.xml");
-            XmlWriter writer = new XmlTextWriter(textWriter);
-
-            writer.WriteStartDocument();
-            writer.WriteStartElement("root");
-
-            writer.WriteComment("This is level file for use with a Teelengine powered game");
-            
-
-            level.Save();
-
-            writer.WriteEndDocument();
-            writer.Close();
-
+            using (var writer = XmlWriter.Create("level.xml", settings))
+            {
+                IntermediateSerializer.Serialize(writer, level, null);
+            }
         }
     }
 }

@@ -34,5 +34,10 @@ namespace TeelEngine
             AssetName = assetName;
             TextureId = textureId;
         }
+
+        public SpriteTexture()
+        {
+            
+        }
     }
 }
