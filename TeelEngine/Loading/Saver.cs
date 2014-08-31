@@ -24,7 +24,7 @@ namespace TeelEngine.Loading
             writer.WriteComment("This is level file for use with a Teelengine powered game");
             
 
-            level.Save(writer);
+            level.Save();
 
             writer.WriteEndDocument();
             writer.Close();

@@ -7,7 +7,7 @@ namespace TeelEngine.Level
 {
     public class TerrainTile : ITile, IRenderable
     {
-        public ITexture Texture { get; set; }
+        public SpriteTexture Texture { get; set; }
         public int Layer { get; set; }
         public Vector2 Location { get; set; }
 

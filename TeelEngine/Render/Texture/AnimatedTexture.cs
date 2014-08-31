@@ -8,10 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TeelEngine
 {
-    public class AnimatedTexture : ITexture
+    public class AnimatedTexture : SpriteTexture
     {
-        public string AssetName { get; set; }
-        public int TextureId { get; set; }
         private Point _frame;
 
         public int Column
@@ -50,9 +48,8 @@ namespace TeelEngine
 
         private int ColumnCount;
 
-        public AnimatedTexture(string assetName, Point frame, int framePerSec, bool paused, int columnCount)
+        public AnimatedTexture(string assetName, Point frame, int framePerSec, bool paused, int columnCount) : base(assetName, 0)
         {
-            AssetName = assetName;
             _frame = frame;
             _paused = paused;
             ColumnCount = columnCount;
@@ -61,12 +58,12 @@ namespace TeelEngine
             TimePerFrame = (float) 1/framePerSec;
         }
 
-        public void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet)
+        public override void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet)
         {
             Render(spriteBatch, screenPos, gameTileSize, spriteSheet, 0F);
         }
 
-        public void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet, float rotation)
+        public override void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet, float rotation)
         {
             if (ColumnCount == 0) ColumnCount = spriteSheet.ColumnCount;
 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace TeelEngine.Level
 {
@@ -10,7 +11,7 @@ namespace TeelEngine.Level
         {
             SubTiles = new List<ITile>();
         }
-
+        [ContentSerializer]
         public List<ITile> SubTiles { get; private set; }
         public Point Location { get; set; }
 

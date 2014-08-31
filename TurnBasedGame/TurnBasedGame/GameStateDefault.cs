@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TeelEngine;
@@ -146,11 +148,18 @@ namespace TurnBasedGame
             _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
 
 
-            Saver saver = new Saver();
-            saver.Save(_level);
+            var settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.Encoding = Encoding.UTF8;
 
-            Loader loader = new Loader();
-            loader.Load();
+            using (var writer = XmlWriter.Create("level.xml", settings))
+            {
+                //IntermediateSerializer.Serialize(writer, _level.Entities, null);
+                IntermediateSerializer.Serialize(writer, _level.GameTiles[0,0], null);
+            }
+
+            /*Loader loader = new Loader();
+            loader.Load();*/
         }
 
         public override void Update(GameTime gameTime)

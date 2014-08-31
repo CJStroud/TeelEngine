@@ -24,7 +24,7 @@ namespace TeelEngine.Render
 
             foreach (var renderable in renderables)
             {
-                ITexture texture = renderable.Texture;
+                SpriteTexture texture = renderable.Texture;
 
                 if (texture != null)
                 {

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Point = Microsoft.Xna.Framework.Point;
 
 namespace TeelEngine.Level
@@ -88,12 +89,14 @@ namespace TeelEngine.Level
             return renderables;
         }
 
-        public void Save(XmlWriter writer)
+        public void Save()
         {
-            foreach (var gameTile in GameTiles)
-            {
-                gameTile.Save(writer);
-            }
+            
+        }
+
+        public void Load(XmlReader reader)
+        {
+            
         }
     }
 }
