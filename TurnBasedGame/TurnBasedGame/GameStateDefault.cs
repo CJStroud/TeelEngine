@@ -148,6 +148,7 @@ namespace TurnBasedGame
             _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
 
             _level = null;
+            //Saver.Save(_level);
 
             _level = Loader.Load("");
         }
