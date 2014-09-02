@@ -13,12 +13,13 @@ namespace TeelEngine
     {
         public string AssetName { get; set; }
         public int TextureId { get; set; }
-        public void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet)
+
+        public virtual void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet)
         {
             Render(spriteBatch, screenPos, gameTileSize, spriteSheet, 0F);
         }
 
-        public void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet, float rotation)
+        public virtual void Render(SpriteBatch spriteBatch, Point screenPos, int gameTileSize, SpriteSheet spriteSheet, float rotation)
         {
             var sourceRectangle = spriteSheet.GetTileRectangle(TextureId);
 
@@ -32,6 +33,11 @@ namespace TeelEngine
         {
             AssetName = assetName;
             TextureId = textureId;
+        }
+
+        public SpriteTexture()
+        {
+            
         }
     }
 }

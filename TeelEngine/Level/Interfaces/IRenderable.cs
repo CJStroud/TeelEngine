@@ -4,7 +4,7 @@ namespace TeelEngine.Level
 {
     public interface IRenderable
     {
-        ITexture Texture { get; set; }
+        SpriteTexture Texture { get; set; }
 
         float Rotation { get; set; }
 

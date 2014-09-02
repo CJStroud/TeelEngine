@@ -12,7 +12,7 @@ namespace TeelEngine
     {
         public Vector2 Location { get; set; }
 
-        public ITexture Texture { get; set; }
+        public SpriteTexture Texture { get; set; }
 
         public float Rotation { get; set; }
 
