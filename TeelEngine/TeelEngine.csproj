@@ -105,6 +105,8 @@
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Interfaces\IAnimatable.cs" />
+    <Compile Include="Loading\Loader.cs" />
+    <Compile Include="Loading\Saver.cs" />
     <Compile Include="Render\Renderer\EntityRenderer.cs" />
     <Compile Include="Render\Renderer.cs" />
     <Compile Include="Render\Texture\SpriteSheet.cs" />

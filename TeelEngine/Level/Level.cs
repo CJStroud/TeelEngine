@@ -5,16 +5,26 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Xml;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Point = Microsoft.Xna.Framework.Point;
 
 namespace TeelEngine.Level
 {
     public class Level
     {
+        public Level()
+        {
+            Entities = new List<Entity>();
+        }
+
         public Level(Size mapSize)
         {
-            GameTiles = new GameTile[mapSize.Width, mapSize.Height];
+            Width = mapSize.Width;
+            Height = mapSize.Height;
+            GameTiles = new GameTile[mapSize.Width* mapSize.Height];
             Entities = new List<Entity>();
         }
 
@@ -22,27 +32,30 @@ namespace TeelEngine.Level
         {
             Width = width;
             Height = height;
-            GameTiles = new GameTile[width, height];
+            GameTiles = new GameTile[width*height];
             Entities = new List<Entity>();
         }
 
-        public GameTile[,] GameTiles { get; private set; }
+        [ContentSerializer]
+        public GameTile[] GameTiles { get; set; }
+
+
+        [ContentSerializer]
         public List<Entity> Entities { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
-
 
         private int _nextAvaliableId;
 
         public void AddTile(ITile tile, Point location)
         {
-            if (location.X <= GameTiles.GetUpperBound(0) && location.Y <= GameTiles.GetUpperBound(1))
+            if (location.X <= Width && location.Y <=Height)
             {
-                if (GameTiles[location.X, location.Y] == null)
-                    GameTiles[location.X, location.Y] = new GameTile {Location = location};
+                if (GameTiles[location.X* location.Y] == null)
+                    GameTiles[location.X* location.Y] = new GameTile {Location = location};
 
                 tile.Location = new Vector2(location.X, location.Y);
-                GameTiles[location.X, location.Y].SubTiles.Add(tile);
+                GameTiles[location.X* location.Y].SubTiles.Add(tile);
             }
         }
 
@@ -86,6 +99,16 @@ namespace TeelEngine.Level
             renderables = renderables.OrderBy(render => render.Layer).ToList();
 
             return renderables;
+        }
+
+        public void Save()
+        {
+            
+        }
+
+        public void Load(XmlReader reader)
+        {
+            
         }
     }
 }

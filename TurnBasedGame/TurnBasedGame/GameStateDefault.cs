@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TeelEngine;
 using TeelEngine.Level;
 using TeelEngine.Pathing;
 using TeelEngine.Render;
+using TeelEngine.Loading;
 
 namespace TurnBasedGame
 {
@@ -144,6 +147,10 @@ namespace TurnBasedGame
             _keyController.Add("PlayerMoveDown", Keys.S, () => entity.Move(Direction.South));
             _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
 
+            _level = null;
+            //Saver.Save(_level);
+
+            _level = Loader.Load("");
         }
 
         public override void Update(GameTime gameTime)
