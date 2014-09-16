@@ -25,9 +25,9 @@ namespace TurnBasedGame
         private InputManager _inputManager;
         private int ScreenWidth;
         private int ScreenHeight;
-        private Gui _testGui;
-        private GuiContainer _testGuiContainer;
-        private GuiContainer _testGuiScreen;
+        private BaseGui _testBaseGui;
+        private BaseGuiContainer _testBaseGuiContainer;
+        private BaseGuiContainer _testBaseGuiScreen;
 
         public GameStateDefault(string name, int screenWidth, int screenHeight) : base(name)
         {
@@ -89,15 +89,15 @@ namespace TurnBasedGame
 
             _inputManager.AddKeyBinding(Keys.X, "CameraZoomOut");
 
-            _testGuiScreen = new GuiContainer(new Point(0,0), ScreenWidth, ScreenHeight);
+            _testBaseGuiScreen = new BaseGuiContainer(new Point(0,0), ScreenWidth, ScreenHeight);
 
-            _testGuiContainer = new GuiContainer(new Vector2(0F,0F), 1F, 0.1F) { BackColour = Color.Teal, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
+            _testBaseGuiContainer = new BaseGuiContainer(new Vector2(0F,0F), 1F, 0.1F) { BackColour = Color.Teal, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
 
-            _testGui = new GuiContainer(new Vector2(0F, 0F), 0.5F, 1.5F) { BackColour = Color.Red, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
+            _testBaseGui = new BaseGuiContainer(new Vector2(0F, 0F), 0.5F, 1.5F) { BackColour = Color.Red, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
 
-            _testGuiContainer.AddGui(_testGui);
+            _testBaseGuiContainer.AddGui(_testBaseGui);
 
-            _testGuiScreen.AddGui(_testGuiContainer);
+            _testBaseGuiScreen.AddGui(_testBaseGuiContainer);
 
         }
 
@@ -204,22 +204,22 @@ namespace TurnBasedGame
 
             if (state.IsKeyDown(Keys.F))
             {
-                _testGuiScreen.SetWidth(_testGuiScreen.Width - 10);
+                _testBaseGuiScreen.SetWidth(_testBaseGuiScreen.Width - 10);
             }
 
             if (state.IsKeyDown(Keys.G))
             {
-                _testGuiScreen.SetWidth(_testGuiScreen.Width + 10);
+                _testBaseGuiScreen.SetWidth(_testBaseGuiScreen.Width + 10);
             }
 
             if (state.IsKeyDown(Keys.V))
             {
-                _testGuiScreen.SetHeight(_testGuiScreen.Height - 10);
+                _testBaseGuiScreen.SetHeight(_testBaseGuiScreen.Height - 10);
             }
 
             if (state.IsKeyDown(Keys.B))
             {
-                _testGuiScreen.SetHeight(_testGuiScreen.Height + 10);
+                _testBaseGuiScreen.SetHeight(_testBaseGuiScreen.Height + 10);
             }
 
         }
@@ -229,7 +229,7 @@ namespace TurnBasedGame
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             _tileRenderer.Render(level, spriteBatch);
             _entityRenderer.Render(level, spriteBatch);
-            _testGuiScreen.Draw(spriteBatch);
+            _testBaseGuiScreen.Draw(spriteBatch);
             spriteBatch.End();
         }
     }

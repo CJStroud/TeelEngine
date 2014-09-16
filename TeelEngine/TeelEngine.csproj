@@ -101,10 +101,12 @@
     <Compile Include="Entity\MoveableEntity.cs" />
     <Compile Include="GameStates\GameStateManager.cs" />
     <Compile Include="GameStates\GameState.cs" />
-    <Compile Include="GUI\Anchor.cs" />
-    <Compile Include="GUI\Gui.cs" />
-    <Compile Include="GUI\GuiButton.cs" />
-    <Compile Include="GUI\GuiContainer.cs" />
+    <Compile Include="Gui\Anchor.cs" />
+    <Compile Include="Gui\BaseGui.cs" />
+    <Compile Include="Gui\GuiButton.cs" />
+    <Compile Include="Gui\GuiContainer.cs" />
+    <Compile Include="Gui\GuiButtonContainer.cs" />
+    <Compile Include="Gui\Controls.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />

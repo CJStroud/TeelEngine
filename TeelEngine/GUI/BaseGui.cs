@@ -9,7 +9,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace TeelEngine.GUI
 {
-    public abstract class Gui
+    public abstract class BaseGui
     {
         #region Properties
 
@@ -67,7 +67,7 @@ namespace TeelEngine.GUI
         
         public Color BackColour { get; set; }
 
-        public GuiContainer ParentContainer { get; set; }
+        public BaseGuiContainer ParentContainer { get; set; }
 
         public bool ForcePixelValues { get; set; }
 
@@ -151,7 +151,7 @@ namespace TeelEngine.GUI
 
         #region Constructors
 
-        public Gui(Texture2D texture, Point location, int width, int height, bool visible = true)
+        public BaseGui(Texture2D texture, Point location, int width, int height, bool visible = true)
         {
             _texture = texture;
             _pixelLocation = location;
@@ -163,9 +163,9 @@ namespace TeelEngine.GUI
             Opacity = 1F;
         }
 
-        public Gui(Point location, int width, int height) : this (null, location, width, height){}
+        public BaseGui(Point location, int width, int height) : this (null, location, width, height){}
 
-        public Gui(Texture2D texture, Vector2 location, float width, float height, bool visible = true)
+        public BaseGui(Texture2D texture, Vector2 location, float width, float height, bool visible = true)
         {
             _texture = texture;
             _relativeLocation = location;
@@ -177,16 +177,16 @@ namespace TeelEngine.GUI
             Opacity = 1F;
         }
 
-        public Gui(Vector2 location, float width, float height) : this(null, location, width, height){}
+        public BaseGui(Vector2 location, float width, float height) : this(null, location, width, height){}
 
-        public Gui(Texture2D texture, Vector2 location, float width, float height, int maxWidth, int maxHeight)
+        public BaseGui(Texture2D texture, Vector2 location, float width, float height, int maxWidth, int maxHeight)
             : this(texture, location, width, height)
         {
             _pixelWidth = maxWidth;
             _pixelHeight = maxHeight;
         }
 
-        public Gui(Vector2 location, float width, float height, int maxWidth, int maxHeight)
+        public BaseGui(Vector2 location, float width, float height, int maxWidth, int maxHeight)
             : this(null, location, width, height)
         {
             _pixelWidth = maxWidth;

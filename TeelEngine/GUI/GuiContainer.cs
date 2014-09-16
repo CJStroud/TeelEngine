@@ -4,59 +4,59 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TeelEngine.GUI
 {
-    public class GuiContainer : Gui
+    public class BaseGuiContainer : BaseGui
     {
         #region Properties
 
-        private List<Gui> Children { get; set; }
+        private List<BaseGui> Children { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public GuiContainer(Texture2D texture, Point location, int width, int height) : base(texture, location, width, height)
+        public BaseGuiContainer(Texture2D texture, Point location, int width, int height) : base(texture, location, width, height)
         {
-            Children = new List<Gui>();
+            Children = new List<BaseGui>();
         }
 
-        public GuiContainer(Point location, int width, int height) : this((Texture2D)null, location, width, height)
+        public BaseGuiContainer(Point location, int width, int height) : this((Texture2D)null, location, width, height)
         {
         }
 
-        public GuiContainer(List<Gui> children, Point location, int width, int height) : this(location, width, height)
+        public BaseGuiContainer(List<BaseGui> children, Point location, int width, int height) : this(location, width, height)
         {
             Children = children;
         }
 
-        public GuiContainer(Texture2D texture, Vector2 location, float width, float height)
+        public BaseGuiContainer(Texture2D texture, Vector2 location, float width, float height)
             : base(texture, location, width, height)
         {
-            Children = new List<Gui>();
+            Children = new List<BaseGui>();
         }
 
-        public GuiContainer(Vector2 location, float width, float height)
+        public BaseGuiContainer(Vector2 location, float width, float height)
             : this(null, location, width, height){}
 
-        public GuiContainer(Texture2D texture, Vector2 location, float width, float height, int maxWidth, int maxHeight)
+        public BaseGuiContainer(Texture2D texture, Vector2 location, float width, float height, int maxWidth, int maxHeight)
             : base(texture, location, width, height, maxWidth, maxHeight)
         {
-            Children = new List<Gui>();
+            Children = new List<BaseGui>();
         }
 
-        public GuiContainer(Vector2 location, float width, float height, int maxWidth, int maxHeight)
+        public BaseGuiContainer(Vector2 location, float width, float height, int maxWidth, int maxHeight)
             : this(null, location, width, height, maxWidth, maxHeight){}
 
         #endregion
 
-        public void AddGui(Gui childGui)
+        public void AddGui(BaseGui childBaseGui)
         {
-            childGui.ParentContainer = this;
-            Children.Add(childGui);
+            childBaseGui.ParentContainer = this;
+            Children.Add(childBaseGui);
         }
 
-        public void RemoveGui(Gui childGui)
+        public void RemoveGui(BaseGui childBaseGui)
         {
-            Children.Remove(childGui);
+            Children.Remove(childBaseGui);
         }
 
         public void RemoveGui(int index)
