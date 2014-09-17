@@ -1,4 +1,4 @@
-﻿namespace TeelEngine.GUI
+﻿namespace TeelEngine.Gui
 {
     public enum Anchor
     {

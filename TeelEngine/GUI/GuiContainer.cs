@@ -2,9 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace TeelEngine.GUI
+namespace TeelEngine.Gui
 {
-    public class BaseGuiContainer : BaseGui
+    public class GuiContainer : BaseGui, IClickable
     {
         #region Properties
 
@@ -14,37 +14,68 @@ namespace TeelEngine.GUI
 
         #region Constructors
 
-        public BaseGuiContainer(Texture2D texture, Point location, int width, int height) : base(texture, location, width, height)
+        public GuiContainer(Texture2D texture, Point location, int width, int height) : base(texture, location, width, height)
         {
             Children = new List<BaseGui>();
         }
 
-        public BaseGuiContainer(Point location, int width, int height) : this((Texture2D)null, location, width, height)
+        public GuiContainer(Point location, int width, int height) : this((Texture2D)null, location, width, height)
         {
         }
 
-        public BaseGuiContainer(List<BaseGui> children, Point location, int width, int height) : this(location, width, height)
+        public GuiContainer(List<BaseGui> children, Point location, int width, int height) : this(location, width, height)
         {
             Children = children;
         }
 
-        public BaseGuiContainer(Texture2D texture, Vector2 location, float width, float height)
+        public GuiContainer(Texture2D texture, Vector2 location, float width, float height)
             : base(texture, location, width, height)
         {
             Children = new List<BaseGui>();
         }
 
-        public BaseGuiContainer(Vector2 location, float width, float height)
+        public GuiContainer(Vector2 location, float width, float height)
             : this(null, location, width, height){}
 
-        public BaseGuiContainer(Texture2D texture, Vector2 location, float width, float height, int maxWidth, int maxHeight)
+        public GuiContainer(Texture2D texture, Vector2 location, float width, float height, int maxWidth, int maxHeight)
             : base(texture, location, width, height, maxWidth, maxHeight)
         {
             Children = new List<BaseGui>();
         }
 
-        public BaseGuiContainer(Vector2 location, float width, float height, int maxWidth, int maxHeight)
+        public GuiContainer(Vector2 location, float width, float height, int maxWidth, int maxHeight)
             : this(null, location, width, height, maxWidth, maxHeight){}
+
+        #endregion
+
+        #region Events
+
+        #region Event Handlers
+
+        public event OnClickEvent OnClickHandler;
+        public event OnPressEvent OnPressHandler;
+        public event OnReleaseEvent OnReleaseHandler;
+
+        #endregion
+
+        #region Event Methods
+
+        public void OnClick(OnClickEventArgs e)
+        {
+            OnClickHandler.Invoke(this, e);
+        }
+
+        public void OnPress(OnPressEventArgs e)
+        {
+            OnPressHandler.Invoke(this, e);
+        }
+
+        public void OnRelease(OnReleaseEventArgs e)
+        {
+            OnReleaseHandler.Invoke(this, e);
+        }
+
+        #endregion
 
         #endregion
 
@@ -85,5 +116,7 @@ namespace TeelEngine.GUI
                 child.Update();
             }
         }
+
+        
     }
 }

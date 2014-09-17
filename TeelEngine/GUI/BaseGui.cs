@@ -7,7 +7,7 @@ using Point = Microsoft.Xna.Framework.Point;
 using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace TeelEngine.GUI
+namespace TeelEngine.Gui
 {
     public abstract class BaseGui
     {
@@ -67,7 +67,7 @@ namespace TeelEngine.GUI
         
         public Color BackColour { get; set; }
 
-        public BaseGuiContainer ParentContainer { get; set; }
+        public GuiContainer ParentContainer { get; set; }
 
         public bool ForcePixelValues { get; set; }
 
