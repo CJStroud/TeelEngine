@@ -152,7 +152,7 @@ namespace TeelEngine.Gui
 
             GetMouseIntersectChildren(mouseRectangle, intersectingChildren);
 
-            if (intersectingChildren.Count == 0)
+            if (intersectingChildren.Count == 0 && BoundingRectangle.Intersects(mouseRectangle))
             {
                 OnClick(new OnClickEventArgs { MouseState = Mouse.GetState() });
             }
@@ -184,7 +184,6 @@ namespace TeelEngine.Gui
                 if (!child.BoundingRectangle.Intersects(mouseRectangle)) continue;
 
                 intersectingGuis.Add(child);
-
 
             }
         }

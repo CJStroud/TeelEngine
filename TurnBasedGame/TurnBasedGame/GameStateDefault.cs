@@ -162,6 +162,7 @@ namespace TurnBasedGame
 
             _testGuiGameContainer = new GuiGameContainer(new Vector2(0, 0), 1, 0.8F, _tileRenderer, _entityRenderer, level);
 
+            _testGuiGameContainer.OnClickHandler += PathFinderClick;
 
             _testBaseGuiScreen.AddGui(_testGuiGameContainer);
 
@@ -188,25 +189,7 @@ namespace TurnBasedGame
 
             var mouseState = Mouse.GetState();
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
-            {
-                var mousePosition = new Point(mouseState.X, mouseState.Y);
-                if (mousePosition.X < ScreenWidth &&
-                    mousePosition.Y < ScreenHeight)
-                {
-                    Console.WriteLine(mousePosition);
-
-                    var start = new Point((int)moveableEntity.Location.X, (int)moveableEntity.Location.Y);
-                    var end = new Point(mousePosition.X / _tileRenderer.GameTileSize, mousePosition.Y / _tileRenderer.GameTileSize);
-
-                    PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
-                    //pathFinder.Create(start, end);
-
-                    //Path path = pathFinder.Path;
-
-                    //moveableEntity.Path = path;
-                }
-            }
+            
 
             KeyboardState state = Keyboard.GetState();
 
@@ -239,6 +222,31 @@ namespace TurnBasedGame
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
             _testBaseGuiScreen.Draw(spriteBatch);
             spriteBatch.End();
+        }
+
+        public void PathFinderClick(object sender, OnClickEventArgs eventArgs)
+        {
+            var moveableEntity = level.Entities[0] as MoveableEntity;
+            MouseState mouseState = eventArgs.MouseState;
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                var mousePosition = new Point(mouseState.X, mouseState.Y);
+                if (mousePosition.X < ScreenWidth &&
+                    mousePosition.Y < ScreenHeight)
+                {
+                    Console.WriteLine(mousePosition);
+
+                    var start = new Point((int)moveableEntity.Location.X, (int)moveableEntity.Location.Y);
+                    var end = new Point(mousePosition.X / _tileRenderer.GameTileSize, mousePosition.Y / _tileRenderer.GameTileSize);
+
+                    PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
+                    pathFinder.Create(start, end);
+
+                    Path path = pathFinder.Path;
+
+                    moveableEntity.Path = path;
+                }
+            }
         }
     }
 }
