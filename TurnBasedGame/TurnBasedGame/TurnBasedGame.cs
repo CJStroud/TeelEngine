@@ -56,10 +56,8 @@ namespace TurnBasedGame
             Camera.Lens = new Rectangle(0,0,_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
 
             _gameStateManager.LoadContent(Content);
-
-            
-
         }
+
         protected override void UnloadContent()
         {
 
