@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Audio\AudioManager.cs" />
     <Compile Include="Collision\CollisionDetection.cs" />
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\MoveableAnimatableEntity.cs" />

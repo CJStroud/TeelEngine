@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Media;
 using TeelEngine.GameStates;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using TeelEngine;
-using TeelEngine.Level;
+using TeelEngine.Audio;
 using TeelEngine.Pathing;
 
 namespace TurnBasedGame
@@ -24,6 +24,8 @@ namespace TurnBasedGame
         readonly GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
         private GameStateManager _gameStateManager;
+
+        private AudioManager _audioManager;
 
         public TurnBasedGame()
         {
@@ -46,6 +48,12 @@ namespace TurnBasedGame
             _gameStateManager.Initialize();
 
             IsMouseVisible = true;
+
+            // GameComponent Example - todo: delete
+            _audioManager = new AudioManager(this);
+            Components.Add(_audioManager);
+            // End 
+
             base.Initialize();
             
         }
@@ -57,9 +65,11 @@ namespace TurnBasedGame
 
             _gameStateManager.LoadContent(Content);
 
-            
+            _audioManager.LoadContent("Sounds");
+            _audioManager.LoadSoundEffect("footstep", "footsteps");
 
         }
+
         protected override void UnloadContent()
         {
 
@@ -68,6 +78,11 @@ namespace TurnBasedGame
         protected override void Update(GameTime gameTime)
         {
             _gameStateManager.Update(gameTime);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) & !_audioManager.IsSoundEffectPlaying)
+            {
+                _audioManager.PlaySoundEffect("footstep");
+            }
 
             base.Update(gameTime);
         }

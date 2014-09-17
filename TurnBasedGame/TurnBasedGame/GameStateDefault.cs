@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TeelEngine;
+using TeelEngine.Audio;
 using TeelEngine.Level;
 using TeelEngine.Pathing;
 using TeelEngine.Render;
