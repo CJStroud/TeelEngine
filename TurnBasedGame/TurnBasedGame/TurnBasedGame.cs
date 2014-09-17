@@ -49,7 +49,7 @@ namespace TurnBasedGame
 
             IsMouseVisible = true;
 
-            // GameComponent Example - todo: delete
+            // GameComponent Example
             _audioManager = new AudioManager(this);
             Components.Add(_audioManager);
             // End 
@@ -65,8 +65,9 @@ namespace TurnBasedGame
 
             _gameStateManager.LoadContent(Content);
 
-            _audioManager.LoadContent("Sounds");
-            _audioManager.LoadSoundEffect("footstep", "footsteps");
+            _audioManager.LoadContent();
+            _audioManager.LoadSoundEffect("footstep", "Sounds/footsteps");
+            _audioManager.LoadSong("test", "Songs/Dan Bull - John Lennon");
 
         }
 
@@ -79,10 +80,24 @@ namespace TurnBasedGame
         {
             _gameStateManager.Update(gameTime);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) & !_audioManager.IsSoundEffectPlaying)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                _audioManager.PlaySoundEffect("footstep");
+                _audioManager.PlaySong("test", true);
             }
+            else if (Keyboard.GetState().IsKeyDown(Keys.P) && _audioManager.IsSongPlaying)
+            {
+                _audioManager.PauseSong();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.P) && _audioManager.IsSongPaused)
+            {
+                _audioManager.ResumeSong();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                _audioManager.StopSong();
+            }
+
+
 
             base.Update(gameTime);
         }

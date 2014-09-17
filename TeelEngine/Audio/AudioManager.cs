@@ -22,9 +22,9 @@ namespace TeelEngine.Audio
 
         #region Public Properties
 
+        public string CurrentSong { get; set; }
         public bool IsSongPlaying { get { return _isSongPlaying; } }
-        public bool IsSoundEffectPlaying { get { return _isSoundEffectPlaying; } }
-        public bool LoopSongs { get; set; }
+        public bool IsSongPaused { get { return _isSongPaused; } }
 
         public float MusicVolume
         {
@@ -52,8 +52,6 @@ namespace TeelEngine.Audio
         private bool _isSongPaused;
 
         private SoundEffect _currentSoundEffect;
-        private bool _isSoundEffectPlaying;
-        private bool _isSoundEffectPaused;
 
         private SoundEffectInstance[] _soundEffectsBeingPlayed = new SoundEffectInstance[MaxSounds];
         private const int MaxSounds = 16;
@@ -70,13 +68,13 @@ namespace TeelEngine.Audio
                 {
                     _soundEffectsBeingPlayed[i].Dispose();
                     _soundEffectsBeingPlayed[i] = null;
-                    _isSoundEffectPlaying = false;
                 }
             }
 
             if (_currentSong != null && MediaPlayer.State == MediaState.Stopped)
             {
                 _currentSong = null;
+                CurrentSong = null;
             }
 
 
@@ -86,6 +84,11 @@ namespace TeelEngine.Audio
         #endregion
 
         #region Public Methods
+
+        public void LoadContent()
+        {
+            LoadContent(string.Empty);
+        }
 
         public void LoadContent(string contentFolder)
         {
@@ -106,45 +109,84 @@ namespace TeelEngine.Audio
             SoundEffect soundEffect;
             _soundEffects.TryGetValue(soundName, out soundEffect);
 
+            int index = GetAvailableIndex();
+            if (index == -1) return;
+
             if (soundEffect != null)
             {
-                _soundEffectsBeingPlayed[0] = soundEffect.CreateInstance();
-                _soundEffectsBeingPlayed[0].Play();
-                _isSoundEffectPlaying = true;
+                _soundEffectsBeingPlayed[index] = soundEffect.CreateInstance();
+                _soundEffectsBeingPlayed[index].Play();
             }
 
         }
 
-        public void AddSong(Song song)
+        public void LoadSong(string songName, string songPath)
         {
+            if (_soundEffects.ContainsKey(songName)) return;
 
+            _songs.Add(songName, _content.Load<Song>(songPath));
         }
 
-        public void RemoveSong()
+        public void PlaySong(string songName, bool isRepeating)
         {
-            
-        }
+            Song song;
+            if (!_songs.TryGetValue(songName, out song) || song == null) return;
 
-        public void PlaySong()
-        {
+            _isSongPaused = false;
+            _isSongPlaying = true;
 
+            MediaPlayer.Stop();
+
+            MediaPlayer.IsRepeating = isRepeating;
+            MediaPlayer.Play(song);
+            _currentSong = song;
+            CurrentSong = songName;
         }
 
         public void PauseSong()
         {
-            
+            if (_isSongPlaying && !_isSongPaused)
+            {
+                MediaPlayer.Pause();
+                _isSongPlaying = false;
+                _isSongPaused = true;
+            }
         }
 
         public void ResumeSong()
         {
-            
+            if (_isSongPaused)
+            {
+                MediaPlayer.Resume();
+                _isSongPlaying = true;
+                _isSongPaused = false;
+            }
         }
 
         public void StopSong()
         {
-            
+            MediaPlayer.Stop();
+            _currentSong = null;
+            CurrentSong = null;
         }
 
+
+        #endregion
+
+        #region Private Methods
+
+        private int GetAvailableIndex()
+        {
+            for (int i = 0; i < _soundEffectsBeingPlayed.Length; i++)
+            {
+                if (_soundEffectsBeingPlayed[i] == null)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
 
         #endregion
     }
