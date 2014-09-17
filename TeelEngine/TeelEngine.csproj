@@ -109,6 +109,7 @@
     <Compile Include="Gui\Controls.cs" />
     <Compile Include="Gui\IClickable.cs" />
     <Compile Include="Input\KeyManager.cs" />
+    <Compile Include="Input\MouseHandler.cs" />
     <Compile Include="Level\Interfaces\IMoveable.cs" />
     <Compile Include="Level\Objects\CollisionTile.cs" />
     <Compile Include="Level\Interfaces\IAnimatable.cs" />

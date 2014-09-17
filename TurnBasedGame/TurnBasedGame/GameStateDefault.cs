@@ -165,9 +165,9 @@ namespace TurnBasedGame
 
             _testBaseGuiScreen.AddGui(_testGuiGameContainer);
 
-            _testBaseGuiContainer.AddGui(_testBaseGui);
-
             _testBaseGuiScreen.AddGui(_testBaseGuiContainer);
+
+            _testBaseGuiContainer.AddGui(_testBaseGui);
 
         }
 
@@ -229,6 +229,8 @@ namespace TurnBasedGame
             {
                 _testBaseGuiScreen.SetHeight(_testBaseGuiScreen.Height + 10);
             }
+
+            _testBaseGuiScreen.Update();
 
         }
 

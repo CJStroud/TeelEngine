@@ -131,6 +131,10 @@ namespace TeelEngine.Gui
             }
         }
 
+        public int DepthLevel { get; set; }
+
+        public int Priority { get; set; }
+
         #endregion
 
         #region Private Globals

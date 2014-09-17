@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using TeelEngine.Input;
 
 namespace TeelEngine.Gui
 {
@@ -62,26 +67,48 @@ namespace TeelEngine.Gui
 
         public void OnClick(OnClickEventArgs e)
         {
-            OnClickHandler.Invoke(this, e);
+            Console.WriteLine("Depth Level: " + DepthLevel);
+            Console.WriteLine("Container: " + ToString());
+            
+            if (OnClickHandler != null)
+            {
+                OnClickHandler.Invoke(this, e);
+            }
         }
 
         public void OnPress(OnPressEventArgs e)
         {
-            OnPressHandler.Invoke(this, e);
+            if (OnClickHandler != null)
+            {
+                OnPressHandler.Invoke(this, e);
+            }
         }
 
         public void OnRelease(OnReleaseEventArgs e)
         {
-            OnReleaseHandler.Invoke(this, e);
+            if (OnReleaseHandler != null)
+            {
+                OnReleaseHandler.Invoke(this, e);
+            }
         }
 
         #endregion
+
+        #endregion
+
+        #region Private Globals
+
+        private int _currentPriority = 0;
 
         #endregion
 
         public void AddGui(BaseGui childBaseGui)
         {
             childBaseGui.ParentContainer = this;
+            Console.WriteLine("Set child depth level to: " + (DepthLevel + 1));
+            childBaseGui.DepthLevel = DepthLevel + 1;
+            childBaseGui.Priority = _currentPriority;
+            _currentPriority += 1;
             Children.Add(childBaseGui);
         }
 
@@ -115,8 +142,51 @@ namespace TeelEngine.Gui
             {
                 child.Update();
             }
+
+            if (DepthLevel != 0) return;
+            if (!MouseHandler.IsMouseButtonClicked()) return;
+
+            Rectangle mouseRectangle = MouseHandler.GetMouseRectangle();
+
+            var intersectingChildren = new List<BaseGui>();
+
+            GetMouseIntersectChildren(mouseRectangle, intersectingChildren);
+
+            if (intersectingChildren.Count == 0)
+            {
+                OnClick(new OnClickEventArgs { MouseState = Mouse.GetState() });
+            }
+            else
+            {
+                intersectingChildren = intersectingChildren.OrderByDescending(x => x.DepthLevel).ThenByDescending(x => x.Priority).ToList();
+
+                var clickableGui = (IClickable)intersectingChildren.First();
+
+                clickableGui.OnClick(new OnClickEventArgs { MouseState = MouseHandler.CurrentMouseState });
+            }
+
         }
 
-        
+        public void GetMouseIntersectChildren(Rectangle mouseRectangle, List<BaseGui> intersectingGuis)
+        {
+
+            foreach (var child in Children)
+            {
+
+                var container = child as GuiContainer;
+
+                if (container != null)
+                {
+                    container.GetMouseIntersectChildren(mouseRectangle, intersectingGuis);
+                }
+
+                if (!(child is IClickable)) continue;
+                if (!child.BoundingRectangle.Intersects(mouseRectangle)) continue;
+
+                intersectingGuis.Add(child);
+
+
+            }
+        }
     }
 }
