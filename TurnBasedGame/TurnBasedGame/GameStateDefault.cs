@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TeelEngine;
+using TeelEngine.Gui;
+using TeelEngine.Input;
 using TeelEngine.Level;
 using TeelEngine.Pathing;
 using TeelEngine.Render;
 using TeelEngine.Loading;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
+
 
 namespace TurnBasedGame
 {
@@ -20,9 +20,12 @@ namespace TurnBasedGame
     {
         private Level _level;
         private Renderer _renderer;
-        private KeyController _keyController;
         private int ScreenWidth;
         private int ScreenHeight;
+        private BaseGui _testBaseGui;
+        private GuiContainer _testBaseGuiContainer;
+        private GuiScreen _testBaseGuiScreen;
+        private GuiGameContainer _testGuiGameContainer;
 
         public GameStateDefault(string name, int screenWidth, int screenHeight) : base(name)
         {
@@ -33,41 +36,60 @@ namespace TurnBasedGame
         public override void Initialize()
         {
             _level = new Level(50, 50);
-            _keyController = new KeyController();
-
-            _keyController.Add("MoveCameraUp", Keys.Up, () =>
+            
+            KeyManager.AddAction("MoveCameraUp", () =>
             {
                 var y = Camera.Lens.Y - 10;
                 Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
             });
 
-            _keyController.Add("MoveCameraDown", Keys.Down, () =>
+            KeyManager.AddKeyBinding(Keys.Up, "MoveCameraUp");
+            KeyManager.AddGamepadBinding(Buttons.LeftThumbstickUp, "MoveCameraUp");
+
+            KeyManager.AddAction("MoveCameraDown", () =>
             {
                 var y = Camera.Lens.Y + 10;
                 Camera.UpdateLensPosition(new Point(Camera.Lens.X, y));
             });
 
-            _keyController.Add("MoveCameraLeft", Keys.Left, () =>
+            KeyManager.AddKeyBinding(Keys.Down, "MoveCameraDown");
+
+            KeyManager.AddAction("MoveCameraLeft", () =>
             {
                 var x = Camera.Lens.X - 10;
                 Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
             });
 
-            _keyController.Add("MoveCameraRight", Keys.Right, () =>
+            KeyManager.AddKeyBinding(Keys.Left, "MoveCameraLeft");
+
+            KeyManager.AddAction("MoveCameraRight", () =>
             {
                 var x = Camera.Lens.X + 10;
                 Camera.UpdateLensPosition(new Point(x, Camera.Lens.Y));
             });
 
-            _keyController.Add("CameraZoomIn", Keys.Z, () =>
+            KeyManager.AddKeyBinding(Keys.Right, "MoveCameraRight");
+
+            KeyManager.AddAction("CameraZoomIn", () =>
             {
                 _renderer.GameTileSize += 1;
             });
 
-            _keyController.Add("CameraZoomOut", Keys.X, () =>
+            KeyManager.AddKeyBinding(Keys.Z, "CameraZoomIn");
+
+            KeyManager.AddAction("CameraZoomOut", () =>
             {
                 _renderer.GameTileSize -= 1;
             });
+
+            KeyManager.AddKeyBinding(Keys.X, "CameraZoomOut");
+
+            _testBaseGuiScreen = new GuiScreen(new Point(0,0), ScreenWidth, ScreenHeight);
+
+            _testBaseGuiContainer = new GuiContainer(new Vector2(0F,0F), 1F, 0.1F) { BackColour = Color.Teal, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
+
+            _testBaseGui = new GuiContainer(new Vector2(0F, 0F), 0.5F, 1.5F) { BackColour = Color.Red, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
+
         }
 
         public override void LoadContent(ContentManager contentManager)
@@ -142,20 +164,56 @@ namespace TurnBasedGame
             };
             _level.AddEntity(entity);
 
-            _keyController.Add("PlayerMoveUp", Keys.W, () => entity.Move(Direction.North));
-            _keyController.Add("PlayerMoveRight", Keys.D, () => entity.Move(Direction.East));
-            _keyController.Add("PlayerMoveDown", Keys.S, () => entity.Move(Direction.South));
-            _keyController.Add("PlayerMoveLeft", Keys.A, () => entity.Move(Direction.West));
+            KeyManager.AddAction("Player.MoveUp", () => entity.Move(Direction.North));
+            KeyManager.AddAction("Player.MoveRight", () => entity.Move(Direction.East));
+            KeyManager.AddAction("Player.MoveDown", () => entity.Move(Direction.South));
+            KeyManager.AddAction("Player.MoveLeft", () => entity.Move(Direction.West));
 
-            _level = null;
-            //Saver.Save(_level);
+            KeyManager.AddKeyBinding(Keys.W,  "Player.MoveUp");
+            KeyManager.AddKeyBinding(Keys.D, "Player.MoveRight");
+            KeyManager.AddKeyBinding(Keys.S, "Player.MoveDown");
+            KeyManager.AddKeyBinding(Keys.A, "Player.MoveLeft");
 
-            _level = Loader.Load("");
+            _testGuiGameContainer = new GuiGameContainer(new Vector2(0, 0), 1, 0.8F);
+
+            _testGuiGameContainer.OnPressHandler += (sender, args) =>
+            {
+                MouseState mouseState = MouseHandler.CurrentMouseState;
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    var mousePosition = new Point(mouseState.X, mouseState.Y);
+                    if (mousePosition.X < ScreenWidth &&
+                        mousePosition.Y < ScreenHeight)
+                    {
+                        Console.WriteLine(mousePosition);
+
+                        var start = new Point((int)entity.Location.X, (int)entity.Location.Y);
+                        var end = Camera.GetGridCoordsWherePixelLocationIs(_renderer.GameTileSize, mousePosition);
+
+                        PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
+                        Path path = pathFinder.FindPath(start, end);
+
+                        entity.Path = path;
+                    }
+                }
+
+            };
+
+            _testGuiGameContainer.OnDrawHandler += (sender, args) =>
+            {
+                _renderer.Render(_level.GetAllRenderables(), args.SpriteBatch);
+            };
+
+            _testBaseGuiScreen.AddGui(_testGuiGameContainer);
+
+            _testBaseGuiScreen.AddGui(_testBaseGuiContainer);
+
+            _testBaseGuiContainer.AddGui(_testBaseGui);
         }
 
         public override void Update(GameTime gameTime)
         {
-            _keyController.CheckKeyPresses(Keyboard.GetState());
+            
 
             foreach (var gameTile in _level.GameTiles)
             {
@@ -170,32 +228,38 @@ namespace TurnBasedGame
 
             var mouseState = Mouse.GetState();
 
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            
+
+            KeyboardState state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.F))
             {
-                var mousePosition = new Point(mouseState.X, mouseState.Y);
-                if (mousePosition.X < ScreenWidth &&
-                    mousePosition.Y < ScreenHeight)
-                {
-                    Console.WriteLine(mousePosition);
-
-                    var start = new Point((int)moveableEntity.Location.X, (int)moveableEntity.Location.Y);
-                    var end = Camera.GetGridCoordsWherePixelLocationIs(_renderer.GameTileSize, mousePosition);
-
-                    PathFinder pathFinder = new PathFinder(100, 100, CollisionDetection.Collisions);
-                    Path path = pathFinder.FindPath(start, end);
-
-                    moveableEntity.Path = path;
-                }
+                _testBaseGuiScreen.SetWidth(_testBaseGuiScreen.Width - 10);
             }
+
+            if (state.IsKeyDown(Keys.G))
+            {
+                _testBaseGuiScreen.SetWidth(_testBaseGuiScreen.Width + 10);
+            }
+
+            if (state.IsKeyDown(Keys.V))
+            {
+                _testBaseGuiScreen.SetHeight(_testBaseGuiScreen.Height - 10);
+            }
+
+            if (state.IsKeyDown(Keys.B))
+            {
+                _testBaseGuiScreen.SetHeight(_testBaseGuiScreen.Height + 10);
+            }
+
+            _testBaseGuiScreen.Update();
 
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-
-            _renderer.Render(_level.GetAllRenderables(), spriteBatch);
-            
+            _testBaseGuiScreen.Draw(spriteBatch);
             spriteBatch.End();
         }
     }
