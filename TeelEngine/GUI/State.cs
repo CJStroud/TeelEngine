@@ -5,7 +5,7 @@
         None = 0,
         Pressed,
         Released,
-        Hover,
+        Enter,
         Leave,
         Held,
         Hovering

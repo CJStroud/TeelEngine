@@ -27,7 +27,7 @@ namespace TurnBasedGame
         private int ScreenHeight;
         private BaseGui _testBaseGui;
         private GuiContainer _testBaseGuiContainer;
-        private GuiContainer _testBaseGuiScreen;
+        private GuiScreen _testBaseGuiScreen;
         private GuiGameContainer _testGuiGameContainer;
 
         public GameStateDefault(string name, int screenWidth, int screenHeight) : base(name)
@@ -89,14 +89,11 @@ namespace TurnBasedGame
 
             KeyManager.AddKeyBinding(Keys.X, "CameraZoomOut");
 
-            _testBaseGuiScreen = new GuiContainer(new Point(0,0), ScreenWidth, ScreenHeight);
+            _testBaseGuiScreen = new GuiScreen(new Point(0,0), ScreenWidth, ScreenHeight);
 
             _testBaseGuiContainer = new GuiContainer(new Vector2(0F,0F), 1F, 0.1F) { BackColour = Color.Teal, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
 
             _testBaseGui = new GuiContainer(new Vector2(0F, 0F), 0.5F, 1.5F) { BackColour = Color.Red, Anchor = Anchor.TopMiddle, Opacity = 0.5F};
-
-
-
 
         }
 
@@ -161,8 +158,6 @@ namespace TurnBasedGame
             KeyManager.AddKeyBinding(Keys.A, "Player.MoveLeft");
 
             _testGuiGameContainer = new GuiGameContainer(new Vector2(0, 0), 1, 0.8F, _tileRenderer, _entityRenderer, level);
-
-            _testGuiGameContainer.OnClickHandler += PathFinderClick;
 
             _testBaseGuiScreen.AddGui(_testGuiGameContainer);
 

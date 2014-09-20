@@ -107,6 +107,7 @@
     <Compile Include="Gui\GuiButton.cs" />
     <Compile Include="Gui\GuiContainer.cs" />
     <Compile Include="Gui\Controls.cs" />
+    <Compile Include="Gui\GuiScreen.cs" />
     <Compile Include="Gui\IClickable.cs" />
     <Compile Include="Gui\State.cs" />
     <Compile Include="Input\KeyManager.cs" />
