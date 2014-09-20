@@ -12,11 +12,61 @@ namespace TeelEngine.Input
             get { return Mouse.GetState(); }
         }
 
-        public static bool IsMouseButtonClicked()
+        public static bool IsMouseButtonPressed()
         {
-            return CurrentMouseState.LeftButton == ButtonState.Pressed ||
-                   CurrentMouseState.MiddleButton == ButtonState.Pressed ||
-                   CurrentMouseState.RightButton == ButtonState.Pressed;
+            return
+                PreviousMouseState.LeftButton == ButtonState.Released &&
+                CurrentMouseState.LeftButton == ButtonState.Pressed ||
+
+                PreviousMouseState.RightButton == ButtonState.Released &&
+                CurrentMouseState.RightButton == ButtonState.Pressed ||
+
+                PreviousMouseState.MiddleButton == ButtonState.Released &&
+                CurrentMouseState.MiddleButton == ButtonState.Pressed ||
+
+                PreviousMouseState.XButton1 == ButtonState.Released && 
+                CurrentMouseState.XButton1 == ButtonState.Pressed ||
+
+                PreviousMouseState.XButton2 == ButtonState.Released && 
+                CurrentMouseState.XButton2 == ButtonState.Pressed;
+        }
+
+        public static bool IsMouseButtonReleased()
+        {
+            return
+                PreviousMouseState.LeftButton == ButtonState.Pressed &&
+                CurrentMouseState.LeftButton == ButtonState.Released ||
+
+                PreviousMouseState.RightButton == ButtonState.Pressed &&
+                CurrentMouseState.RightButton == ButtonState.Released ||
+
+                PreviousMouseState.MiddleButton == ButtonState.Pressed &&
+                CurrentMouseState.MiddleButton == ButtonState.Released ||
+
+                PreviousMouseState.XButton1 == ButtonState.Pressed &&
+                CurrentMouseState.XButton1 == ButtonState.Released ||
+
+                PreviousMouseState.XButton2 == ButtonState.Pressed &&
+                CurrentMouseState.XButton2 == ButtonState.Released;
+        }
+
+        public static bool IsMouseButtonHeld()
+        {
+            return
+                PreviousMouseState.LeftButton == ButtonState.Pressed &&
+                CurrentMouseState.LeftButton == ButtonState.Pressed ||
+
+                PreviousMouseState.RightButton == ButtonState.Pressed &&
+                CurrentMouseState.RightButton == ButtonState.Pressed ||
+
+                PreviousMouseState.MiddleButton == ButtonState.Pressed &&
+                CurrentMouseState.MiddleButton == ButtonState.Pressed ||
+
+                PreviousMouseState.XButton1 == ButtonState.Pressed &&
+                CurrentMouseState.XButton1 == ButtonState.Pressed ||
+
+                PreviousMouseState.XButton2 == ButtonState.Pressed &&
+                CurrentMouseState.XButton2 == ButtonState.Pressed;
         }
 
         public static Rectangle GetMouseRectangle()

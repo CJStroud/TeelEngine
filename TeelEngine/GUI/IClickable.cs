@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework.Input;
 
 namespace TeelEngine.Gui
@@ -27,6 +24,34 @@ namespace TeelEngine.Gui
         
     }
 
+    public delegate void OnEnterEvent(object sender, OnEnterEventArgs e);
+
+    public sealed class OnEnterEventArgs : EventArgs
+    {
+        
+    }
+
+    public delegate void OnLeaveEvent(object sender, OnLeaveEventArgs e);
+
+    public sealed class OnLeaveEventArgs : EventArgs
+    {
+        
+    }
+
+    public delegate void WhileDownEvent(object sender, WhileDownEventArgs e);
+
+    public sealed class WhileDownEventArgs : EventArgs
+    {
+        
+    }
+
+    public delegate void WhileHoverEvent(object sender, WhileHoverEventArgs e);
+
+    public sealed class WhileHoverEventArgs : EventArgs
+    {
+        
+    }
+
     interface IClickable
     {
         event OnClickEvent OnClickHandler;
@@ -35,11 +60,29 @@ namespace TeelEngine.Gui
 
         event OnReleaseEvent OnReleaseHandler;
 
+        event OnEnterEvent OnEnterHandler;
+
+        event OnLeaveEvent OnLeaveHandler;
+
+        event WhileDownEvent WhileDownHandler;
+
+        event WhileHoverEvent WhileHoverHandler;
+
         void OnClick(OnClickEventArgs e);
 
         void OnPress(OnPressEventArgs e);
 
         void OnRelease(OnReleaseEventArgs e);
+
+        void OnEnter(OnEnterEventArgs e);
+
+        void OnLeave(OnLeaveEventArgs e);
+
+        void WhileHeld(WhileDownEventArgs e);
+
+        void WhileHovering(WhileHoverEventArgs e);
+
+        State CurrentState { get; set; }
 
     }
 
