@@ -112,20 +112,22 @@ namespace TeelEngine.Gui
                     container.GetMouseIntersectChildren(mouseRectangle, intersectingGuis);
                 }
 
-                if (!(child is IClickable)) continue;
                 if (!child.BoundingRectangle.Intersects(mouseRectangle))
                 {
-                    var clickable = (IClickable)child;
+                    var clickable = child as IClickable;
 
-                    if (clickable.CurrentState == State.Hovering || clickable.CurrentState == State.Enter)
+                    if (clickable != null)
                     {
-                        clickable.CurrentState = State.Leave;
+                        if (clickable.CurrentState == State.Hovering || clickable.CurrentState == State.Enter)
+                        {
+                            clickable.CurrentState = State.Leave;
 
-                        clickable.OnLeave(new OnLeaveEventArgs());
-                    }
-                    else if (clickable.CurrentState == State.Leave)
-                    {
-                        clickable.CurrentState = State.None;
+                            clickable.OnLeave(new OnLeaveEventArgs());
+                        }
+                        else if (clickable.CurrentState == State.Leave)
+                        {
+                            clickable.CurrentState = State.None;
+                        }
                     }
                     continue;
                 }

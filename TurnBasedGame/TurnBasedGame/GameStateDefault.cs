@@ -99,7 +99,26 @@ namespace TurnBasedGame
             for (int t = 0; t < 25; t++)
             {
                 CollisionDetection.Collisions.Add(new Point(t, 10));
+                if (t != 4)
+                {
+                    CollisionDetection.Collisions.Add(new Point(t, 12));
+                }
+                if (t != 15)
+                {
+                    CollisionDetection.Collisions.Add(new Point(t, 14));
+                }
+
+                if (t != 12)
+                {
+                    CollisionDetection.Collisions.Add(new Point(t, 16));
+                }
+
+                CollisionDetection.Collisions.Add(new Point(t, 18));
             }
+            CollisionDetection.Collisions.Add(new Point(3, 11));
+            CollisionDetection.Collisions.Add(new Point(20, 13));
+            CollisionDetection.Collisions.Add(new Point(25, 15));
+            CollisionDetection.Collisions.Add(new Point(25, 17));
 
             var spriteSheets = new List<SpriteSheet>();
 

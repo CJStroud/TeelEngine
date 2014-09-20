@@ -44,7 +44,7 @@ namespace TeelEngine.Gui
         public override void Update()
         {
             base.Update();
-
+            this.Children = Children;
             Rectangle mouseRectangle = MouseHandler.GetMouseRectangle();
 
             var intersectingChildren = new List<BaseGui>();
@@ -55,152 +55,163 @@ namespace TeelEngine.Gui
 
             intersectingChildren = intersectingChildren.OrderByDescending(x => x.DepthLevel).ThenByDescending(x => x.Priority).ToList();
 
-            var clickableGui = (IClickable)intersectingChildren.First();
+            var clickableGui = intersectingChildren.First() as IClickable;
 
-            State currentState = clickableGui.CurrentState;
-
-            switch (currentState)
+            if (clickableGui != null)
             {
-                #region State.None
-                case State.None:
+                State currentState = clickableGui.CurrentState;
 
-                    if (MouseHandler.IsMouseButtonPressed())
-                    {
-                        clickableGui.CurrentState = State.Pressed;
+                switch (currentState)
+                {
+                        #region State.None
 
-                        clickableGui.OnPress(new OnPressEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.CurrentState = State.Enter;
+                    case State.None:
 
-                        clickableGui.OnEnter(new OnEnterEventArgs());
-                    }
-                    break;
-                #endregion
+                        if (MouseHandler.IsMouseButtonPressed())
+                        {
+                            clickableGui.CurrentState = State.Pressed;
 
-                #region State.Pressed
-                case State.Pressed:
+                            clickableGui.OnPress(new OnPressEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.CurrentState = State.Enter;
 
-                    if (MouseHandler.IsMouseButtonHeld())
-                    {
-                        clickableGui.CurrentState = State.Held;
+                            clickableGui.OnEnter(new OnEnterEventArgs());
+                        }
+                        break;
 
-                        clickableGui.WhileHeld(new WhileDownEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.CurrentState = State.Released;
+                        #endregion
 
-                        clickableGui.OnRelease(new OnReleaseEventArgs());
+                        #region State.Pressed
 
-                        clickableGui.OnClick(new OnClickEventArgs());
-                    }
+                    case State.Pressed:
 
-                    break;
-                #endregion
+                        if (MouseHandler.IsMouseButtonHeld())
+                        {
+                            clickableGui.CurrentState = State.Held;
 
-                #region State.Released
-                case State.Released:
+                            clickableGui.WhileHeld(new WhileDownEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.CurrentState = State.Released;
 
-                    if (MouseHandler.IsMouseButtonPressed())
-                    {
-                        clickableGui.CurrentState = State.Pressed;
+                            clickableGui.OnRelease(new OnReleaseEventArgs());
 
-                        clickableGui.OnPress(new OnPressEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.CurrentState = State.Hovering;
+                            clickableGui.OnClick(new OnClickEventArgs());
+                        }
 
-                        clickableGui.WhileHovering(new WhileHoverEventArgs());
-                    }
+                        break;
 
-                    break;
-                #endregion
+                        #endregion
 
-                #region State.Enter
-                case State.Enter:
+                        #region State.Released
 
-                    if (MouseHandler.IsMouseButtonPressed())
-                    {
-                        clickableGui.CurrentState = State.Pressed;
+                    case State.Released:
 
-                        clickableGui.OnPress(new OnPressEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.CurrentState = State.Hovering;
+                        if (MouseHandler.IsMouseButtonPressed())
+                        {
+                            clickableGui.CurrentState = State.Pressed;
 
-                        clickableGui.WhileHovering(new WhileHoverEventArgs());
-                    }
+                            clickableGui.OnPress(new OnPressEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.CurrentState = State.Hovering;
 
-                    break;
-                #endregion
+                            clickableGui.WhileHovering(new WhileHoverEventArgs());
+                        }
 
-                #region State.Leave
+                        break;
 
-                case State.Leave:
+                        #endregion
 
-                    if (MouseHandler.IsMouseButtonPressed())
-                    {
-                        clickableGui.CurrentState = State.Pressed;
+                        #region State.Enter
 
-                        clickableGui.OnPress(new OnPressEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.CurrentState = State.Enter;
+                    case State.Enter:
 
-                        clickableGui.OnEnter(new OnEnterEventArgs());
-                    }
+                        if (MouseHandler.IsMouseButtonPressed())
+                        {
+                            clickableGui.CurrentState = State.Pressed;
 
-                    break;
+                            clickableGui.OnPress(new OnPressEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.CurrentState = State.Hovering;
 
-                #endregion
+                            clickableGui.WhileHovering(new WhileHoverEventArgs());
+                        }
 
-                #region State.Held
+                        break;
 
-                case State.Held:
+                        #endregion
 
-                    if (MouseHandler.IsMouseButtonReleased())
-                    {
-                        clickableGui.CurrentState = State.Released;
+                        #region State.Leave
 
-                        clickableGui.OnClick(new OnClickEventArgs());
+                    case State.Leave:
 
-                        clickableGui.OnRelease(new OnReleaseEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.WhileHeld(new WhileDownEventArgs());
-                    }
+                        if (MouseHandler.IsMouseButtonPressed())
+                        {
+                            clickableGui.CurrentState = State.Pressed;
 
-                    break;
+                            clickableGui.OnPress(new OnPressEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.CurrentState = State.Enter;
 
-                #endregion
+                            clickableGui.OnEnter(new OnEnterEventArgs());
+                        }
 
-                #region State.Hovering
+                        break;
 
-                case State.Hovering:
+                        #endregion
 
-                    if (MouseHandler.IsMouseButtonPressed())
-                    {
-                        clickableGui.CurrentState = State.Pressed;
+                        #region State.Held
 
-                        clickableGui.OnPress(new OnPressEventArgs());
-                    }
-                    else
-                    {
-                        clickableGui.WhileHovering(new WhileHoverEventArgs());
-                    }
+                    case State.Held:
 
-                    break;
+                        if (MouseHandler.IsMouseButtonReleased())
+                        {
+                            clickableGui.CurrentState = State.Released;
 
-                #endregion
+                            clickableGui.OnClick(new OnClickEventArgs());
 
-                default:
-                    throw new ArgumentOutOfRangeException();
+                            clickableGui.OnRelease(new OnReleaseEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.WhileHeld(new WhileDownEventArgs());
+                        }
+
+                        break;
+
+                        #endregion
+
+                        #region State.Hovering
+
+                    case State.Hovering:
+
+                        if (MouseHandler.IsMouseButtonPressed())
+                        {
+                            clickableGui.CurrentState = State.Pressed;
+
+                            clickableGui.OnPress(new OnPressEventArgs());
+                        }
+                        else
+                        {
+                            clickableGui.WhileHovering(new WhileHoverEventArgs());
+                        }
+
+                        break;
+
+                        #endregion
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
             MouseHandler.PreviousMouseState = MouseHandler.CurrentMouseState;
