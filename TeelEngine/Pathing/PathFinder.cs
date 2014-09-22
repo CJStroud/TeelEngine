@@ -36,6 +36,7 @@ namespace TeelEngine.Pathing
         private List<Point> _allCollisionLocations; 
 
         private bool _pathComplete;
+        private bool _impossiblePath;
 
         #endregion
 
@@ -93,8 +94,13 @@ namespace TeelEngine.Pathing
             _nodeInFocus = SetAdjacentNodes(_nodeInFocus);
             AddToOpenList(_nodeInFocus);
 
+            if (_nodeInFocus == null)
+            {
+                _impossiblePath = true;
+            }
+
             // main pathfinding loop
-            while (_path == null)
+            while (_path == null && !_impossiblePath)
             {
                 Update();
             }
@@ -175,7 +181,14 @@ namespace TeelEngine.Pathing
                 RemoveNodeFromOpenList();
                 _nodeInFocus = null;
                 _nodeInFocus = GetBestNodeFromOpenList();
-                _nodeInFocus = SetAdjacentNodes(_nodeInFocus);
+                if (_nodeInFocus == null)
+                {
+                    _impossiblePath = true;
+                }
+                else
+                {
+                    _nodeInFocus = SetAdjacentNodes(_nodeInFocus);    
+                }
             }
         }
 
@@ -277,6 +290,7 @@ namespace TeelEngine.Pathing
         {
             _path = null;
             _pathComplete = false;
+            _impossiblePath = false;
             _openList = new Queue<PathNode>();
             _closedList = new HashSet<PathNode>();
             _nodeMap = null;
