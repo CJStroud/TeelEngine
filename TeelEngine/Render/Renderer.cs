@@ -24,16 +24,24 @@ namespace TeelEngine.Render
 
             foreach (var renderable in renderables)
             {
-                SpriteTexture texture = renderable.Texture;
-
-                if (texture != null)
+                if (
+                    Camera.Lens.Intersects(new Rectangle((int)renderable.Location.X * GameTileSize, (int)renderable.Location.Y * GameTileSize, GameTileSize,
+                        GameTileSize)))
                 {
-                    SpriteSheet spriteSheet = SpriteSheets[texture.AssetName];
-                    var screenPosition = new Point(
-                                        (int)(renderable.Location.X * GameTileSize) - Camera.Lens.X + (int)(renderable.Offset.X * GameTileSize) + (GameTileSize / 2),
-                                        (int)(renderable.Location.Y * GameTileSize) - Camera.Lens.Y + (int)(renderable.Offset.Y * GameTileSize) + (GameTileSize / 2));
 
-                    texture.Render(spriteBatch, screenPosition, GameTileSize, spriteSheet, renderable.Rotation);
+                    SpriteTexture texture = renderable.Texture;
+
+                    if (texture != null)
+                    {
+                        SpriteSheet spriteSheet = SpriteSheets[texture.AssetName];
+                        var screenPosition = new Point(
+                            (int) (renderable.Location.X*GameTileSize) - Camera.Lens.X +
+                            (int) (renderable.Offset.X*GameTileSize) + (GameTileSize/2),
+                            (int) (renderable.Location.Y*GameTileSize) - Camera.Lens.Y +
+                            (int) (renderable.Offset.Y*GameTileSize) + (GameTileSize/2));
+
+                        texture.Render(spriteBatch, screenPosition, GameTileSize, spriteSheet, renderable.Rotation);
+                    }
                 }
 
             }

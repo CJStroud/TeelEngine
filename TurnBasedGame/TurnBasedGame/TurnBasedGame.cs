@@ -1,21 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using TeelEngine.GameStates;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
 using TeelEngine;
 using TeelEngine.Audio;
 using TeelEngine.Pathing;
+
 
 namespace TurnBasedGame
 {
@@ -32,8 +22,8 @@ namespace TurnBasedGame
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            _graphics.PreferredBackBufferHeight = 720;
-            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 900;
+            _graphics.PreferredBackBufferWidth = 1600;
 
         }
 

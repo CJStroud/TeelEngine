@@ -13,4 +13,11 @@ namespace TeelEngine
         South = 3,
         None = 4
     }
+
+    public enum MouseButtons
+    {
+        LeftButton = 0,
+        RightButton,
+        MiddleButton,
+    }
 }
