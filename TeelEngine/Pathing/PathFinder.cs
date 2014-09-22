@@ -6,10 +6,9 @@ namespace TeelEngine.Pathing
 {
     public class PathFinder
     {
+        #region Constants
 
-        #region consts
-
-        public const int BaseMovementCost = 10;
+        private const int BaseMovementCost = 10;
 
         private readonly int _mapWidth;
         private readonly int _mapHeight;
@@ -20,7 +19,7 @@ namespace TeelEngine.Pathing
 
         #endregion
 
-        #region private variables
+        #region Private Globals
 
         private PathNode _startNode;
         private PathNode _targetNode;
@@ -40,7 +39,7 @@ namespace TeelEngine.Pathing
 
         #endregion
 
-        #region constructors
+        #region Constructor
 
         /// <summary>
         /// The pathfinder constructor, this should be instialised at the same time as the map or level
@@ -112,11 +111,6 @@ namespace TeelEngine.Pathing
 
         }
 
-        private bool IsACollisionPoint(Point location)
-        {
-            return _allCollisionLocations.Contains(location);
-        }
-
         /// <summary>
         /// Finds the shortest possible path between the start and on point
         /// </summary>
@@ -132,7 +126,12 @@ namespace TeelEngine.Pathing
 
         #endregion
 
-        #region main private methods
+        #region Private Methods
+
+        private bool IsACollisionPoint(Point location)
+        {
+            return _allCollisionLocations.Contains(location);
+        }
 
         /// <summary>
         /// Creates nodes to represent the map
@@ -209,9 +208,6 @@ namespace TeelEngine.Pathing
         /// <param name="nodeToCheck">This is one of the nodes that is adjacent to the current node and is will be evaluated to see if it creates a shorter / faster path</param>
         private void CalculateNodeValue(PathNode nodeInFocus, PathNode nodeToCheck)
         {
-            if (nodeInFocus.Location == nodeToCheck.Location)
-                throw new ArgumentException("The current node and the target node cannot be the same!");
-
             // We have found the target node, there is no need to continue
             if (nodeToCheck.Location == _targetNode.Location)
             {
@@ -278,10 +274,6 @@ namespace TeelEngine.Pathing
                 node = node.ParentNode;
             } while (node != null);
         }    
-
-        #endregion
-
-        #region helper private methods
 
         /// <summary>
         /// Clears out any old global variables
