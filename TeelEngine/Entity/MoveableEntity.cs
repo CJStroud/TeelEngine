@@ -58,7 +58,7 @@ namespace TeelEngine
                 if (Path != null)
                 {
                     Move(Path.GetNextLocation());
-                    if (Path.ReachedEnd) Path = null;
+                    if (Path.HasReachedEnd) Path = null;
                 }
             }
 

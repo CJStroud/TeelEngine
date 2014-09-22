@@ -1,26 +1,28 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
 
 namespace TeelEngine.Pathing
 {
     public class Path
     {
-        #region properties
+        #region Properties
 
         /// <summary>
-        /// Stack of PathNodes that make up the path
+        /// Returns a value to represent whether the path has any more steps
         /// </summary>
-        public Stack<PathNode> Nodes { get; set; }
-        public bool ReachedEnd {
+        public bool HasReachedEnd {
             get { return Nodes.Count == 0; }
         }
 
         #endregion
 
-        #region public methods
+        #region Private Globals
+
+        public Stack<PathNode> Nodes { get; set; }
+
+        #endregion
+
+        #region Public methods
 
         /// <summary>
         /// Returns the next nodes location as a vector and removes that node from the path
@@ -28,13 +30,12 @@ namespace TeelEngine.Pathing
         /// <returns>Location of the next node</returns>
         public Vector2 GetNextLocation()
         {
-            if (Nodes.Count == 0) return Vector2.Zero;
+            if (HasReachedEnd) return Vector2.Zero;
 
             PathNode node = Nodes.Pop();
             return new Vector2(node.Location.X, node.Location.Y);
         }
 
         #endregion
-
     }
 }

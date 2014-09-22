@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 namespace TeelEngine.Pathing
 {
     /// <summary>
-    /// Holds the information about each stage on the path
+    /// Represents a node of the map and holds data relating to the path
     /// </summary>
     public class PathNode
     {
 
-        #region properties
+        #region Properties
 
         /// <summary>
         /// This node that comes before this one is the path, if this is the starting node it will be null
@@ -37,18 +37,25 @@ namespace TeelEngine.Pathing
         public int MovementCost { get; set; }
         public int TotalCost { get; set; }
 
+        /// <summary>
+        /// Is the node able to be part of the path
+        /// </summary>
         public bool IsSolid { get; set; }
 
         #endregion
 
-        #region private methods
+        #region Private Globals
 
         private PathNode _parentNode;
 
         #endregion
 
-        #region constructors
+        #region Constructor
 
+        /// <summary>
+        /// Creates a new PathNode
+        /// </summary>
+        /// <param name="location">The point on the map that this PathNode represents</param>
         public PathNode(Point location)
         {
             Location = location;
@@ -56,7 +63,7 @@ namespace TeelEngine.Pathing
 
         #endregion
 
-        #region public methods
+        #region Public Methods
 
         /// <summary>
         /// Calculates the total cost of moving through the node, using the estimated cost and movement cost
