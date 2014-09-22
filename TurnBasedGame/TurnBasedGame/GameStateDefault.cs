@@ -10,7 +10,6 @@ using TeelEngine.Input;
 using TeelEngine.Level;
 using TeelEngine.Pathing;
 using TeelEngine.Render;
-using TeelEngine.Loading;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 

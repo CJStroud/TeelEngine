@@ -1,7 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using TeelEngine.GameStates;
 using TeelEngine;
+using TeelEngine.Audio;
+using TeelEngine.Pathing;
+
 
 namespace TurnBasedGame
 {
@@ -10,6 +14,8 @@ namespace TurnBasedGame
         readonly GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
         private GameStateManager _gameStateManager;
+
+        private AudioManager _audioManager;
 
         public TurnBasedGame()
         {
@@ -32,6 +38,12 @@ namespace TurnBasedGame
             _gameStateManager.Initialize();
 
             IsMouseVisible = true;
+
+            // GameComponent Example
+            _audioManager = new AudioManager(this);
+            Components.Add(_audioManager);
+            // End 
+
             base.Initialize();
             
         }
@@ -43,9 +55,12 @@ namespace TurnBasedGame
 
             _gameStateManager.LoadContent(Content);
 
-            
+            _audioManager.LoadContent();
+            _audioManager.LoadSoundEffect("footstep", "Sounds/footsteps");
+            _audioManager.LoadSong("test", "Songs/Dan Bull - John Lennon");
 
         }
+
         protected override void UnloadContent()
         {
 
@@ -54,6 +69,25 @@ namespace TurnBasedGame
         protected override void Update(GameTime gameTime)
         {
             _gameStateManager.Update(gameTime);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                _audioManager.PlaySong("test", true);
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.P) && _audioManager.IsSongPlaying)
+            {
+                _audioManager.PauseSong();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.P) && _audioManager.IsSongPaused)
+            {
+                _audioManager.ResumeSong();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            {
+                _audioManager.StopSong();
+            }
+
+
 
             base.Update(gameTime);
         }
