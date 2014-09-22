@@ -63,7 +63,7 @@ namespace TeelEngine.Pathing
 
         #endregion
 
-        #region public methods
+        #region Public Methods
 
         /// <summary>
         /// Finds the shortest possible path between the start and on point
